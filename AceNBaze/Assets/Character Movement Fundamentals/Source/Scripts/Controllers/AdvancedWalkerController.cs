@@ -201,7 +201,7 @@ namespace CMF
 			RaycastHit hit;
 			if (Input.GetKeyDown(KeyCode.Mouse1) == true && Physics.Raycast(castPoint, out hit, Mathf.Infinity, hitLayers))
 			{
-				//Debug.Log("Player pos: " + tr.position + ". new pos: " + hit.point);
+				Debug.Log("Player pos: " + tr.position + ". new pos: " + hit.point);
 				newPosition = hit.point;// - tr.position;
 
 				_isLerping = true;
@@ -213,27 +213,32 @@ namespace CMF
 
 			}
 
-			if (_isLerping)
-			{
-				//We want percentage = 0.0 when Time.time = _timeStartedLerping
-				//and percentage = 1.0 when Time.time = _timeStartedLerping + timeTakenDuringLerp
-				//In other words, we want to know what percentage of "timeTakenDuringLerp" the value
-				//"Time.time - _timeStartedLerping" is.
-				float timeSinceStarted = Time.time - _timeStartedLerping;
-				float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
+			float distanceBetween = Vector3.Distance(tr.position, newPosition);
+			float distanceTime = (Time.time - _timeStartedLerping) * movementSpeed;
+			float reltiveTime = distanceTime / distanceBetween;
+			tr.position = Vector3.Lerp(transform.position, newPosition, reltiveTime);
 
-				//Perform the actual lerping.  Notice that the first two parameters will always be the same
-				//throughout a single lerp-processs (ie. they won't change until we hit the space-bar again
-				//to start another lerp)
-				//tr.position = Vector3.Lerp(_startPosition, _endPosition, percentageComplete);
-				tr.position = Vector3.MoveTowards(tr.position, newPosition, Time.deltaTime * movementSpeed);
-				//tr.Translate(_endPosition.normalized * Time.deltaTime * movementSpeed);
-				//When we've completed the lerp, we set _isLerping to false
-				if (percentageComplete >= 1.0f)
-				{
-					_isLerping = false;
-				}
-			}
+			//if (_isLerping)
+			//{
+			//	//We want percentage = 0.0 when Time.time = _timeStartedLerping
+			//	//and percentage = 1.0 when Time.time = _timeStartedLerping + timeTakenDuringLerp
+			//	//In other words, we want to know what percentage of "timeTakenDuringLerp" the value
+			//	//"Time.time - _timeStartedLerping" is.
+			//	float timeSinceStarted = Time.time - _timeStartedLerping;
+			//	float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
+
+			//	//Perform the actual lerping.  Notice that the first two parameters will always be the same
+			//	//throughout a single lerp-processs (ie. they won't change until we hit the space-bar again
+			//	//to start another lerp)
+			//	//tr.position = Vector3.Lerp(_startPosition, _endPosition, percentageComplete);
+			//	//tr.position = Vector3.MoveTowards(tr.position, newPosition, Time.deltaTime * movementSpeed);
+			//	//tr.Translate(_endPosition.normalized * Time.deltaTime * movementSpeed);
+			//	//When we've completed the lerp, we set _isLerping to false
+			//	if (percentageComplete >= 1.0f)
+			//	{
+			//		_isLerping = false;
+			//	}
+			//}
 
 			//If necessary, clamp movement vector to magnitude of 1f;
 			if (_velocity.magnitude > 1f)
