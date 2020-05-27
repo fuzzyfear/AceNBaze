@@ -1,6 +1,6 @@
-Base path: 'C:/Users/pontu/OneDrive/Dokument/2019.2.2f1/Editor/Data', plugins path 'C:/Users/pontu/OneDrive/Dokument/2019.2.2f1/Editor/Data/PlaybackEngines'
+Base path: 'C:/Program Files/Unity/Editor/Data', plugins path 'C:/Program Files/Unity/Editor/Data/PlaybackEngines'
 Cmd: initializeCompiler
 Cmd: preprocess
-  insize=444 outsize=441 ok=1
+  insize=462 outsize=459 ok=1
 Cmd: preprocess
   insize=72486 outsize=2584 ok=1
