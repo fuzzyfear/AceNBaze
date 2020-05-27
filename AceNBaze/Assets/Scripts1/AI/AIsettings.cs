@@ -38,8 +38,9 @@ public class AIsettings : MonoBehaviour
     private Quaternion stepAngle = Quaternion.AngleAxis(angle: 5, Vector3.up);
     public static Quaternion StepAngle => Instance.stepAngle;
 
-
-    public static int aiSenseCone   = 24;
+    [Tooltip("sense radius cone")][Range(0, 73)]
+    [SerializeField] private int aiSenseCone = 24;
+    public static int AiSenseCone   => Instance.aiSenseCone;
     public static int aiSenseCirkle = 73;
 
     /// <summary>

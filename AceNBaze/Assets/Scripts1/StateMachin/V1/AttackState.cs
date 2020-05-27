@@ -32,7 +32,7 @@ public class AttackState : BaseState
         return AIsettings.InAttackDist(origin: transform,
                                        direcion: Vector3.forward,
                                        tagTarget: "Player",
-                                       numberOfrays: AIsettings.aiSenseCone,
+                                       numberOfrays: AIsettings.AiSenseCone,
                                        distance: AIsettings.AttackRadius);
     }
 
