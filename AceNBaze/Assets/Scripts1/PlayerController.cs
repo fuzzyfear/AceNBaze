@@ -11,6 +11,10 @@ public class PlayerController : MonoBehaviour
 	public CharacterInfo playerStats;
 	public Slider hp;
 	public LayerMask enemy;
+	public bool moveAndAttack;
+	private Collider[] hitColliders;
+	private RaycastHit attackTarget;
+	float distBetweenStartAndGoal;
 
 	private void Start()
 	{
@@ -19,16 +23,17 @@ public class PlayerController : MonoBehaviour
 		hp.value = hp.maxValue;
 	}
 
-	// Update is called once per frame
 	void Update()
     {
 		MoveToMouse();
-		Attack();
-    }
+		MoveAndAttack();
+		WaitToAttackUntilInRange();
+		hitColliders = Physics.OverlapSphere(agent.transform.position, playerStats.attackRange, enemy);
+	}
 
     void MoveToMouse()
     {
-		if(Input.GetMouseButtonDown(1) == true)
+		if(Input.GetMouseButtonDown(1))
 		{
 			Vector3 mouse = Input.mousePosition;
 			Ray castPoint = cam.ScreenPointToRay(mouse);
@@ -41,9 +46,9 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	void Attack()
+	void MoveAndAttack()
 	{
-		if (Input.GetMouseButtonDown(0) == true)
+		if (Input.GetMouseButtonDown(0))
 		{
 			Vector3 mouse = Input.mousePosition;
 			Ray castPoint = cam.ScreenPointToRay(mouse);
@@ -51,9 +56,42 @@ public class PlayerController : MonoBehaviour
 
 			if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, enemy))
 			{
-				Debug.Log(hit.collider.gameObject.name + " takes " + playerStats.dmg + " dmg");
-				hit.collider.gameObject.GetComponent<TargetDummyBehaviour>().TakeDmg(playerStats.dmg);
+				agent.SetDestination(hit.point);
+				attackTarget = hit;
+				moveAndAttack = true;
 			}
 		}
+	}
+
+	void WaitToAttackUntilInRange()
+	{
+		if (moveAndAttack)
+		{
+			if (agent.pathPending)
+			{
+				distBetweenStartAndGoal = Vector3.Distance(transform.position, attackTarget.point);
+			}
+			else
+			{
+				distBetweenStartAndGoal = agent.remainingDistance;
+			}
+			if (distBetweenStartAndGoal <= playerStats.attackRange)
+			{
+				Attack();
+			}
+		}
+	}
+
+	void Attack()
+	{
+		Debug.Log(attackTarget.collider.gameObject.name + " takes " + playerStats.dmg + " dmg");
+		attackTarget.collider.gameObject.GetComponent<TargetDummyBehaviour>().TakeDmg(playerStats.dmg);
+		moveAndAttack = false;
+	}
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.color = new Color (1, 1, 1, 0.1f);
+		Gizmos.DrawSphere(agent.transform.position, playerStats.attackRange);
 	}
 }

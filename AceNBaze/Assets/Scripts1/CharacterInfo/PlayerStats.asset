@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
   HP: 100
-  dmg: 10
+  currentHP: 0
+  dmg: 100
   movementSpeed: 7
   attackSpeed: 10
+  attackRange: 3
+  dashCooldown: 0
