@@ -12,9 +12,10 @@ public class PlayerController : MonoBehaviour
 	public Slider hp;
 	public LayerMask enemy;
 	public bool moveAndAttack;
-	private Collider[] hitColliders;
 	private RaycastHit attackTarget;
 	float distBetweenStartAndGoal;
+	bool attackSpeed = true;
+	public bool onlyAttack = false;
 
 	private void Start()
 	{
@@ -26,9 +27,15 @@ public class PlayerController : MonoBehaviour
 	void Update()
     {
 		MoveToMouse();
-		MoveAndAttack();
+		if (!onlyAttack)
+		{
+			MoveAndAttack();
+		}
+		else
+		{
+			OnlyAttack();
+		}
 		WaitToAttackUntilInRange();
-		hitColliders = Physics.OverlapSphere(agent.transform.position, playerStats.attackRange, enemy);
 	}
 
     void MoveToMouse()
@@ -42,6 +49,34 @@ public class PlayerController : MonoBehaviour
 			if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
 			{
 				agent.SetDestination(hit.point);
+			}
+		}
+	}
+
+	void OnlyAttack()
+	{
+		if (Input.GetMouseButtonDown(0))
+		{
+			Vector3 mouse = Input.mousePosition;
+			Ray castPoint = cam.ScreenPointToRay(mouse);
+			RaycastHit hit;
+
+			if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
+			{
+				if (attackSpeed)
+				{
+					if (hit.collider.gameObject.layer == 11)
+					{
+						attackTarget = hit;
+						moveAndAttack = true;
+					}
+					else
+					{
+						Debug.Log("Miss, no enemmy selected");
+						attackSpeed = false;
+						StartCoroutine(WaitForAttackSpeed());
+					}
+				}
 			}
 		}
 	}
@@ -63,29 +98,57 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	IEnumerator WaitForAttackSpeed()
+	{
+		yield return new WaitForSeconds(playerStats.attackSpeed);
+		attackSpeed = true;
+	}
+
 	void WaitToAttackUntilInRange()
 	{
 		if (moveAndAttack)
 		{
-			if (agent.pathPending)
+			if(onlyAttack && agent.velocity == Vector3.zero)
 			{
-				distBetweenStartAndGoal = Vector3.Distance(transform.position, attackTarget.point);
+				distBetweenStartAndGoal = Vector3.Distance(agent.transform.position, attackTarget.point);
 			}
-			else
+			else if (!onlyAttack && agent.pathPending)
+			{
+				distBetweenStartAndGoal = Vector3.Distance(agent.transform.position, attackTarget.point);
+			}
+			else if(!onlyAttack)
 			{
 				distBetweenStartAndGoal = agent.remainingDistance;
 			}
 			if (distBetweenStartAndGoal <= playerStats.attackRange)
 			{
-				Attack();
+				agent.isStopped = true;
+				agent.SetDestination(agent.transform.position);
+				agent.isStopped = false;
+				if (attackSpeed)
+				{
+					Attack();
+					attackSpeed = false;
+					StartCoroutine(WaitForAttackSpeed());
+				}
+			}
+			else if (onlyAttack)
+			{
+				if (attackSpeed)
+				{
+					Debug.Log("Miss, enemy not in range");
+					moveAndAttack = false;
+					attackSpeed = false;
+					StartCoroutine(WaitForAttackSpeed());
+				}
 			}
 		}
 	}
 
 	void Attack()
 	{
-		Debug.Log(attackTarget.collider.gameObject.name + " takes " + playerStats.dmg + " dmg");
 		attackTarget.collider.gameObject.GetComponent<TargetDummyBehaviour>().TakeDmg(playerStats.dmg);
+		Debug.Log(attackTarget.collider.gameObject.name + " takes " + playerStats.dmg + " dmg");
 		moveAndAttack = false;
 	}
 

@@ -201,6 +201,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   moveAndAttack: 0
+  onlyAttack: 1
 --- !u!1 &167665602
 GameObject:
   m_ObjectHideFlags: 0
