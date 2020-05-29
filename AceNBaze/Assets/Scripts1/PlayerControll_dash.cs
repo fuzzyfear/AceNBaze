@@ -23,13 +23,15 @@ public class PlayerControll_dash : MonoBehaviour
     private bool dashing = false;
     private float walkingSpeedNORMAL;
     private float walkingAccelerationNORMAL;
+   
+
 
     public void Start()
     {
        
         sqrDashDistnase = dashDistanse * dashDistanse;
   
-
+        
 
         agent.speed = playerStats.movementSpeed;
         hp.maxValue = playerStats.HP;
@@ -43,17 +45,21 @@ public class PlayerControll_dash : MonoBehaviour
 
 
 
-        if (MoveDash())
-            return;
+   
         
         
 
         MoveToMouse();
+        MoveDash();
+        
+
+
+
         Attack();
     }
 
 
-    bool MoveDash()
+    void MoveDash()
     {
         if (dashing)
         {
@@ -64,43 +70,76 @@ public class PlayerControll_dash : MonoBehaviour
                 dashing = false;
             }
         }
-        else if (Input.GetKey(MOVMENT_KEY_dash) && Input.GetKeyDown(MOVMENT_KEY) == true)
+        else if (Input.GetKey(MOVMENT_KEY_dash))
         {
             Vector3 mouse = Input.mousePosition;
             Ray castPoint = cam.ScreenPointToRay(mouse);
-            RaycastHit hit;
-  
-            if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
-            {
-                // 
-             
-                float dist = (agent.transform.position - hit.point).sqrMagnitude;
-        
-                if(dist <= sqrDashDistnase )
-                {
 
-              
-                    walkingSpeedNORMAL = agent.speed;
-                    agent.speed =  walkingSpeedNORMAL * 10f;
-                    walkingAccelerationNORMAL = agent.acceleration;
-                    agent.acceleration =  agent.acceleration*10f;
-                    agent.SetDestination(hit.point);
-                    dashing = true;
+            Vector3 mheading = (castPoint.origin - agent.transform.position);
+            float mdist = mheading.magnitude;
+            Vector3 mdir = mheading / mdist;
+
+            Vector3 targetPoint;
+            RaycastHit hit;
+            dashing = false;
+            float tempDist = dashDistanse;
+            bool continuSearcingIfFales = false;
+            while (!continuSearcingIfFales && castPoint.origin != agent.transform.position)
+            {
+                continuSearcingIfFales = Physics.Raycast(castPoint, out hit, Mathf.Infinity);
+                if (continuSearcingIfFales)
+                {
+                    Vector3 heading = (hit.point - agent.transform.position);
+                    float dist = heading.magnitude;
+                    Vector3 dir = heading / dist;
+                    targetPoint = tempDist * dir + agent.transform.position;
+
+                    bool notFound = true;
+
+                    while (notFound)
+                    {
+                        Debug.Log(!agent.SetDestination(targetPoint));
+                        if (!agent.SetDestination(targetPoint))
+                        {
+
+                            tempDist -= 0.2f;
+                            if (tempDist <= 0.0f)
+                            {
+                                notFound = false;
+                                agent.speed = walkingSpeedNORMAL;
+                                agent.acceleration = walkingAccelerationNORMAL;
+
+                            }
+                            else
+                                targetPoint = tempDist * dir + agent.transform.position;
+                            Debug.Log(targetPoint);
+                        }
+                        else
+                        {
+                            notFound = false;
+                            dashing = true;
+                        }
+                    }
                 }
-  
-                
+                else
+                {
+                    castPoint.origin = Vector3.MoveTowards(castPoint.origin, agent.transform.position, 0.2f);
+                  //  castPoint.origin -= mdir * 0.2f;
+                }
+            
 
             }
+            if (dashing)
+            {
+                walkingSpeedNORMAL = agent.speed;
+                agent.speed = walkingSpeedNORMAL * 10f;
+                walkingAccelerationNORMAL = agent.acceleration;
+                agent.acceleration = agent.acceleration * 10f;
+            }
+
+
+
         }
-
-
-       
-
-
-
-
-
-        return dashing;
     }
 
 
