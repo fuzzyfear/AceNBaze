@@ -19,7 +19,6 @@ public class PlayerControll_dash : MonoBehaviour
 
 
     [SerializeField] private float dashDistanse = 4f;
-    private float sqrDashDistnase;
     private bool dashing = false;
     private float walkingSpeedNORMAL;
     private float walkingAccelerationNORMAL;
@@ -28,11 +27,6 @@ public class PlayerControll_dash : MonoBehaviour
 
     public void Start()
     {
-       
-        sqrDashDistnase = dashDistanse * dashDistanse;
-  
-        
-
         agent.speed = playerStats.movementSpeed;
         hp.maxValue = playerStats.HP;
         hp.value    = hp.maxValue;
