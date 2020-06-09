@@ -13,6 +13,10 @@ public class AIsettings : MonoBehaviour
     public static float AttackRadius => Instance.attackRadius;
 
 
+    [SerializeField] private float wanderRadius = 50f;
+    public static float WanderRadius => Instance.wanderRadius;
+
+
     public static AIsettings Instance { get; private set; }
     
     private void Awake()
