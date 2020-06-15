@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private KeyCode MOVMENT_KEY_dash = KeyCode.Space;
     [SerializeField] private KeyCode MOVMENT_KEY      = KeyCode.Mouse1;
     [SerializeField] private KeyCode ATTACK_KEY       = KeyCode.Mouse0;
+    [SerializeField] private KeyCode BLOCK_KEY        = KeyCode.B;
 
     [Space]
     [Header("Attack saker")]
@@ -115,6 +116,14 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 	}
+
+
+
+
+    void block()
+    {
+
+    }
 
 
     void MoveDash()

@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: TargetDummy
   m_EditorClassIdentifier: 
   HP: 1000
-  dmg: 0
+  currentHP: 1000
+  dmg: 10
   movementSpeed: 0
-  attackSpeed: 0
+  attackSpeed: 1
+  attackRange: 0
+  dashCooldown: 0

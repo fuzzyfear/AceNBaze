@@ -1,4 +1,5 @@
 ﻿using System;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class AttackState : BaseState
 {
 
     AI _ai;
+
+
 
     public AttackState(AI ai) : base(ai.gameObject)
     {
@@ -21,7 +24,19 @@ public class AttackState : BaseState
         if (dist > AIsettings.AttackRadius)
             return typeof(ChaseState);
 
-        _ai.transform.Rotate(Vector3.up, 360);
+
+
+
+        if (_ai.TEMP_attackSpeed)
+        {
+            Attack();
+            _ai.TEMP_attackSpeed = false;
+            _ai.RapperstartCrution(WaitForAttackSpeed());
+
+        }
+
+
+     
         return null;
     }
 
@@ -36,5 +51,34 @@ public class AttackState : BaseState
                                        distance: AIsettings.AttackRadius);
     }
 
+
+
+
+
+    //=========================================
+    //TEMP
+    //=========================================
+    IEnumerator WaitForAttackSpeed()
+    {
+
+        _ai.TEMP_attackbar.value = 0;
+     
+        while (_ai.TEMP_attackbar.value != _ai.TEMP_attackbar.maxValue)
+        {
+            _ai.TEMP_attackbar.value += 0.1f;
+            yield return new WaitForSeconds(_ai.TEMP_Stats.attackSpeed / 10f);
+        }
+        _ai.TEMP_attackSpeed = true;
+    }
     
+    
+
+    void Attack()
+    {
+        _ai.TEMP_player.TakeDmg(_ai.TEMP_Stats.dmg);
+        Debug.Log(_ai.Target.name + " takes " + _ai.TEMP_Stats.dmg + " dmg");
+        _ai.TEMP_moveANDattack = false;
+    }
+
+
 }
