@@ -19,7 +19,7 @@ public abstract class FunctionBase : MonoBehaviour
         }
 
         public string PreatyName { get; }
-        public int    lockKey { get; }
+        public int    lockKey    { get; }
 
     }
 

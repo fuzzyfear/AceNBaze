@@ -13,32 +13,49 @@ public class FunctionTick : MonoBehaviour
     public struct flags
     {
     }
-    //TODO: Fixa klar så att det går att låsa saker
+
     public struct flag
     {
-        const string LockfreeLock = "free";
-        const int Lockfreehash    = 1294909896; //hårdkodad, värdet av Animator.StringToHash(LockfreeLock)
+        const string LockfreeName  = "free";
+        const int     Lockfreehash = 1294909896; //hårdkodad, värdet av Animator.StringToHash(LockfreeLock)
         public flag(string name)
         {
             PreatyName = name;
-            flagKey = Animator.StringToHash(name);
+            flagKey    = Animator.StringToHash(name);
 
-            currentLockName = LockfreeLock;
+            currentLockName = LockfreeName;
             currentLockHash = Lockfreehash;
         }
 
         public string PreatyName { get; }
-        public int flagKey { get; }
+        public int    flagKey    { get; }
 
         public string currentLockName;
-        public int currentLockHash;
+        public int    currentLockHash;
 
         public bool Lock(FunctionBase.LockKey key)
         {
-            return true;
+
+            bool didLock = currentLockHash == Lockfreehash;
+            if (didLock)
+            {
+                currentLockHash = key.lockKey;
+                currentLockName = key.PreatyName;
+            }
+            return didLock;
 
         }
+        public bool UnLock(FunctionBase.LockKey key)
+        {
+            bool didUnLock = currentLockHash == key.lockKey;
+            if (didUnLock)
+            {
+                currentLockHash = Lockfreehash;
+                currentLockName = LockfreeName;
+            }
+            return didUnLock;
 
+        }
     }
 
 
@@ -64,5 +81,5 @@ public class FunctionTick : MonoBehaviour
 
 
 
-
+    
 }
