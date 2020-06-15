@@ -202,6 +202,7 @@ MonoBehaviour:
   enemy:
     serializedVersion: 2
     m_Bits: 2048
+  TEMP_anim: {fileID: 1263274919864854704}
   MOVMENT_KEY_dash: 32
   MOVMENT_KEY: 324
   ATTACK_KEY: 323
@@ -1681,6 +1682,12 @@ MonoBehaviour:
   cam: {fileID: 467805042}
   camOffset: {x: 0, y: 1.5, z: 0}
   blocking: 0
+--- !u!95 &1360927084 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8724542476942385127, guid: 88de0a0eb936ea94f8708702b5f5710d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1263274919864854703}
+  m_PrefabAsset: {fileID: 0}
 --- !u!195 &1360927087 stripped
 NavMeshAgent:
   m_CorrespondingSourceObject: {fileID: 1263274920686285248, guid: 88de0a0eb936ea94f8708702b5f5710d,
@@ -2237,5 +2244,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8724542476942385127, guid: 88de0a0eb936ea94f8708702b5f5710d,
+        type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724542476942385127, guid: 88de0a0eb936ea94f8708702b5f5710d,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: ca48df5e9e9a4464c917980c8329ebf8, type: 2}
+    - target: {fileID: 7043458779846442345, guid: 88de0a0eb936ea94f8708702b5f5710d,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 163769703}
+    - target: {fileID: 7043458779846442345, guid: 88de0a0eb936ea94f8708702b5f5710d,
+        type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1360927084}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88de0a0eb936ea94f8708702b5f5710d, type: 3}
+--- !u!114 &1263274919864854704 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7043458779846442345, guid: 88de0a0eb936ea94f8708702b5f5710d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1263274919864854703}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360927082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 613f6b052f52c004a86dcd912fbe7aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

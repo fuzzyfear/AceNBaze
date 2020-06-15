@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public Slider attackbar;
 	public LayerMask enemy;
 
-
+    public TEMP_animator_trigger TEMP_anim;
 [Space]
 [Header("Kontroller")]
     [SerializeField] private KeyCode MOVMENT_KEY_dash = KeyCode.Space;
@@ -66,8 +66,8 @@ public class PlayerController : MonoBehaviour
 
 
     bool uppdatemovementTarget;
-
-
+    bool doingsomthing = false;
+    bool swingingForAttack = false;
     private Coroutine doing;
 
     private void Start()
@@ -96,19 +96,40 @@ public class PlayerController : MonoBehaviour
 	void Update()
     {
 
-   
-
+    
+        if(agent.velocity.magnitude == 0)
+        {
+            TEMP_anim.setValue("idle");
+        }
+        else
+        {
+            if(agent.speed == walkingSpeedNORMAL)
+            {
+                TEMP_anim.setValue("walk");
+            }
+            else
+            {
+                TEMP_anim.setValue("dash");
+            }
+        }
 
         MoveToMouse();
         MoveDash();
 
 
-        if (block()) { return; }
+
+        
+
+
+        if (block()) { TEMP_anim.setValue("block"); doingsomthing = true;  return; }
 
         if (!onlyAttack){ MoveAndAttack();	}
 		else		    { OnlyAttack();		}
 
 		WaitToAttackUntilInRange();
+
+        //doingsomthing = !swingingForAttack && !blocking;
+        //if (!doingsomthing) { TEMP_anim.setValue("idleA"); }
 	}
 
     void MoveToMouse()
@@ -273,7 +294,7 @@ public class PlayerController : MonoBehaviour
 					else
 					{
 						Debug.Log("Miss, no enemmy selected");
-						attackSpeed = false;
+                        attackSpeed = false;
 
 
                        StartCoroutine(WaitForAttackSpeed());
@@ -320,10 +341,6 @@ public class PlayerController : MonoBehaviour
         }
         blocking = false;
     }
-
-
-
-
 
     IEnumerator WaitForAttackSpeed()
 	{
@@ -382,6 +399,9 @@ public class PlayerController : MonoBehaviour
 
         CandDash = true;
     }
+
+
+
     void WaitToAttackUntilInRange()
 	{
 		if (moveAndAttack)
@@ -423,8 +443,9 @@ public class PlayerController : MonoBehaviour
 				agent.isStopped = false;
 				if (attackSpeed)
 				{
-					Attack();
-					attackSpeed = false;
+                    Attack();
+             
+                    attackSpeed = false;
 					StartCoroutine(WaitForAttackSpeed());
 				}
 			}
@@ -433,7 +454,7 @@ public class PlayerController : MonoBehaviour
 				if (attackSpeed)
 				{
 					Debug.Log("Miss, enemy not in range");
-					moveAndAttack = false;
+                    moveAndAttack = false;
 					attackSpeed = false;
 					StartCoroutine(WaitForAttackSpeed());
 				}
@@ -441,12 +462,18 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	void Attack()
+	 void Attack()
 	{
-		attackTarget.collider.transform.root.gameObject.GetComponent<TargetDummyBehaviour>().TakeDmg(playerStats.dmg);
-		Debug.Log(attackTarget.collider.gameObject.name + " takes " + playerStats.dmg + " dmg");
-		moveAndAttack = false;
-	}
+        swingingForAttack = true;
+        TEMP_anim.setValue("attack");
+    }
+    public void realAttack()
+    {
+        attackTarget.collider.transform.root.gameObject.GetComponent<TargetDummyBehaviour>().TakeDmg(playerStats.dmg);
+        Debug.Log(attackTarget.collider.gameObject.name + " takes " + playerStats.dmg + " dmg");
+        moveAndAttack = false;
+        swingingForAttack = false;
+    }
 
 	private void OnDrawGizmos()
 	{
