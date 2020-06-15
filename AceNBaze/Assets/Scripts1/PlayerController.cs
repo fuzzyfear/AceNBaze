@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 	public Camera cam;
 	public NavMeshAgent agent;
 	public CharacterInfo playerStats;
-	public Slider hp;
+	public TargetDummyBehaviour hp;
     public Slider dashBar;
     public Slider attackbar;
 	public LayerMask enemy;
@@ -44,7 +44,16 @@ public class PlayerController : MonoBehaviour
 
     private float stepDashRefil = 0f;
     private float attackRefil   = 0f;
-[Space]
+
+
+
+    [Space]
+    [Header("BLOCK")]
+    public float blockTime = 2f;
+    public bool blocking   = false;
+    public Slider blockbar;
+
+    [Space]
     [Header("inställnignar för testning ", order = 0)]
     [Header("attack ", order = 1)]
     public bool onlyAttack = false;
@@ -57,18 +66,25 @@ public class PlayerController : MonoBehaviour
 
 
     bool uppdatemovementTarget;
+
+
+    private Coroutine doing;
+
     private void Start()
 	{
 		agent.speed        = playerStats.movementSpeed;
 
-		hp.maxValue        = playerStats.HP;
-		hp.value           = hp.maxValue;
 
         attackbar.maxValue = playerStats.attackSpeed;
         attackbar.value    = playerStats.attackSpeed;
 
+
+        blockbar.maxValue = playerStats.attackSpeed;
+        blockbar.value    = playerStats.attackSpeed;
+
         dashBar.maxValue   = playerStats.dashCooldown;
         dashBar.value      = playerStats.dashCooldown;
+
 
 
 
@@ -79,8 +95,15 @@ public class PlayerController : MonoBehaviour
 
 	void Update()
     {
-		MoveToMouse();
+
+   
+
+
+        MoveToMouse();
         MoveDash();
+
+
+        if (block()) { return; }
 
         if (!onlyAttack){ MoveAndAttack();	}
 		else		    { OnlyAttack();		}
@@ -120,9 +143,18 @@ public class PlayerController : MonoBehaviour
 
 
 
-    void block()
+    bool block()
     {
-
+        if (Input.GetKeyDown(BLOCK_KEY))
+        {
+            if (!blocking && blockbar.value != blockbar.minValue)
+            {
+              
+                StartCoroutine(Blocking());
+                blocking = true;
+            }
+        }
+        return blocking;
     }
 
 
@@ -242,7 +274,9 @@ public class PlayerController : MonoBehaviour
 					{
 						Debug.Log("Miss, no enemmy selected");
 						attackSpeed = false;
-						StartCoroutine(WaitForAttackSpeed());
+
+
+                       StartCoroutine(WaitForAttackSpeed());
 					}
 				}
 			}
@@ -267,7 +301,31 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	IEnumerator WaitForAttackSpeed()
+
+
+    IEnumerator Blocking()
+    {
+        hp.blocking = true;
+        while (blockbar.value != blockbar.minValue)
+        {
+            blockbar.value -= 0.1f;
+            yield return new WaitForSeconds(playerStats.attackSpeed / 10f);
+        }
+        hp.blocking = false;
+        //laddar dash energin
+        while (blockbar.value != blockbar.maxValue)
+        {
+            blockbar.value += 0.1f;
+            yield return new WaitForSeconds(playerStats.attackSpeed / 10f);
+        }
+        blocking = false;
+    }
+
+
+
+
+
+    IEnumerator WaitForAttackSpeed()
 	{
 
         attackbar.value = 0;

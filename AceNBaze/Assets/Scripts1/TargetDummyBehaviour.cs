@@ -7,14 +7,23 @@ public class TargetDummyBehaviour : MonoBehaviour
 {
 	public Canvas        canvas;
 	public Slider        hp;
-	public CharacterInfo dummyStats;
+    public GameObject    TEMP_shilde;
+    public CharacterInfo dummyStats;
 	private Slider       characterHp;
 	public Camera        cam;
 	public Vector3       camOffset;
 	private float        temp;
-	private void OnEnable()
+
+    private GameObject TEMP_character_shilde;
+
+    public bool blocking = false;
+
+    private void OnEnable()
 	{
+    
         characterHp = Instantiate(hp, transform.position, Quaternion.identity);
+        TEMP_character_shilde = Instantiate(TEMP_shilde, transform.position, Quaternion.identity);
+
 
         characterHp.transform.SetParent(canvas.transform);
 
@@ -26,7 +35,10 @@ public class TargetDummyBehaviour : MonoBehaviour
 
 	private void Update()
 	{
-		characterHp.transform.position = cam.WorldToScreenPoint(transform.position + camOffset);
+        TEMP_character_shilde.transform.position = transform.position;
+        TEMP_character_shilde.SetActive(blocking);
+
+        characterHp.transform.position = cam.WorldToScreenPoint(transform.position + camOffset);
 		if(dummyStats.currentHP != temp)
 		{
 			TakeDmg(10);
@@ -35,6 +47,7 @@ public class TargetDummyBehaviour : MonoBehaviour
 
 	public void TakeDmg(int dmg)
 	{
-		characterHp.value -= dmg;
+        if(!blocking)
+		    characterHp.value -= dmg;
 	}
 }

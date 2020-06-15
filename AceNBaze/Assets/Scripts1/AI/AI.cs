@@ -9,16 +9,25 @@ public class AI : MonoBehaviour
 
     public TargetDummyBehaviour TEMP_player;
     public Slider           TEMP_attackbar;
+    public Slider           TEMP_Blockbar;
     public CharacterInfo    TEMP_Stats;
     public bool             TEMP_attackSpeed;
     public bool             TEMP_moveANDattack;
     public Camera           TEMP_cam;
     public Vector3          TEMP_offestAttackSlider;
+    public Vector3          TEMP_offestBlockSlider;
 
+    public int TEMP_desitionValue = 0;
+    public int TEMP_blockValue    = 2;
 
-
-
-
+    public bool blockDone = true;
+    public bool blocking
+    {
+        set
+        {
+            GetComponent<TargetDummyBehaviour>().blocking = value;
+        }
+    }
 
 
 
@@ -42,7 +51,8 @@ public class AI : MonoBehaviour
         Dictionary<System.Type, BaseState> knowHowTo = new Dictionary<System.Type, BaseState>() {
                                                         { typeof(WanderState), new WanderState(ai: this) },
                                                         { typeof(ChaseState ), new ChaseState (ai: this) },
-                                                        { typeof(AttackState), new AttackState(ai: this) } };
+                                                        { typeof(AttackState), new AttackState(ai: this) },
+                                                        { typeof(BlockState),  new BlockState (ai: this) } };
 
         _brain = gameObject.AddComponent<StateMachine>();
         _brain.SetState(knowHowTo);
@@ -50,7 +60,7 @@ public class AI : MonoBehaviour
 
         //TEMP
         TEMP_attackSpeed = true;
-       // TEMP_offestAttackSlider = transform.position - TEMP_attackbar.transform.position;
+       
     }
 
 
@@ -60,12 +70,21 @@ public class AI : MonoBehaviour
     {
 
         TEMP_attackbar.transform.position = TEMP_cam.WorldToScreenPoint(transform.position + TEMP_offestAttackSlider);
+        TEMP_Blockbar.transform.position = TEMP_cam.WorldToScreenPoint(transform.position + TEMP_offestBlockSlider);
         _brain.StateTick();
     }
 
+
+
     public void RapperstartCrution(IEnumerator rutino)
     {
+
         StartCoroutine(rutino);
+    }
+    public void RapperStopCrution(IEnumerator rutino)
+    {
+        StopCoroutine(rutino);
+
     }
 
 }

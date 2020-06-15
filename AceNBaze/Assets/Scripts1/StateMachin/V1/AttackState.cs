@@ -10,7 +10,6 @@ public class AttackState : BaseState
     AI _ai;
 
 
-
     public AttackState(AI ai) : base(ai.gameObject)
     {
         _ai = ai;
@@ -29,6 +28,18 @@ public class AttackState : BaseState
 
         if (_ai.TEMP_attackSpeed)
         {
+
+            if(_ai.TEMP_desitionValue > _ai.TEMP_blockValue)
+            {
+                _ai.TEMP_attackSpeed = true;
+   
+                return typeof(BlockState);
+            }
+
+            _ai.TEMP_desitionValue += 1;
+
+
+
             Attack();
             _ai.TEMP_attackSpeed = false;
             _ai.RapperstartCrution(WaitForAttackSpeed());
