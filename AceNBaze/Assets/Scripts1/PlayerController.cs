@@ -66,10 +66,14 @@ public class PlayerController : MonoBehaviour
 
 
     bool uppdatemovementTarget;
-    bool doingsomthing = false;
+    bool doingsomthing     = false;
     bool swingingForAttack = false;
-    private Coroutine doing;
 
+
+    private string moventAnimation = walk_anim_raper_key;
+    private const string walk_anim_raper_key = "walk";
+    private const string dash_anim_raper_key = "dash";
+    private bool doing=false;
     private void Start()
 	{
 		agent.speed        = playerStats.movementSpeed;
@@ -97,20 +101,21 @@ public class PlayerController : MonoBehaviour
     {
 
     
-        if(agent.velocity.magnitude == 0)
+        if(agent.velocity.magnitude == 0 && !doing )
         {
             TEMP_anim.setValue("idle");
         }
-        else
+        else if(!doing)
         {
-            if(agent.speed == walkingSpeedNORMAL)
+            if (dashing)
             {
-                TEMP_anim.setValue("walk");
+                TEMP_anim.setValue(dash_anim_raper_key);
             }
             else
             {
-                TEMP_anim.setValue("dash");
+                TEMP_anim.setValue(walk_anim_raper_key);
             }
+      
         }
 
         MoveToMouse();
@@ -121,15 +126,13 @@ public class PlayerController : MonoBehaviour
         
 
 
-        if (block()) { TEMP_anim.setValue("block"); doingsomthing = true;  return; }
+        if (block()) { doingsomthing = true;  return; } //TEMP_anim.setValue("block"); 
 
         if (!onlyAttack){ MoveAndAttack();	}
 		else		    { OnlyAttack();		}
 
 		WaitToAttackUntilInRange();
 
-        //doingsomthing = !swingingForAttack && !blocking;
-        //if (!doingsomthing) { TEMP_anim.setValue("idleA"); }
 	}
 
     void MoveToMouse()
@@ -193,10 +196,10 @@ public class PlayerController : MonoBehaviour
             {
                 if (agent.remainingDistance == 0)
                 {
-                    agent.speed = walkingSpeedNORMAL;
+                    agent.speed        = walkingSpeedNORMAL;
                     agent.acceleration = walkingAccelerationNORMAL;
-                    dashing = false;
-
+                    dashing            = false;
+                    moventAnimation = walk_anim_raper_key;
                 }
 
             }
@@ -264,7 +267,7 @@ public class PlayerController : MonoBehaviour
                     walkingAccelerationNORMAL = agent.acceleration;
                     agent.acceleration = agent.acceleration * 10f;
                     CandDash = false;
-  
+                    moventAnimation = dash_anim_raper_key;
                     StartCoroutine(WaitForDashSpeed());
                 }
 
@@ -284,6 +287,8 @@ public class PlayerController : MonoBehaviour
 
 			if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
 			{
+
+                Debug.Log(hit.transform.gameObject.name + " attackSpeed " + attackSpeed);
 				if (attackSpeed)
 				{
 					if (hit.collider.gameObject.layer == 11)
@@ -295,9 +300,9 @@ public class PlayerController : MonoBehaviour
 					{
 						Debug.Log("Miss, no enemmy selected");
                         attackSpeed = false;
-
-
-                       StartCoroutine(WaitForAttackSpeed());
+                        TEMP_anim.setValue("attack");
+                        doing = true;
+                        StartCoroutine(WaitForAttackSpeed());
 					}
 				}
 			}
@@ -465,19 +470,25 @@ public class PlayerController : MonoBehaviour
 	 void Attack()
 	{
         swingingForAttack = true;
+        doing = true;
         TEMP_anim.setValue("attack");
     }
     public void realAttack()
     {
-        attackTarget.collider.transform.root.gameObject.GetComponent<TargetDummyBehaviour>().TakeDmg(playerStats.dmg);
-        Debug.Log(attackTarget.collider.gameObject.name + " takes " + playerStats.dmg + " dmg");
-        moveAndAttack = false;
-        swingingForAttack = false;
+        if (swingingForAttack)
+        {
+            attackTarget.collider.transform.root.gameObject.GetComponent<TargetDummyBehaviour>().TakeDmg(playerStats.dmg);
+            Debug.Log(attackTarget.collider.gameObject.name + " takes " + playerStats.dmg + " dmg");
+            moveAndAttack = false;
+            swingingForAttack = false;
+         
+        }
+        doing = false;
     }
 
 	private void OnDrawGizmos()
 	{
-		Gizmos.color = new Color (1, 1, 1, 0.1f);
+		Gizmos.color = new Color (1, 1, 1, 0.5f);
 		Gizmos.DrawSphere(agent.transform.position, playerStats.attackRange);
 	}
 }

@@ -12,32 +12,56 @@ public class TEMP_animator_trigger : MonoBehaviour
     public Animator anim;
 
     /// <summary>
-    /// 
+    /// attack, walk, idle, hurt, dash
     /// </summary>
-    /// <param name="name">attack,attackM, walk, idle, block, dash</param>
+    /// <param name="name"></param>
     public void setValue(string name)
     {
         switch (name)
         {
             case "attack":
-                anim.SetFloat("A", 0f);
+                anim.SetFloat("B", 1f);
                 break;
-            case "block":
-                anim.SetFloat("A", 0.4f);
+            case "hurt":
+                anim.SetFloat("B", 0.75f);
                 break;
             case "walk":
-                anim.SetFloat("M", 0f);
+                anim.SetFloat("B", 0.25f);
                 break;
             case "idle":
-                anim.SetFloat("M", 0.5f);
+                anim.SetFloat("B", 0f);
                 break;
             case "dash":
-                anim.SetFloat("M", 1f);
-                break;
-            case "idleA":
-                anim.SetFloat("A", 0.7f);
+                anim.SetFloat("B", 0.5f);
                 break;
         }
+        //switch (name)
+        //{
+        //    case "attack":
+        //        anim.SetFloat("A", 0f);
+        //        anim.SetFloat("B", 0.75f);
+        //        break;
+        //    case "hurt":
+        //        anim.SetFloat("A", 1f);
+        //        anim.SetFloat("B", 0.75f);
+        //        break;
+        //    case "walk":
+        //        anim.SetFloat("M", 0.5f);
+        //        anim.SetFloat("B", 0f);
+        //        break;
+        //    case "idle":
+        //        anim.SetFloat("M", 0f);
+        //        anim.SetFloat("B", 0f);
+        //        break;
+        //    case "dash":
+        //        anim.SetFloat("M", 0.75f);
+        //        anim.SetFloat("B", 0f);
+        //        break;
+        //    case "idleA":
+        //        anim.SetFloat("A", 0.7f);
+        //        anim.SetFloat("B", 0.75f);
+        //        break;
+        //}
     }
 
     public void attack()
