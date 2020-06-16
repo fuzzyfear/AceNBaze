@@ -10,13 +10,17 @@ public class FunctionTick : MonoBehaviour
 // structar för funktioner
 //========================================================================
 
-    public struct flags
+  
+
+    public struct MetodDelegate
     {
-    }
+        
+    }  
+
 
     public struct flag
     {
-        const string LockfreeName  = "free";
+        const string  LockfreeName  = "free";
         const int     Lockfreehash = 1294909896; //hårdkodad, värdet av Animator.StringToHash(LockfreeLock)
         public flag(string name)
         {
@@ -33,7 +37,7 @@ public class FunctionTick : MonoBehaviour
         public string currentLockName;
         public int    currentLockHash;
 
-        public bool Lock(FunctionBase.LockKey key)
+        public bool Lock(_FunctionBase.LockKey key)
         {
 
             bool didLock = currentLockHash == Lockfreehash;
@@ -45,7 +49,7 @@ public class FunctionTick : MonoBehaviour
             return didLock;
 
         }
-        public bool UnLock(FunctionBase.LockKey key)
+        public bool UnLock(_FunctionBase.LockKey key)
         {
             bool didUnLock = currentLockHash == key.lockKey;
             if (didUnLock)
@@ -59,10 +63,27 @@ public class FunctionTick : MonoBehaviour
     }
 
 
+
+    /// <summary>
+    /// Core function like set destination to walk to,
+    /// change animation.
+    /// </summary>
+    public struct CoreFunktion
+    {
+
+
+
+
+    }
+
+
+
+
+
     [SerializeField] private CharacterInfo  _playerStats;
     [SerializeField] private NavMeshAgent   _agent;
 
-    [SerializeField] private FunctionBase[] _functions;
+    [SerializeField] private _FunctionBase[] _functions;
 
 
     

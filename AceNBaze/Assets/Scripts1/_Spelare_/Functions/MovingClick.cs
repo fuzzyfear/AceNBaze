@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingClick : FunctionBase
+public class MovingClick : _FunctionBase
 {
     [SerializeField] private KeyCode MOVMENT_KEY = KeyCode.Mouse1;
 

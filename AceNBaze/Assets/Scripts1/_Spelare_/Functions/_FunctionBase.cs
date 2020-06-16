@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class FunctionBase : MonoBehaviour
+public abstract class _FunctionBase : MonoBehaviour
 {
     /// <summary>
     /// Struckt som används av functioner för att
@@ -24,10 +24,10 @@ public abstract class FunctionBase : MonoBehaviour
     }
 
     private LockKey _lockKey;
-    protected FunctionBase() { _lockKey = new LockKey(this.name); }
+    protected _FunctionBase() { _lockKey = new LockKey(this.name); }
 
 
-    public abstract void Tick(CharacterInfo stats, ref FunctionTick.flags locks);
+    //public abstract void Tick(CharacterInfo stats, ref FunctionTick.flags locks);
 
 
 
