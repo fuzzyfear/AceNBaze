@@ -2,53 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+/// <summary>
+/// Simple click to move skript
+/// </summary>
 public class MovingClick : _FunctionBase
 {
-    [SerializeField] private KeyCode MOVMENT_KEY = KeyCode.Mouse1;
-
-
-
-
-
     public MovingClick() : base() { }
 
     public override void Tick(CharacterBaseAbilitys stats, LockManager modifier)
     {
-        throw new System.NotImplementedException();
+        if (Input.GetKeyDown(Controlls.instanse.movment)) 
+            if (modifier.SetMovingDestination.LockAction(_keyName))
+            {
+                Vector3    mouse = Input.mousePosition;
+                Ray        castPoint = stats.camar.ScreenPointToRay(mouse);
+                RaycastHit hit;
+
+                if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, stats.maskes.grundMask))
+                    modifier.SetMovingDestination.UseAction(stats, hit.point, _keyHash);
+            }
     }
 
 
-
-
-
-    //void MoveToMouse()
-    //{
-
-    //    //Temp ändring för att ändra hur du rör dig
-    //    if (toogleMovment)
-    //    {
-    //        ConstatMovment = true;
-    //        if (Input.GetKey(MOVMENT_KEY))
-    //            uppdatemovementTarget = !uppdatemovementTarget;
-    //    }
-    //    else
-    //    {
-    //        uppdatemovementTarget = (ConstatMovment) ? Input.GetKey(MOVMENT_KEY) : Input.GetKeyDown(MOVMENT_KEY);
-    //    }
-
-
-    //    if (uppdatemovementTarget)
-    //    {
-    //        Vector3 mouse = Input.mousePosition;
-    //        Ray castPoint = cam.ScreenPointToRay(mouse);
-    //        RaycastHit hit;
-
-    //        if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
-    //        {
-    //            agent.SetDestination(hit.point);
-    //        }
-    //    }
-    //}
 
 
 }

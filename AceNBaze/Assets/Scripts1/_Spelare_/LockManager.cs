@@ -8,14 +8,14 @@ public class LockManager : MonoBehaviour
 
 
 
-    Lock<Vector3>       SetMovingDestination        = new Lock<Vector3>      ("SetMovingDestination"      , SetMovingDestinationAction        );
-    Lock<int>           SetLife                     = new Lock<int>          ("SetLife"                   , SetLifeAction                     );
-    Lock<int>           SetStamina                  = new Lock<int>          ("SetStamina"                , SetStaminaAction                  );
+    public Lock<Vector3>       SetMovingDestination        = new Lock<Vector3>      ("SetMovingDestination"      , SetMovingDestinationAction        );
+    public Lock<int>           SetLife                     = new Lock<int>          ("SetLife"                   , SetLifeAction                     );
+    public Lock<int>           SetStamina                  = new Lock<int>          ("SetStamina"                , SetStaminaAction                  );
 
-    Lock<string, int>   SetAnimationVariableInt     = new Lock<string, int>  ("SetAnimationVariableInt"   , SetAnimationVariableIntAction     );
-    Lock<string, float> SetAnimationVariableFloat   = new Lock<string, float>("SetAnimationVariableFloat" , SetAnimationVariableFloatAction   );
-    Lock<string, bool>  SetAnimationVariableBool    = new Lock<string, bool> ("SetAnimationVariableBool"  , SetAnimationVariableBoolAction    );
-    Lock<string>        SetAnimationVariableTrigger = new Lock<string>       ("SetAnimationVariableBool"  , SetAnimationVariableTriggerAction );
+    public Lock<string, int>   SetAnimationVariableInt     = new Lock<string, int>  ("SetAnimationVariableInt"   , SetAnimationVariableIntAction     );
+    public Lock<string, float> SetAnimationVariableFloat   = new Lock<string, float>("SetAnimationVariableFloat" , SetAnimationVariableFloatAction   );
+    public Lock<string, bool>  SetAnimationVariableBool    = new Lock<string, bool> ("SetAnimationVariableBool"  , SetAnimationVariableBoolAction    );
+    public Lock<string>        SetAnimationVariableTrigger = new Lock<string>       ("SetAnimationVariableBool"  , SetAnimationVariableTriggerAction );
 
 
 

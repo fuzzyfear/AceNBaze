@@ -6,8 +6,8 @@ public abstract class _FunctionBase : MonoBehaviour
 {
 
     // will be used to lock actions
-    private string _keyName;
-    private int    _keyHash;
+    protected string _keyName;
+    protected int    _keyHash;
 
     protected _FunctionBase()
     {
