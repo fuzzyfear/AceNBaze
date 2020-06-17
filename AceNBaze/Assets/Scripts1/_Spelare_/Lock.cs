@@ -26,21 +26,84 @@ public class Lock : MonoBehaviour
         currentLockHash = Lockfreehash;
         this.action     = action;
     }
-    //TODO: fixa klart denna 
 
+    public bool ControllKey(string keyName){ return currentLockHash == Animator.StringToHash(keyName);    }
+    public bool ControllKey(int keyHash)   { return currentLockHash == keyHash;                           }
+    public bool ControllKey()              { return currentLockHash == Lockfreehash;                      }
+
+
+    /// <summary>
+    /// Use the action that if its aviable 
+    /// </summary>
+    /// <typeparam name="T"    >  Type of the input</typeparam>
+    /// <param name="Character"> the character stats that will be modifyed</param>
+    /// <param name="input"    > variable that will be used during the modification (ex new target position to walk to)</param>
+    /// <param name="keyname"  > the name of the funktion that wants to use the action</param>
+    /// <returns> true if it could use the action fals other wise</returns>
     public bool UseAction<T>(CharacterBaseAbilitys Character, T input, string keyname)
     {
+        bool couldDoAction = ControllKey() || ControllKey(keyname);
+        if(couldDoAction)
+            action.ActionFunction<T>(Character, input);
 
-        action.ActionFunction<T>(Character, input);
-        return true;
+        return couldDoAction;
     }
-
-    public bool UseAndLockAction()
+    /// <summary>
+    /// Use the action that if its aviable 
+    /// </summary>
+    /// <typeparam name="T"    >  Type of the input</typeparam>
+    /// <param name="Character"> the character stats that will be modifyed</param>
+    /// <param name="input"    > variable that will be used during the modification (ex new target position to walk to)</param>
+    /// <param name="keyhash"> the key (hase of namen) of the funktion that wants to use the action</param>
+    /// <returns> true if it could use the action fals other wise</returns>
+    public bool UseAction<T>(CharacterBaseAbilitys Character, T input, int keyhash)
     {
-        return true;
+        bool couldDoAction = ControllKey() || ControllKey(keyhash);
+        if (couldDoAction)
+            action.ActionFunction<T>(Character, input);
+
+        return couldDoAction;
+    }
+
+    /// <summary>
+    /// Use the action that if its aviable and locks it 
+    /// </summary>
+    /// <typeparam name="T"    >  Type of the input</typeparam>
+    /// <param name="Character"> the character stats that will be modifyed</param>
+    /// <param name="input"    > variable that will be used during the modification (ex new target position to walk to)</param>
+    /// <param name="keyname"  > the name of the funktion that wants to use the action</param>
+    /// <returns> true if it could use the action fals other wise</returns>
+    public bool UseAndLockAction<T>(CharacterBaseAbilitys Character, T input, string keyname)
+    {
+        bool couldDoAction = LockAction(keyname) || ControllKey(keyname);
+        if (couldDoAction)
+            action.ActionFunction<T>(Character, input);
+
+        return couldDoAction;
+    }
+    /// <summary>
+    /// Use the action that if its aviable and locks it 
+    /// </summary>
+    /// <typeparam name="T"    >  Type of the input</typeparam>
+    /// <param name="Character"> the character stats that will be modifyed</param>
+    /// <param name="input"    > variable that will be used during the modification (ex new target position to walk to)</param>
+    /// <param name="keyhash"> the key (hase of namen) of the funktion that wants to use the action</param>
+    /// <returns> true if it could use the action fals other wise</returns>
+    public bool UseAndLockAction<T>(CharacterBaseAbilitys Character, T input, int keyhash)
+    {
+        bool couldDoAction = LockAction(keyhash) || ControllKey(keyhash);
+        if (couldDoAction)
+            action.ActionFunction<T>(Character, input);
+
+        return couldDoAction;
     }
 
 
+
+
+//==================================================================================================
+// Functions to lock and unlock 
+//==================================================================================================
 
     /// <summary>
     /// Locks the action 
@@ -49,7 +112,7 @@ public class Lock : MonoBehaviour
     /// <returns>true if the action could be claimed, fals if it already loked</returns>
     public bool LockAction(string keyName)
     {
-        bool loked = (currentLockHash == Lockfreehash);
+        bool loked = ControllKey(keyName);
 
         if(loked)
             currentLockHash = Animator.StringToHash(keyName);
@@ -63,14 +126,13 @@ public class Lock : MonoBehaviour
     /// <returns>true if the action could be claimed, fals if it already loked</returns>
     public bool LockAction(int keyHash)
     {
-        bool loked = (currentLockHash == Lockfreehash);
+        bool loked = ControllKey();
 
         if (loked)
             currentLockHash = keyHash;
 
         return loked;
     }
-
 
     /// <summary>
     /// Unlocks the action
@@ -79,7 +141,7 @@ public class Lock : MonoBehaviour
     /// <returns>True if current owner unlocks it, fals if any one else trys to unlock it</returns>
     public bool UnLockAction(string keyName)
     {
-        bool loked = (currentLockHash == Animator.StringToHash(keyName));
+        bool loked = ControllKey(name);  
         if (loked)
         {
             currentLockName = LockfreeName;
@@ -94,9 +156,7 @@ public class Lock : MonoBehaviour
     /// <returns>True if current owner unlocks it, fals if any one else trys to unlock it</returns>
     public bool UnLockAction(int keyHash)
     {
-
         bool loked = (currentLockHash == keyHash);
-
         if (loked)
         {
             currentLockName = LockfreeName;

@@ -12,10 +12,10 @@ public class MovingClick : _FunctionBase
 
     public MovingClick() : base() { }
 
-    public override void Tick(CharacterInfo stats, ref FunctionTick.flags locks)
-    {
+    //public override void Tick(CharacterInfo stats, ref FunctionTick.flags locks)
+    //{
        
-    }
+    //}
 
 
 
