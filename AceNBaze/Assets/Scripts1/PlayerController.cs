@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
 	public Camera cam;
 	public NavMeshAgent agent;
 	public CharacterInfo playerStats;
-	public Slider hp;
+
+    public Slider hp;
     public Slider dashBar;
     public Slider attackbar;
 	public LayerMask enemy;

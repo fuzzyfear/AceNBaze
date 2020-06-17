@@ -4,30 +4,20 @@ using UnityEngine;
 
 public abstract class _FunctionBase : MonoBehaviour
 {
-    /// <summary>
-    /// Struckt som används av functioner för att
-    /// låsa specifika funktioner så som förmågan 
-    /// att ändra rörelse destination
-    /// </summary>
-    public readonly struct LockKey
-    {
-    
-        public LockKey(string key)
-        {
-            PreatyName = key;
-            lockKey    = Animator.StringToHash(key);
-        }
 
-        public string PreatyName { get; }
-        public int    lockKey    { get; }
+    // will be used to lock actions
+    private string _keyName;
+    private int    _keyHash;
+
+    protected _FunctionBase()
+    {
+        _keyName = this.name;
+        _keyHash = Animator.StringToHash(_keyName);
 
     }
 
-    private LockKey _lockKey;
-    protected _FunctionBase() { _lockKey = new LockKey(this.name); }
 
-
-    //public abstract void Tick(CharacterInfo stats, ref FunctionTick.flags locks);
+    public abstract void Tick(CharacterBaseAbilitys stats, LockManager modifier);
 
 
 

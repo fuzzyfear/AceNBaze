@@ -12,42 +12,43 @@ public class MovingClick : _FunctionBase
 
     public MovingClick() : base() { }
 
-    //public override void Tick(CharacterInfo stats, ref FunctionTick.flags locks)
+    public override void Tick(CharacterBaseAbilitys stats, LockManager modifier)
+    {
+        throw new System.NotImplementedException();
+    }
+
+
+
+
+
+    //void MoveToMouse()
     //{
-       
+
+    //    //Temp ändring för att ändra hur du rör dig
+    //    if (toogleMovment)
+    //    {
+    //        ConstatMovment = true;
+    //        if (Input.GetKey(MOVMENT_KEY))
+    //            uppdatemovementTarget = !uppdatemovementTarget;
+    //    }
+    //    else
+    //    {
+    //        uppdatemovementTarget = (ConstatMovment) ? Input.GetKey(MOVMENT_KEY) : Input.GetKeyDown(MOVMENT_KEY);
+    //    }
+
+
+    //    if (uppdatemovementTarget)
+    //    {
+    //        Vector3 mouse = Input.mousePosition;
+    //        Ray castPoint = cam.ScreenPointToRay(mouse);
+    //        RaycastHit hit;
+
+    //        if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
+    //        {
+    //            agent.SetDestination(hit.point);
+    //        }
+    //    }
     //}
-
-
-
-
-  //void MoveToMouse()
-  //{
-
-  //    //Temp ändring för att ändra hur du rör dig
-  //    if (toogleMovment)
-  //    {
-  //        ConstatMovment = true;
-  //        if (Input.GetKey(MOVMENT_KEY))
-  //            uppdatemovementTarget = !uppdatemovementTarget;
-  //    }
-  //    else
-  //    {
-  //        uppdatemovementTarget = (ConstatMovment) ? Input.GetKey(MOVMENT_KEY) : Input.GetKeyDown(MOVMENT_KEY);
-  //    }
-
-
-  //    if (uppdatemovementTarget)
-  //    {
-  //        Vector3 mouse = Input.mousePosition;
-  //        Ray castPoint = cam.ScreenPointToRay(mouse);
-  //        RaycastHit hit;
-
-  //        if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
-  //        {
-  //            agent.SetDestination(hit.point);
-  //        }
-  //    }
-  //}
 
 
 }

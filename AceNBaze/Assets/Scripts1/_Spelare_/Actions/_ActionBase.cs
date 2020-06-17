@@ -1,4 +1,8 @@
-﻿public interface _ActionBase 
+﻿using System;
+using UnityEngine;
+
+interface _ActionBase<T>
 {
-     void ActionFunction<T>(CharacterBaseAbilitys characterBase,  T input);
+    void ActionFunction(CharacterBaseAbilitys characterBase, T input);
 }
+
