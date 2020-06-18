@@ -7,11 +7,8 @@ public class FunctionTick : MonoBehaviour
 {
 
 
-    [SerializeField]
-    private CharacterBaseAbilitys _abilitys; // stats and grund functions like agent
-    private LockManager           _Modifier; // modifes stuff in _abilitys
-
- 
+    [SerializeField] private CharacterBaseAbilitys _abilitys; // stats and grund functions like agent
+    [SerializeField] private LockManager           _Modifier; // modifes stuff in _abilitys
 
     [SerializeField] private _FunctionBase[] _functions;
 
@@ -20,7 +17,9 @@ public class FunctionTick : MonoBehaviour
 
     private void Start()
     {
-        _Modifier = new LockManager();
+       // _Modifier = gameObject.GetComponent<LockManager>();
+      
+        //_Modifier = new LockManager();
     }
 
 

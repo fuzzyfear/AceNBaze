@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class CharacterBaseAbilitys : MonoBehaviour
 {
-
+    [System.Serializable]
     public struct layerMaskes
     {
         [SerializeField] private LayerMask _grundMask;

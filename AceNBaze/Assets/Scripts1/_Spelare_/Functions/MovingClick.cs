@@ -13,16 +13,22 @@ public class MovingClick : _FunctionBase
 
     public override void Tick(CharacterBaseAbilitys stats, LockManager modifier)
     {
-        if (Input.GetKeyDown(Controlls.instanse.movment)) 
+        if (Input.GetKeyDown(Controlls.instanse.movment))
+        {
             if (modifier.SetMovingDestination.LockAction(_keyName))
             {
-                Vector3    mouse = Input.mousePosition;
-                Ray        castPoint = stats.camar.ScreenPointToRay(mouse);
+                Vector3 mouse = Input.mousePosition;
+                Ray castPoint = stats.camar.ScreenPointToRay(mouse);
                 RaycastHit hit;
 
                 if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, stats.maskes.grundMask))
+                {
                     modifier.SetMovingDestination.UseAction(stats, hit.point, _keyHash);
+                }
+                Debug.Log(_keyName +" "+this.GetType().Name);
+                modifier.SetMovingDestination.UnLockAction(_keyName);
             }
+        }
     }
 
 

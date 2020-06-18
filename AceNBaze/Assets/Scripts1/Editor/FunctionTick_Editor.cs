@@ -9,11 +9,11 @@ public class FunctionTick_Editor : Editor
     SerializedProperty _functions_prop;
     const string       _functions_name = "_functions";
 
-    SerializedProperty _playerStats_prop;
-    const string       _playerStats_name = "_playerStats";
+    SerializedProperty _abilitys_prop;
+    const string       _abilitys_name = "_abilitys";
 
-    SerializedProperty _agent_prop;
-    const string       _agent_name = "_agent";
+    SerializedProperty _Modifier_prop;
+    const string      __Modifier_name = "_Modifier";
 
 
 
@@ -27,27 +27,29 @@ public class FunctionTick_Editor : Editor
 
     private void OnEnable()
     {
-        _functions_prop   = serializedObject.FindProperty(_functions_name);
-        _playerStats_prop = serializedObject.FindProperty(_playerStats_name);
-        _agent_prop       = serializedObject.FindProperty(_agent_name);
+        _functions_prop = serializedObject.FindProperty(_functions_name);
+        _abilitys_prop  = serializedObject.FindProperty(_abilitys_name);
+        _Modifier_prop     = serializedObject.FindProperty(__Modifier_name);
     }
 
 
     public override void OnInspectorGUI()
     {
-      //  base.OnInspectorGUI();
+       //  base.OnInspectorGUI();
 
 
 
         serializedObject.Update();
-
-        EditorGUILayout.PropertyField(_playerStats_prop);
-
+        //
+        EditorGUILayout.PropertyField(_abilitys_prop);
+        //
         EditorGUILayout.Space();
-        EditorGUILayout.PropertyField(_agent_prop);
 
+        EditorGUILayout.PropertyField(_Modifier_prop);
 
         displayList(_functions_prop);
+
+
         serializedObject.ApplyModifiedProperties();
     }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Base lock
 /// </summary>
-public class Lock: MonoBehaviour
+public abstract class Lock: MonoBehaviour
 {
     protected static string LockfreeName = "free";
     protected static int    Lockfreehash = 1294909896;
@@ -14,14 +14,14 @@ public class Lock: MonoBehaviour
     protected string _lockName;
     protected int    _lockHash;
 
+    [SerializeField] protected string currentLockName; //most for debug
+    [SerializeField] protected int    currentLockHash;
 
     public string LockName => _lockName;
     public int    LockHash => _lockHash;
 
-
-    protected string currentLockName; //most for debug
-    protected int    currentLockHash;
-
+    public string CurrentLockName => currentLockName;
+    public int    CurrentLockHash => currentLockHash;
 
 
     public Lock(string lockName)
@@ -37,11 +37,7 @@ public class Lock: MonoBehaviour
     public bool ControllKey(string keyName){ return currentLockHash == Animator.StringToHash(keyName);    }
     public bool ControllKey(int keyHash)   { return currentLockHash == keyHash;                           }
     public bool ControllKey()              { return currentLockHash == Lockfreehash;                      }
-
-
-
-
-
+    
     //==================================================================================================
     // Functions to lock and unlock 
     //==================================================================================================
@@ -53,10 +49,14 @@ public class Lock: MonoBehaviour
     /// <returns>true if the action could be claimed, fals if it already loked</returns>
     public bool LockAction(string keyName)
     {
-        bool loked = ControllKey(keyName);
+        bool loked = ControllKey();  
 
         if (loked)
+        {
+            currentLockName = keyName;
             currentLockHash = Animator.StringToHash(keyName);
+        }
+         
 
         return loked;
     }
@@ -70,7 +70,10 @@ public class Lock: MonoBehaviour
         bool loked = ControllKey();
 
         if (loked)
+        {
+            currentLockName = keyHash.ToString();
             currentLockHash = keyHash;
+        }
 
         return loked;
     }
@@ -82,7 +85,9 @@ public class Lock: MonoBehaviour
     /// <returns>True if current owner unlocks it, fals if any one else trys to unlock it</returns>
     public bool UnLockAction(string keyName)
     {
-        bool loked = ControllKey(name);
+        bool loked = ControllKey(keyName);
+
+
         if (loked)
         {
             currentLockName = LockfreeName;
@@ -97,7 +102,7 @@ public class Lock: MonoBehaviour
     /// <returns>True if current owner unlocks it, fals if any one else trys to unlock it</returns>
     public bool UnLockAction(int keyHash)
     {
-        bool loked = (currentLockHash == keyHash);
+        bool loked = ControllKey(keyHash);
         if (loked)
         {
             currentLockName = LockfreeName;
@@ -105,6 +110,15 @@ public class Lock: MonoBehaviour
         }
         return loked;
     }
+
+
+
+
+    /// <summary>
+    /// To get the types for the debug, so the can be displayed in the editpr
+    /// </summary>
+    /// <returns></returns>
+    public abstract string[] GetTypes();
 
 }
 
@@ -193,6 +207,16 @@ public class Lock<DataType> : Lock
             action(Character, input);
 
         return couldDoAction;
+    }
+
+
+
+
+    public override string[] GetTypes()
+    {
+        string[] datatypes = { typeof(DataType).Name };
+
+        return datatypes;
     }
 }
 
@@ -283,4 +307,14 @@ public class Lock<DataType1, DataType2> : Lock
 
         return couldDoAction;
     }
+
+
+    public override string[] GetTypes()
+    {
+        string[] datatypes = { typeof(DataType1).Name, typeof(DataType2).Name };
+
+        return datatypes;
+    }
+
+
 }

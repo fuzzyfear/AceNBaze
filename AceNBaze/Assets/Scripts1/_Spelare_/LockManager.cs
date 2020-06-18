@@ -5,9 +5,23 @@ using UnityEngine;
 public class LockManager : MonoBehaviour
 {
 
+    /// <summary>
+    /// Debug to eneable the displayment of the locks in the editor
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public Lock[] DEBUG_GetLocks()
+    {
+        return new Lock[] { SetMovingDestination       ,
+                            SetLife                    ,
+                            SetStamina                 ,
+                            SetAnimationVariableInt    ,
+                            SetAnimationVariableFloat  ,
+                            SetAnimationVariableBool   ,
+                            SetAnimationVariableTrigger };
 
-
-
+    }
+    //NOT: DONT FORGET TO ADSetAnimationVariableTriggerD NEW LOCKS TO THE DEBUG_GetLocks FUNCTION!!!!!
     public Lock<Vector3>       SetMovingDestination        = new Lock<Vector3>      ("SetMovingDestination"      , SetMovingDestinationAction        );
     public Lock<int>           SetLife                     = new Lock<int>          ("SetLife"                   , SetLifeAction                     );
     public Lock<int>           SetStamina                  = new Lock<int>          ("SetStamina"                , SetStaminaAction                  );
@@ -17,9 +31,7 @@ public class LockManager : MonoBehaviour
     public Lock<string, bool>  SetAnimationVariableBool    = new Lock<string, bool> ("SetAnimationVariableBool"  , SetAnimationVariableBoolAction    );
     public Lock<string>        SetAnimationVariableTrigger = new Lock<string>       ("SetAnimationVariableBool"  , SetAnimationVariableTriggerAction );
 
-
-
-
+    
     static void SetMovingDestinationAction(CharacterBaseAbilitys characterBase, Vector3 pos)
     {
         characterBase.agent.SetDestination(pos);

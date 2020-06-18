@@ -9,9 +9,15 @@ public abstract class _FunctionBase : MonoBehaviour
     protected string _keyName;
     protected int    _keyHash;
 
-    protected _FunctionBase()
+    //protected _FunctionBase(string Name)
+    //{
+    //    _keyName = this.name;
+    //    _keyHash = Animator.StringToHash(_keyName);
+
+    //}
+    protected void Awake()
     {
-        _keyName = this.name;
+        _keyName = GetType().Name;
         _keyHash = Animator.StringToHash(_keyName);
 
     }
