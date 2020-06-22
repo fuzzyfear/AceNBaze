@@ -25,7 +25,7 @@ public class MovingClick : _FunctionBase
                 {
                     modifier.SetMovingDestination.UseAction(stats, hit.point, _keyHash);
                 }
-                Debug.Log(_keyName +" "+this.GetType().Name);
+               
                 modifier.SetMovingDestination.UnLockAction(_keyName);
             }
         }

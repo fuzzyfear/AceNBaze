@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
+
+
+
+
+
+
+
 [CustomEditor(typeof(LockManager))]
 public class LockManager_Editor : Editor
 {
@@ -11,7 +19,11 @@ public class LockManager_Editor : Editor
     private void OnEnable()
     {
         lockManager = target as LockManager;
+      
     }
+
+    public override bool RequiresConstantRepaint(){  return true;   }
+
 
     public override void OnInspectorGUI()
     {
@@ -56,7 +68,5 @@ public class LockManager_Editor : Editor
         }
   
     }
-
-
 
 }
