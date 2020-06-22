@@ -35,14 +35,24 @@ public class CharacterBaseAbilitys : MonoBehaviour
     public Camera       camar    => _camar;
     public layerMaskes  maskes   => _layerMaskes;
 
+
+
+
+
+
+
     public CharackterStats character
     {
         get { return _character; }
         set { _character = value; }
     }
 
- 
 
+    private void Start()
+    {
+        _agnet.speed = _character.GetMovmentSpeed();
+    
+    }
 
 }
 

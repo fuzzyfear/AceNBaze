@@ -271,6 +271,7 @@ public class PlayerController : MonoBehaviour
         }
 		attackSpeed = true;
 	}
+
     IEnumerator WaitForDashSpeed()
     {
         dashBar.value = 0f;

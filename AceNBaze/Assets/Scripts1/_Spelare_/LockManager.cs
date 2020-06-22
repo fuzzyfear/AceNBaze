@@ -25,12 +25,14 @@ public class LockManager : MonoBehaviour
     public Lock<Vector3>       SetMovingDestination        = new Lock<Vector3>      ("SetMovingDestination"      , SetMovingDestinationAction        );
     public Lock<int>           SetLife                     = new Lock<int>          ("SetLife"                   , SetLifeAction                     );
     public Lock<int>           SetStamina                  = new Lock<int>          ("SetStamina"                , SetStaminaAction                  );
+    
 
     public Lock<string, int>   SetAnimationVariableInt     = new Lock<string, int>  ("SetAnimationVariableInt"   , SetAnimationVariableIntAction     );
     public Lock<string, float> SetAnimationVariableFloat   = new Lock<string, float>("SetAnimationVariableFloat" , SetAnimationVariableFloatAction   );
     public Lock<string, bool>  SetAnimationVariableBool    = new Lock<string, bool> ("SetAnimationVariableBool"  , SetAnimationVariableBoolAction    );
     public Lock<string>        SetAnimationVariableTrigger = new Lock<string>       ("SetAnimationVariableBool"  , SetAnimationVariableTriggerAction );
 
+    public Lock<float>         SetAttackCollDown           = new Lock<float>        ("SetAttackCollDown"          , SetAttackCollDownAction          );
     
     static void SetMovingDestinationAction(CharacterBaseAbilitys characterBase, Vector3 pos)
     {
@@ -66,4 +68,13 @@ public class LockManager : MonoBehaviour
     {
         characterBase.animator.SetTrigger(variableName);
     }
+
+
+    static void SetAttackCollDownAction(CharacterBaseAbilitys characterBase, float colldown)
+    {
+        CharackterStats.Stats stats            = characterBase.character.characterStats;
+        stats.weapon.Colldown                  = colldown;
+        characterBase.character.characterStats = stats;
+    }
+
 }
