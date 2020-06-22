@@ -12,7 +12,7 @@ public class LockManager : MonoBehaviour
     /// <returns></returns>
     public Lock[] DEBUG_GetLocks()
     {
-        return new Lock[] { SetMovingDestination       ,
+        return new Lock[] { SetAgentMovingDestination       ,
                             SetLife                    ,
                             SetStamina                 ,
                             SetAnimationVariableInt    ,
@@ -22,34 +22,57 @@ public class LockManager : MonoBehaviour
 
     }
     //NOT: DONT FORGET TO ADSetAnimationVariableTriggerD NEW LOCKS TO THE DEBUG_GetLocks FUNCTION!!!!!
-    public Lock<Vector3>       SetMovingDestination        = new Lock<Vector3>      ("SetMovingDestination"      , SetMovingDestinationAction        );
-    public Lock<int>           SetLife                     = new Lock<int>          ("SetLife"                   , SetLifeAction                     );
-    public Lock<int>           SetStamina                  = new Lock<int>          ("SetStamina"                , SetStaminaAction                  );
-    
+    public Lock<Vector3>                SetAgentMovingDestination   = new Lock<Vector3>                ("SetAgentMovingDestination" , SetAgentMovingDestinationAction   );
+    public Lock<bool>                   SetAgentIsStopped           = new Lock<bool>                   ("SetAgentIsStopped"         , SetAgentIsStoppedAction           );
+                                                                                                       
+    public Lock<int>                    SetLife                     = new Lock<int>                    ("SetLife"                   , SetLifeAction                     );
+    public Lock<int>                    SetStamina                  = new Lock<int>                    ("SetStamina"                , SetStaminaAction                  );
+    public Lock<float>                  SetAttackCollDown           = new Lock<float>                  ("SetAttackCollDown"         , SetAttackCollDownAction           );
+    public Lock<CharackterStats.Weapon> ApplayDamage                = new Lock<CharackterStats.Weapon> ("ApplayDamage"              , ApplayDamageAction                );
+                                                        
+                                                           
+    public Lock<string, int>            SetAnimationVariableInt     = new Lock<string, int>            ("SetAnimationVariableInt"   , SetAnimationVariableIntAction     );
+    public Lock<string, float>          SetAnimationVariableFloat   = new Lock<string, float>          ("SetAnimationVariableFloat" , SetAnimationVariableFloatAction   );
+    public Lock<string, bool>           SetAnimationVariableBool    = new Lock<string, bool>           ("SetAnimationVariableBool"  , SetAnimationVariableBoolAction    );
+    public Lock<string>                 SetAnimationVariableTrigger = new Lock<string>                 ("SetAnimationVariableBool"  , SetAnimationVariableTriggerAction );
+                                                           
 
-    public Lock<string, int>   SetAnimationVariableInt     = new Lock<string, int>  ("SetAnimationVariableInt"   , SetAnimationVariableIntAction     );
-    public Lock<string, float> SetAnimationVariableFloat   = new Lock<string, float>("SetAnimationVariableFloat" , SetAnimationVariableFloatAction   );
-    public Lock<string, bool>  SetAnimationVariableBool    = new Lock<string, bool> ("SetAnimationVariableBool"  , SetAnimationVariableBoolAction    );
-    public Lock<string>        SetAnimationVariableTrigger = new Lock<string>       ("SetAnimationVariableBool"  , SetAnimationVariableTriggerAction );
-
-    public Lock<float>         SetAttackCollDown           = new Lock<float>        ("SetAttackCollDown"          , SetAttackCollDownAction          );
-    
-    static void SetMovingDestinationAction(CharacterBaseAbilitys characterBase, Vector3 pos)
+    static void SetAgentMovingDestinationAction(CharacterBaseAbilitys characterBase, Vector3 pos)
     {
         characterBase.agent.SetDestination(pos);
     }
+    static void SetAgentIsStoppedAction(CharacterBaseAbilitys characterBase, bool stopped)
+    {
+        characterBase.agent.isStopped = stopped;
+    }
+
 
     static void SetLifeAction(CharacterBaseAbilitys characterBase, int hp)
     {
-        CharackterStats.Stats stats            = characterBase.character.characterStats;
+        CharackterStats.Stats stats            = characterBase.characterStats.cStats;
         stats.currentHP                        = hp;
-        characterBase.character.characterStats = stats;
+        characterBase.characterStats.cStats = stats;
     }
     static void SetStaminaAction(CharacterBaseAbilitys characterBase, int stamina)
     {
-        CharackterStats.Stats stats            = characterBase.character.characterStats;
+        CharackterStats.Stats stats            = characterBase.characterStats.cStats;
         stats.currentStamina                   = stamina;
-        characterBase.character.characterStats = stats;
+        characterBase.characterStats.cStats = stats;
+    }
+    static void SetAttackCollDownAction(CharacterBaseAbilitys characterBase, float colldown)
+    {
+        CharackterStats.Stats stats = characterBase.characterStats.cStats;
+        stats.weapon.attakcStamina = colldown;
+        characterBase.characterStats.cStats = stats;
+    }
+    static void ApplayDamageAction(CharacterBaseAbilitys characterBase, CharackterStats.Weapon damage)
+    {
+        //TODO: uppdate weapon type later 
+        //TODO: do so stats effekt plays in the damage resived
+        CharackterStats.Stats stats = characterBase.characterStats.cStats;
+        stats.currentHP -= damage.weaponDamage;
+        characterBase.characterStats.cStats = stats;
+
     }
 
     static void SetAnimationVariableIntAction(CharacterBaseAbilitys characterBase, string variableName, int value)
@@ -70,11 +93,5 @@ public class LockManager : MonoBehaviour
     }
 
 
-    static void SetAttackCollDownAction(CharacterBaseAbilitys characterBase, float colldown)
-    {
-        CharackterStats.Stats stats            = characterBase.character.characterStats;
-        stats.weapon.Colldown                  = colldown;
-        characterBase.character.characterStats = stats;
-    }
-
+ 
 }

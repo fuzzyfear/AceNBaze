@@ -630,7 +630,16 @@ MonoBehaviour:
     currentHP: 0
     maxStamina: 0
     currentStamina: 0
-    wapen: {x: 0, y: 0, z: 0}
+    weapon:
+      weaponSpeed: 0
+      weaponDamage: 0
+      weaponRange: 0
+      weaponWeight: 0
+      weaponType: 0
+      weaponStatEffekt: 0
+      weaponStatEffetkPower: 0
+      _colldown: 0
+      _notColldown: 0
     armor: {x: 0, y: 0, z: 0}
     statusEffekts: []
   _baseStats: {fileID: 11400000, guid: 2c53328f8ddd7ee41877fdd97a1b0e23, type: 2}
@@ -1080,6 +1089,7 @@ MonoBehaviour:
   _character: {fileID: 1207524804914376930}
   _animator: {fileID: 1207524805258237832}
   _camar: {fileID: 0}
+  _mainTransform: {fileID: 0}
 --- !u!1 &1207524805112745363
 GameObject:
   m_ObjectHideFlags: 0
@@ -2369,6 +2379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1207524805860861043}
   - component: {fileID: 1207524805860861042}
+  - component: {fileID: 674095601968055774}
   m_Layer: 0
   m_Name: _Functions
   m_TagString: Untagged
@@ -2400,6 +2411,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1eb3abf743fecfb43882b2ea651851ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &674095601968055774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207524805860861040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc1061d99121cdd4c901532bba33c09c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1207524805863272266

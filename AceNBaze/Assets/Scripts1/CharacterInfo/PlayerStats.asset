@@ -17,5 +17,5 @@ MonoBehaviour:
   dmg: 100
   movementSpeed: 7
   attackSpeed: 1
-  attackRange: 2
+  attackRange: 5
   dashCooldown: 1

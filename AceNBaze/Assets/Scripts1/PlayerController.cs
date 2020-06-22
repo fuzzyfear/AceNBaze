@@ -369,7 +369,7 @@ public class PlayerController : MonoBehaviour
 				{
 					Debug.Log("Miss, enemy not in range");
 					moveAndAttack = false;
-					attackSpeed = false;
+					attackSpeed   = false;
 					StartCoroutine(WaitForAttackSpeed());
 				}
 			}

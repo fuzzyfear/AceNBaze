@@ -13,9 +13,9 @@ public class CharacterBaseAbilitys : MonoBehaviour
         [SerializeField] private LayerMask _enemyMask;
         [SerializeField] private LayerMask _itemMask;
 
-        public LayerMask grundMask => _grundMask;
-        public LayerMask enemyMask => _enemyMask;
-        public LayerMask itemMask  => _itemMask;
+        public LayerMask GrundMask => _grundMask;
+        public LayerMask EnemyMask => _enemyMask;
+        public LayerMask ItemMask  => _itemMask;
 
     }
 
@@ -28,12 +28,14 @@ public class CharacterBaseAbilitys : MonoBehaviour
     [SerializeField] private CharackterStats _character;
     [SerializeField] private Animator        _animator;
     [SerializeField] private Camera          _camar;
+    [SerializeField] private Transform       _mainTransform;
 
 
-    public NavMeshAgent agent    => _agnet;
-    public Animator     animator => _animator;
-    public Camera       camar    => _camar;
-    public layerMaskes  maskes   => _layerMaskes;
+    public NavMeshAgent agent         => _agnet;
+    public Animator     animator      => _animator;
+    public Camera       camar         => _camar;
+    public layerMaskes  maskes        => _layerMaskes;
+    public Transform    mainTransform => _mainTransform;
 
 
 
@@ -41,7 +43,7 @@ public class CharacterBaseAbilitys : MonoBehaviour
 
 
 
-    public CharackterStats character
+    public CharackterStats characterStats
     {
         get { return _character; }
         set { _character = value; }
@@ -53,6 +55,7 @@ public class CharacterBaseAbilitys : MonoBehaviour
         _agnet.speed = _character.GetMovmentSpeed();
     
     }
+
 
 }
 

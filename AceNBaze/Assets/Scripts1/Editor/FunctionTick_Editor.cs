@@ -40,6 +40,12 @@ public class FunctionTick_Editor : Editor
 
 
         serializedObject.Update();
+        EditorGUILayout.HelpBox("The Order of the childern must be:" +
+                                " \n \n _CharackterAbilitys " +
+                                "\n _CharackterStats " +
+                                "\n _Functions \n _Model " +
+                                "\n ... \n \n " +
+                                "since code relyes on the order to acces them fast.", MessageType.Info);
         //
         EditorGUILayout.PropertyField(_abilitys_prop);
         //

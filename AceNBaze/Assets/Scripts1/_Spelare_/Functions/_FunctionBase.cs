@@ -23,7 +23,7 @@ public abstract class _FunctionBase : MonoBehaviour
     }
 
 
-    public abstract void Tick(CharacterBaseAbilitys stats, LockManager modifier);
+    public abstract void Tick(CharacterBaseAbilitys baseAbilitys, LockManager modifier);
 
 
 
