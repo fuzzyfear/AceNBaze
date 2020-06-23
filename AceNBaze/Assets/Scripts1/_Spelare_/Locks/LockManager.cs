@@ -12,7 +12,7 @@ public class LockManager : MonoBehaviour
     /// <returns></returns>
     public Lock[] DEBUG_GetLocks()
     {
-        return new Lock[] { SetAgentMovingDestination       ,
+        return new Lock[] { SetAgentMovingDestination  ,
                             SetLife                    ,
                             SetStamina                 ,
                             SetAnimationVariableInt    ,

@@ -20,8 +20,6 @@ public class CharacterBaseAbilitys : MonoBehaviour
     }
 
 
-
-
     [SerializeField] private layerMaskes     _layerMaskes;
     [Space]
     [SerializeField] private NavMeshAgent    _agnet;
@@ -31,23 +29,23 @@ public class CharacterBaseAbilitys : MonoBehaviour
     [SerializeField] private Transform       _mainTransform;
 
 
+
     public NavMeshAgent agent         => _agnet;
     public Animator     animator      => _animator;
     public Camera       camar         => _camar;
     public layerMaskes  maskes        => _layerMaskes;
     public Transform    mainTransform => _mainTransform;
 
-
-
-
-
-
-
     public CharackterStats characterStats
     {
         get { return _character; }
         set { _character = value; }
     }
+
+
+
+
+
 
 
     private void Start()

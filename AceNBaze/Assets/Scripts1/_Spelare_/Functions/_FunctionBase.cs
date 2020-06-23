@@ -9,12 +9,7 @@ public abstract class _FunctionBase : MonoBehaviour
     protected string _keyName;
     protected int    _keyHash;
 
-    //protected _FunctionBase(string Name)
-    //{
-    //    _keyName = this.name;
-    //    _keyHash = Animator.StringToHash(_keyName);
 
-    //}
     protected void Awake()
     {
         _keyName = GetType().Name;
@@ -23,7 +18,7 @@ public abstract class _FunctionBase : MonoBehaviour
     }
 
 
-    public abstract void Tick(CharacterBaseAbilitys baseAbilitys, LockManager modifier);
+    public abstract void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier);
 
 
 

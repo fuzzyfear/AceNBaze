@@ -23,6 +23,7 @@ public abstract class Lock: MonoBehaviour
     public string CurrentLockName => currentLockName;
     public int    CurrentLockHash => currentLockHash;
 
+    protected int HashKey(string key) { return Animator.StringToHash(key); }
 
     public Lock(string lockName)
     {
@@ -34,9 +35,9 @@ public abstract class Lock: MonoBehaviour
     }
 
     
-    public bool ControllKey(string keyName){ return currentLockHash == Animator.StringToHash(keyName);    }
-    public bool ControllKey(int keyHash)   { return currentLockHash == keyHash;                           }
-    public bool ControllKey()              { return currentLockHash == Lockfreehash;                      }
+    public bool ControllKey(string keyName){ return currentLockHash == HashKey(keyName);    }
+    public bool ControllKey(int keyHash)   { return currentLockHash == keyHash;             }
+    public bool ControllKey()              { return currentLockHash == Lockfreehash;        }
     
     //==================================================================================================
     // Functions to lock and unlock 
@@ -54,7 +55,7 @@ public abstract class Lock: MonoBehaviour
         if (loked)
         {
             currentLockName = keyName;
-            currentLockHash = Animator.StringToHash(keyName);
+            currentLockHash = HashKey(keyName);
         }
          
 

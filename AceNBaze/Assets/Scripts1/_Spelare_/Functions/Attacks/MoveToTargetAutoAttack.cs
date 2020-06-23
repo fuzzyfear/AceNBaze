@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveToTargetAutoAttack : MonoBehaviour
+public class MoveToTargetAutoAttack : _FunctionBase
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+
+        throw new System.NotImplementedException();
     }
 }

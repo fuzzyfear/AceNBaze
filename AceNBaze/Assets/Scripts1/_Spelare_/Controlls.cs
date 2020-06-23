@@ -26,6 +26,9 @@ public class Controlls : MonoBehaviour
         }
     }
 
+
+    
+
     [SerializeField] private KeyCode MOVMENT_KEY      = KeyCode.Mouse1;
     [SerializeField] private KeyCode MOVMENT_KEY_dash = KeyCode.Space;
     [SerializeField] private KeyCode ATTACK_KEY       = KeyCode.Mouse0;

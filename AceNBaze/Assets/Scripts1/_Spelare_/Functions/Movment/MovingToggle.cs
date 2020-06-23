@@ -2,13 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingClick : _FunctionBase
+public class MovingToggle : _FunctionBase
 {
-    public MovingClick() : base() { }
+
+    [SerializeField] private bool _uppdateMovmentDestination = false;
+
+
+    public MovingToggle() : base() { }
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
+
         if (Input.GetKeyDown(Controlls.instanse.movment))
+            _uppdateMovmentDestination = !_uppdateMovmentDestination;
+        else if (Input.anyKeyDown)
+            _uppdateMovmentDestination = false; // to stop movment
+        
+        if (_uppdateMovmentDestination)
         {
             if (modifier.lockManager.SetAgentMovingDestination.LockAction(_keyName))
             {
@@ -25,7 +35,5 @@ public class MovingClick : _FunctionBase
             }
         }
     }
-
-    
 
 }

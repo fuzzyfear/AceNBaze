@@ -119,7 +119,8 @@ public class CharackterStats : MonoBehaviour
         _characterStats.SetWeapon(new Weapon(_baseStats.attackSpeed, _baseStats.dmg, _baseStats.attackRange));
     }
 
-
+    //TODO: Fundera på att ta bort dessa, så att stats endast lagarar funktrioner
+    // bygg möjligen in det i något
     /// <summary>
     /// Returns current movmentSpeed with status effekts 
     /// Example: base speed 10 
@@ -147,7 +148,7 @@ public class CharackterStats : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Debug.DrawRay(transform.root.position, Vector3.forward * _characterStats.weapon.weaponRange);
+      //  Debug.DrawRay(transform.root.position, Vector3.forward * _characterStats.weapon.weaponRange);
     }
 
 

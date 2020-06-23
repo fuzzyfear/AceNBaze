@@ -11,12 +11,18 @@ using UnityEngine;
 public class AttackClick : _FunctionBase
 {
 
+
+    // temparary move to setteing script lagter
+    public enum attackScheme { HOLD, TOGGLE, CLICK }
+    public attackScheme scheme = attackScheme.CLICK;
+    [SerializeField] private bool attack = false;
+
+
     public AttackClick() : base() { }
 
-    public override void Tick(CharacterBaseAbilitys baseAbilitys, LockManager modifier)
+    public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-
-        if (Input.GetKeyDown(Controlls.instanse.attack))
+        if (shuldAttack())
         {
            
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
@@ -32,14 +38,14 @@ public class AttackClick : _FunctionBase
                     if(dist <= baseAbilitys.characterStats.cStats.weapon.weaponRange)
                     {
 
-                        StopMovment(baseAbilitys, modifier);
+                        StopMovment(baseAbilitys, modifier.lockManager);
 
                         CharacterBaseAbilitys targetAbilitis = hit.transform.root.GetChild(FunctionTick.CharackterAbilityChildIndex).GetComponent<CharacterBaseAbilitys>();
                         if(targetAbilitis == null)
                             Debug.LogError(" the top rot of target dosent have funktion ticker");
 
-                        if (!modifier.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon , _keyHash))
-                            Debug.Log("Could not applay damage, " + modifier.ApplayDamage.CurrentLockName + " has locked the action");
+                        if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon , _keyHash))
+                            Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
                         else
                             Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
 
@@ -55,10 +61,10 @@ public class AttackClick : _FunctionBase
        
     }
 
-    IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, LockManager modifier)
+    IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
         float colldown = 0f;
-        modifier.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
+        modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
       
         float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
 
@@ -66,7 +72,7 @@ public class AttackClick : _FunctionBase
         {
 
             colldown = Mathf.Clamp01(colldown+colldownSpeed);
-            modifier.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
+            modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
 
             yield return new WaitForSeconds(1f);
         }
@@ -92,5 +98,30 @@ public class AttackClick : _FunctionBase
             modifier.SetAgentIsStopped.UseAction(baseAbilitys, false, _keyHash);
             modifier.SetAgentIsStopped.UnLockAction(_keyHash);
         }
+    }
+
+
+
+
+
+    private bool shuldAttack()
+    {
+
+        switch (scheme)
+        {
+            case attackScheme.HOLD:
+                attack = Input.GetKey(Controlls.instanse.attack);
+                break;
+            case attackScheme.TOGGLE:
+                if (Input.GetKeyDown(Controlls.instanse.attack))
+                    attack = !attack;
+                break;
+            case attackScheme.CLICK:
+                attack = Input.GetKeyDown(Controlls.instanse.attack);
+                break;
+        }
+        return attack;
+
+
     }
 }
