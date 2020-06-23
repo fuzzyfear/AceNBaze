@@ -12,8 +12,7 @@ public class CharackterStats : MonoBehaviour
     public struct Weapon
     {
         [Header("Stats variables")]
-        public int   weaponSpeed;   //Attack cooldown (using 1/attack)
-
+        public float   coldownTime;   //Attack cooldown (using 100/attack)
         public int   weaponDamage;
         public float weaponRange;
         [Space]
@@ -26,8 +25,9 @@ public class CharackterStats : MonoBehaviour
         [Space]
         [Header("Opperation variables")]
         [SerializeField] private float _attackStamina;
+        private const float _maxStamina = 1f;
         [SerializeField] private bool  _notRecovering;
-                         private float _recoveringSpeed;
+        [SerializeField] private float _recoveringSpeed;
         public float attakcStamina
         {
             get
@@ -37,7 +37,7 @@ public class CharackterStats : MonoBehaviour
             set
             {
                 _attackStamina    = value;
-                _notRecovering = (_attackStamina == 1f);
+                _notRecovering = (_attackStamina == _maxStamina);
             }
         }
         public bool NotColldown => _notRecovering;
@@ -46,12 +46,17 @@ public class CharackterStats : MonoBehaviour
 
         public float collDownSpeed => _recoveringSpeed;
 
-        public Weapon( int speed, int damage, float range)
+        public Weapon( float speed, int damage, float range)
         {
+
+            _attackStamina = _maxStamina;
+            _notRecovering = true;
+
+
             weaponType            = -1;
             weaponWeight          = -1;
-            weaponSpeed           = speed;
-            _recoveringSpeed      = 1.0f / speed;
+            coldownTime           = speed;
+            _recoveringSpeed      = _maxStamina/coldownTime;
             weaponDamage          = damage;
             weaponRange           = range;
 
@@ -59,8 +64,7 @@ public class CharackterStats : MonoBehaviour
             weaponStatEffetkPower = -1;
 
 
-            _attackStamina    = 1;
-            _notRecovering = true;
+   
         }
 
     }
@@ -116,7 +120,7 @@ public class CharackterStats : MonoBehaviour
     private void Start()
     {
         _characterStats.loadDefultStas(_baseStats);
-        _characterStats.SetWeapon(new Weapon(_baseStats.attackSpeed, _baseStats.dmg, _baseStats.attackRange));
+        _characterStats.SetWeapon(new Weapon(_baseStats.attackColldown, _baseStats.dmg, _baseStats.attackRange));
     }
 
     //TODO: Fundera på att ta bort dessa, så att stats endast lagarar funktrioner
@@ -148,7 +152,7 @@ public class CharackterStats : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-      //  Debug.DrawRay(transform.root.position, Vector3.forward * _characterStats.weapon.weaponRange);
+        Debug.DrawRay(transform.root.position, Vector3.forward * _characterStats.weapon.weaponRange);
     }
 
 

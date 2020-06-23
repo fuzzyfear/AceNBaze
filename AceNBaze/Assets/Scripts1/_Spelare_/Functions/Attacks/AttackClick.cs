@@ -10,19 +10,11 @@ using UnityEngine;
 /// </summary>
 public class AttackClick : _FunctionBase
 {
-
-
-    // temparary move to setteing script lagter
-    public enum attackScheme { HOLD, TOGGLE, CLICK }
-    public attackScheme scheme = attackScheme.CLICK;
-    [SerializeField] private bool attack = false;
-
-
     public AttackClick() : base() { }
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        if (shuldAttack())
+        if (Input.GetKeyDown(Controlls.instanse.attack))
         {
            
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
@@ -65,16 +57,20 @@ public class AttackClick : _FunctionBase
     {
         float colldown = 0f;
         modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
-      
+
         float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
+
+
 
         while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
         {
 
-            colldown = Mathf.Clamp01(colldown+colldownSpeed);
+            yield return new WaitForSeconds(colldownSpeed);
+            colldown = Mathf.MoveTowards(colldown, 1f, 0.1f);//  Mathf.Clamp01(colldown + colldownSpeed);
+            Debug.Log(colldown);
             modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
 
-            yield return new WaitForSeconds(1f);
+
         }
 
     }
@@ -100,28 +96,5 @@ public class AttackClick : _FunctionBase
         }
     }
 
-
-
-
-
-    private bool shuldAttack()
-    {
-
-        switch (scheme)
-        {
-            case attackScheme.HOLD:
-                attack = Input.GetKey(Controlls.instanse.attack);
-                break;
-            case attackScheme.TOGGLE:
-                if (Input.GetKeyDown(Controlls.instanse.attack))
-                    attack = !attack;
-                break;
-            case attackScheme.CLICK:
-                attack = Input.GetKeyDown(Controlls.instanse.attack);
-                break;
-        }
-        return attack;
-
-
-    }
+  
 }
