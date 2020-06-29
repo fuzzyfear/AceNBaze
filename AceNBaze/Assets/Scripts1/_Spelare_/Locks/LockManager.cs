@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LockManager : MonoBehaviour
 {
-
+    #region DEBUG (DEBUG_GetLocks)
     /// <summary>
     /// Debug to eneable the displayment of the locks in the editor
     /// 
@@ -13,14 +13,22 @@ public class LockManager : MonoBehaviour
     public Lock[] DEBUG_GetLocks()
     {
         return new Lock[] { SetAgentMovingDestination  ,
+                            SetAgentIsStopped          ,
+                            SetAgentIsStopped          ,
+                            SetAgentMovingSpeed        ,
+
                             SetLife                    ,
                             SetStamina                 ,
+                            SetAttackCollDown          ,
+                            ApplayDamage               ,
+
                             SetAnimationVariableInt    ,
                             SetAnimationVariableFloat  ,
                             SetAnimationVariableBool   ,
                             SetAnimationVariableTrigger };
 
     }
+    #endregion
     //NOT: DONT FORGET TO ADSetAnimationVariableTriggerD NEW LOCKS TO THE DEBUG_GetLocks FUNCTION!!!!!
     /// <summary>
     /// <para><b>_Action Input description_</b></para>
@@ -37,7 +45,7 @@ public class LockManager : MonoBehaviour
     /// <para>    float : New speed, set to -1 to use default movment speed from the character stats</para>
     /// <para>    bool  : Shulde status effekt be applayd  defult true, (like -10% momvent)</para>
     /// </summary>
-    public Lock<float,bool>                  SetAgentMovingSpeed    = new Lock<float,bool>             ("SetAgentMovingSpeed"       , SetAgentMovingSpeedAction         );
+    public Lock<float,bool>             SetAgentMovingSpeed         = new Lock<float,bool>             ("SetAgentMovingSpeed"       , SetAgentMovingSpeedAction         );
 
     public Lock<int>                    SetLife                     = new Lock<int>                    ("SetLife"                   , SetLifeAction                     );
     public Lock<float>                  SetStamina                  = new Lock<float>                  ("SetStamina"                , SetStaminaAction                  );

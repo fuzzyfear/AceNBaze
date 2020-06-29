@@ -81,11 +81,13 @@ public class CharackterStats : MonoBehaviour
         [Space]
         public int     maxHP     , currentHP;
         [Space]
-        public float staminMax, staminaCurrent;
+        public float staminMax;
+        public float staminaCurrent;
         [Tooltip("StaminaMax/BaseStats.staminaColldown")]
         public float staminaRecovery;
         [Space]
-        public float dashTime, dashSpeed;
+        public float dashTime;
+        public float dashSpeed;
         [Tooltip("StaminaMax/dashTime")]
         public float dashStaminaDraineSpeed;
         [Space]
