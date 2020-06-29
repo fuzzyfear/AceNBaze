@@ -109,6 +109,7 @@ public class AutoAttackClick : _FunctionBase
 
     }
 
+
     /// <summary>
     /// Stops the movment of the player 
     /// </summary>
@@ -117,18 +118,36 @@ public class AutoAttackClick : _FunctionBase
     private void StopMovment(CharacterBaseAbilitys baseAbilitys, LockManager modifier)
     {
 
-        if (modifier.SetAgentIsStopped.LockAction(_keyName))
+
+        bool locked;
+#if UNITY_EDITOR
+        locked = modifier.SetAgentIsStopped.LockAction(_keyName);
+#else
+        locked = modifier.SetAgentIsStopped.LockAction(_keyHash);
+#endif
+
+
+        if (locked)
         {
             modifier.SetAgentIsStopped.UseAction(baseAbilitys, true, _keyHash);
-            if (modifier.SetAgentMovingDestination.LockAction(keyName: _keyName))
+
+#if UNITY_EDITOR
+            locked = modifier.SetAgentMovingDestination.LockAction(_keyName);
+#else
+            locked = modifier.SetAgentMovingDestination.LockAction(_keyHash);
+#endif
+
+            if (locked)
             {
                 modifier.SetAgentMovingDestination.UseAction(baseAbilitys, baseAbilitys.mainTransform.position, _keyHash);
                 modifier.SetAgentMovingDestination.UnLockAction(_keyHash);
             }
             modifier.SetAgentIsStopped.UseAction(baseAbilitys, false, _keyHash);
             modifier.SetAgentIsStopped.UnLockAction(_keyHash);
+
+
         }
     }
 
-  
+
 }

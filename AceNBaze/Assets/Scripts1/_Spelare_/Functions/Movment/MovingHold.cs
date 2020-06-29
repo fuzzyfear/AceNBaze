@@ -13,10 +13,25 @@ public class MovingHold : _FunctionBase
     {
         if (Input.GetKey(Controlls.instanse.movment))
         {
-            if (modifier.lockManager.SetAgentMovingDestination.LockAction(_keyName))
+            bool locked;
+#if UNITY_EDITOR
+            locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyName);
+#else
+            locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyHash);
+#endif
+
+            if (locked)
             {
-                Vector3 mouse = Input.mousePosition;
-                Ray castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
+                //Sets moving speed to walking
+                if (modifier.lockManager.SetAgentMovingSpeed.LockAction(_keyName))
+                {
+                    modifier.lockManager.SetAgentMovingSpeed.UseAction(baseAbilitys, -1.0f, true, _keyHash);
+                    modifier.lockManager.SetAgentMovingSpeed.UnLockAction(_keyHash);
+                }
+
+
+                Vector3     mouse    = Input.mousePosition;
+                Ray        castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
                 RaycastHit hit;
 
                 if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, baseAbilitys.maskes.GrundMask))

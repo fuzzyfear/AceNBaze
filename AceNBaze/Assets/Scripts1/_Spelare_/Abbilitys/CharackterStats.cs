@@ -12,7 +12,7 @@ public class CharackterStats : MonoBehaviour
     public struct Weapon
     {
         [Header("Stats variables")]
-        public float   coldownTime;   //Attack cooldown (using 100/attack)
+        public float coldownTime;   //Attack cooldown (using 100/attack)
         public int   weaponDamage;
         public float weaponRange;
         [Space]
@@ -78,23 +78,36 @@ public class CharackterStats : MonoBehaviour
     {
         public int     level;
         public int     movmentSpeed;
+        [Space]
         public int     maxHP     , currentHP;
-        public int     maxStamina, currentStamina;
-        public Weapon  weapon;            // for now redo to scriptable objet 
-        public Vector3 armor;            // Vec3(type          , weight, protection)                   for now redo to scriptable objet 
-        public Vector3[] statusEffekts;  // vec3(what to effekt, type of effekt, how mutch to effekt)  for now redo to scriptable objet 
+        [Space]
+        public float staminMax, staminaCurrent;
+        [Tooltip("StaminaMax/BaseStats.staminaColldown")]
+        public float staminaRecovery;
+        [Space]
+        public float dashTime, dashSpeed;
+        [Tooltip("StaminaMax/dashTime")]
+        public float dashStaminaDraineSpeed;
+        [Space]
+        public Weapon  weapon;               // for now redo to scriptable objet 
+        public Vector3 armor;                // Vec3(type          , weight, protection)                   for now redo to scriptable objet 
+        public Vector3[] statusEffekts;     // vec3(what to effekt, type of effekt, how mutch to effekt)  for now redo to scriptable objet 
 
         public void loadDefultStas(CharacterInfo BaseStats)
         {
             //TODO: Addera så att alla stas här går att läsa från character info
-            level          = 0;
-            movmentSpeed   = BaseStats.movementSpeed;
-            maxHP          = BaseStats.HP;
-            currentHP      = maxHP;
-            maxStamina     = BaseStats.dashCooldown;
-            currentStamina = maxStamina;        
-            armor          = new Vector3(-1, 10, 200);
-            statusEffekts  = new Vector3[] { };
+            level                  = 0;
+            movmentSpeed           = BaseStats.movementSpeed;
+            maxHP                  = BaseStats.HP;
+            currentHP              = maxHP;
+            staminMax              = BaseStats.staminaBaseMax;
+            staminaCurrent         = staminMax;
+            staminaRecovery        = staminMax / BaseStats.staminaColldown;
+            dashTime               = BaseStats.baseDashTime;
+            dashSpeed              = BaseStats.bashDashSpeed;
+            dashStaminaDraineSpeed = staminMax / dashTime;
+            armor                  = new Vector3(-1, 10, 200);
+            statusEffekts          = new Vector3[] { };
         }
 
         /// <summary>
@@ -121,6 +134,8 @@ public class CharackterStats : MonoBehaviour
     {
         _characterStats.loadDefultStas(_baseStats);
         _characterStats.SetWeapon(new Weapon(_baseStats.attackColldown, _baseStats.dmg, _baseStats.attackRange));
+
+
     }
 
     //TODO: Fundera på att ta bort dessa, så att stats endast lagarar funktrioner

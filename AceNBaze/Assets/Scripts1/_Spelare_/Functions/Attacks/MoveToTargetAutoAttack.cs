@@ -15,14 +15,12 @@ public class MoveToTargetAutoAttack : _FunctionBase
 
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
             {
-                Vector3 mouse = Input.mousePosition;
-                Ray castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
+                Vector3    mouse     = Input.mousePosition;
+                Ray        castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
                 RaycastHit hit;
 
                 if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, baseAbilitys.maskes.EnemyMask))
                 {
-
-
                     targetAbilitis = hit.transform.root.GetChild(FunctionTick.CharackterAbilityChildIndex).GetComponent<CharacterBaseAbilitys>();
                 }
             }
@@ -56,12 +54,16 @@ public class MoveToTargetAutoAttack : _FunctionBase
                 }
                 else
                 {
-          
-                        if (modifier.lockManager.SetAgentMovingDestination.LockAction(_keyName))
+
+                    bool locked;
+#if UNITY_EDITOR
+                    locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyName);
+#else
+                    locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyHash);
+#endif
+                    if (locked)
                         {
-
                             modifier.lockManager.SetAgentMovingDestination.UseAction(baseAbilitys, targetAbilitis.transform.root.position, _keyHash);
-
                             modifier.lockManager.SetAgentMovingDestination.UnLockAction(_keyName);
                         }
                     
@@ -82,10 +84,26 @@ public class MoveToTargetAutoAttack : _FunctionBase
     private void StopMovment(CharacterBaseAbilitys baseAbilitys, LockManager modifier)
     {
 
-        if (modifier.SetAgentIsStopped.LockAction(_keyName))
+
+        bool locked;
+#if UNITY_EDITOR
+        locked = modifier.SetAgentIsStopped.LockAction(_keyName);
+#else
+        locked = modifier.SetAgentIsStopped.LockAction(_keyHash);
+#endif
+
+
+        if (locked)
         {
             modifier.SetAgentIsStopped.UseAction(baseAbilitys, true, _keyHash);
-            if (modifier.SetAgentMovingDestination.LockAction(keyName: _keyName))
+
+#if UNITY_EDITOR
+            locked = modifier.SetAgentMovingDestination.LockAction(_keyName);
+#else
+            locked = modifier.SetAgentMovingDestination.LockAction(_keyHash);
+#endif
+
+            if (locked)
             {
                 modifier.SetAgentMovingDestination.UseAction(baseAbilitys, baseAbilitys.mainTransform.position, _keyHash);
                 modifier.SetAgentMovingDestination.UnLockAction(_keyHash);

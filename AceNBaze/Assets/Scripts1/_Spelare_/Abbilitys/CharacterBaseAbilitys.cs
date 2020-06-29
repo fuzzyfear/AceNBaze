@@ -29,11 +29,22 @@ public class CharacterBaseAbilitys : MonoBehaviour
     [SerializeField] private Transform       _mainTransform;
 
 
-
+    /// <summary>
+    /// Do not change valus in agent directliy, use actions throug the lock manager to do what.
+    /// </summary>
     public NavMeshAgent agent         => _agnet;
+    /// <summary>
+    /// Do not change valus in animator directliy, use actions throug the lock manager to do what.
+    /// </summary>
     public Animator     animator      => _animator;
+    /// <summary>
+    /// Do not change valus in camar directliy, use actions throug the lock manager to do what.
+    /// </summary>
     public Camera       camar         => _camar;
     public layerMaskes  maskes        => _layerMaskes;
+    /// <summary>
+    /// Do not change valus in mainTransform directliy, use actions throug the lock manager to do what.
+    /// </summary>
     public Transform    mainTransform => _mainTransform;
 
     public CharackterStats characterStats
@@ -48,11 +59,6 @@ public class CharacterBaseAbilitys : MonoBehaviour
 
 
 
-    private void Start()
-    {
-        _agnet.speed = _character.GetMovmentSpeed();
-    
-    }
 
 
 }

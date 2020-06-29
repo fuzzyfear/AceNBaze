@@ -24,6 +24,7 @@ public class FunctionTick : MonoBehaviour
 
     private void Start()
     {
+        
     }
 
 

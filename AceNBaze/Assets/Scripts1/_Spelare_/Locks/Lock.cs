@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -14,7 +15,20 @@ public abstract class Lock: MonoBehaviour
     protected string _lockName;
     protected int    _lockHash;
 
-    [SerializeField] protected string currentLockName; //most for debug
+    /// <summary>
+    /// Used to chow that the action is currently 
+    /// being used by some one but it is not 
+    /// hard locked by them
+    /// </summary>
+    [SerializeField] protected bool     _softLock;
+#if UNITY_EDITOR
+    [SerializeField] protected string[] _SoftLocks; //most for debug
+#else
+   [SerializeField] protected int _SoftLocks = 0; 
+#endif
+
+
+    [SerializeField] protected string currentLockName;
     [SerializeField] protected int    currentLockHash;
 
     public string LockName => _lockName;
@@ -38,10 +52,74 @@ public abstract class Lock: MonoBehaviour
     public bool ControllKey(string keyName){ return currentLockHash == HashKey(keyName);    }
     public bool ControllKey(int keyHash)   { return currentLockHash == keyHash;             }
     public bool ControllKey()              { return currentLockHash == Lockfreehash;        }
-    
+
     //==================================================================================================
     // Functions to lock and unlock 
     //==================================================================================================
+
+    public bool SoftLock() { return _softLock; }
+
+
+
+#if UNITY_EDITOR
+    public bool SoftLock() { return _softLock; }
+    public void SoftLock(string keyName)
+    {
+
+        List<string> names = _SoftLocks.ToList();
+        int index = name.IndexOf(keyName);
+        if (index != -1)
+            names.RemoveAt(index);
+
+        names.Add(keyName);
+        _SoftLocks = names.ToArray();
+        _softLock = true;
+    }
+    public void SofUntLock(string keyName)
+    {
+
+        List<string> names = _SoftLocks.ToList();
+        names.Remove(keyName);
+        _SoftLocks = names.ToArray();
+        _softLock = _SoftLocks.Length > 0;
+    }
+#else
+    public void SoftLock(string keyName)
+    {
+
+        _SoftLocks += 1;
+        _softLock = true;
+    }
+    public void SofUntLock(string keyName)
+    {
+
+        _SoftLocks -= 1;
+        _softLock = _SoftLocks > 0;
+    }
+#endif
+
+
+
+
+
+
+
+
+    public bool OwneLock(string keyName) { return ControllKey(keyName); }
+    public bool OwneLock(int    KeyHash) { return ControllKey(KeyHash); }
+
+    /// <summary>
+    /// Controlls if the key holder ownes the lock, attempts to lock it if not
+    /// </summary>
+    /// <param name="keyName"></param>
+    /// <returns>true if the key holder owns or succeded in claming the lock</returns>
+    public bool OwnesOrLock(string keyName) { return (ControllKey(keyName)) ? true : LockAction(keyName); }
+    /// <summary>
+    /// Controlls if the key holder ownes the lock, attempts to lock it if not
+    /// </summary>
+    /// <param name="keyName"></param>
+    /// <returns>true if the key holder owns or succeded in claming the lock</returns>
+    public bool OwnesOrLock(int keyHash) { return (ControllKey(keyHash)) ? true : LockAction(keyHash); }
 
     /// <summary>
     /// Locks the action 

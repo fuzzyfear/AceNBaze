@@ -2568,8 +2568,12 @@ MonoBehaviour:
     movmentSpeed: 0
     maxHP: 0
     currentHP: 0
-    maxStamina: 0
-    currentStamina: 0
+    staminMax: 0
+    staminaCurrent: 0
+    staminaRecovery: 0
+    dashTime: 0
+    dashSpeed: 0
+    dashStaminaDraineSpeed: 0
     weapon:
       coldownTime: 0
       weaponDamage: 0
@@ -5106,13 +5110,14 @@ MonoBehaviour:
   _abilitys: {fileID: 783089043}
   _Modifier: {fileID: 6849821294543718136}
   _functions:
+  - {fileID: 1903484469}
   - {fileID: 6601653119882133709}
   - {fileID: 1022959607084416775}
   - {fileID: 7808702264748615399}
   - {fileID: 1845106995314458527}
   - {fileID: 1903484467}
   - {fileID: 1903484468}
-  _functionActive: 010000000001
+  _functionActive: 01010000000000
 --- !u!195 &1763683211
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5648,6 +5653,7 @@ GameObject:
   - component: {fileID: 6601653119882133709}
   - component: {fileID: 1022959607084416775}
   - component: {fileID: 7808702264748615399}
+  - component: {fileID: 1903484469}
   - component: {fileID: 1845106995314458527}
   - component: {fileID: 1903484467}
   - component: {fileID: 1903484468}
@@ -5698,6 +5704,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetAbilitis: {fileID: 0}
+--- !u!114 &1903484469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903484465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d7ca9d072712948be4dd7faff70b83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Isdashing: 0
+  dashDist: 4
 --- !u!1 &1914171500
 GameObject:
   m_ObjectHideFlags: 0
@@ -10058,8 +10078,12 @@ MonoBehaviour:
     movmentSpeed: 0
     maxHP: 0
     currentHP: 0
-    maxStamina: 0
-    currentStamina: 0
+    staminMax: 0
+    staminaCurrent: 0
+    staminaRecovery: 0
+    dashTime: 0
+    dashSpeed: 0
+    dashStaminaDraineSpeed: 0
     weapon:
       coldownTime: 0
       weaponDamage: 0
