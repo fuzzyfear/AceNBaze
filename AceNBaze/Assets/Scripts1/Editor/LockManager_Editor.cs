@@ -58,7 +58,20 @@ public class LockManager_Editor : Editor
 
                         GUILayout.Label("Current lock: "+actionLock.CurrentLockName + " <" + actionLock.CurrentLockHash.ToString()+">", EditorStyles.largeLabel);
 
+                        string[] softLocks = actionLock.softLocks;
+                        if(softLocks != null && softLocks.Length > 0)
+                        {
+                            string lable = "Soft Locks : \n";
 
+                            foreach (string sl in softLocks)
+                                lable += sl + "\n";
+
+                            GUILayout.BeginVertical("HelpBox");
+                                GUILayout.Label(lable, EditorStyles.largeLabel);
+                            GUILayout.EndVertical();
+                        }
+                                   
+            
                     GUILayout.EndVertical();
 
                 GUILayout.EndHorizontal();

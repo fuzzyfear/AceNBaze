@@ -25,6 +25,7 @@ public class MovingToggle : _FunctionBase
             bool locked;
 #if UNITY_EDITOR
             locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyName);
+           modifier.lockManager.SetAgentMovingDestination.SoftLock(_keyName);
 #else
             locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyHash);
 #endif

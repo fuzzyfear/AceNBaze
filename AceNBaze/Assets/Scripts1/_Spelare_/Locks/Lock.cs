@@ -23,6 +23,7 @@ public abstract class Lock: MonoBehaviour
     [SerializeField] protected bool     _softLock;
 #if UNITY_EDITOR
     [SerializeField] protected string[] _SoftLocks; //most for debug
+    public string[] softLocks => _SoftLocks;
 #else
    [SerializeField] protected int _SoftLocks = 0; 
 #endif
@@ -46,9 +47,17 @@ public abstract class Lock: MonoBehaviour
 
         currentLockName = LockfreeName;
         currentLockHash = Lockfreehash;
+
+        _softLock = false;
+#if UNITY_EDITOR
+        _SoftLocks = new string[0];
+#else
+       _SoftLocks = 0; 
+#endif
+
     }
 
-    
+
     public bool ControllKey(string keyName){ return currentLockHash == HashKey(keyName);    }
     public bool ControllKey(int keyHash)   { return currentLockHash == keyHash;             }
     public bool ControllKey()              { return currentLockHash == Lockfreehash;        }
@@ -58,16 +67,12 @@ public abstract class Lock: MonoBehaviour
     //==================================================================================================
 
     public bool SoftLock() { return _softLock; }
-
-
-
 #if UNITY_EDITOR
-    public bool SoftLock() { return _softLock; }
     public void SoftLock(string keyName)
     {
 
         List<string> names = _SoftLocks.ToList();
-        int index = name.IndexOf(keyName);
+        int index = names.IndexOf(keyName);
         if (index != -1)
             names.RemoveAt(index);
 
@@ -86,23 +91,15 @@ public abstract class Lock: MonoBehaviour
 #else
     public void SoftLock(string keyName)
     {
-
         _SoftLocks += 1;
         _softLock = true;
     }
     public void SofUntLock(string keyName)
     {
-
         _SoftLocks -= 1;
         _softLock = _SoftLocks > 0;
     }
 #endif
-
-
-
-
-
-
 
 
     public bool OwneLock(string keyName) { return ControllKey(keyName); }
