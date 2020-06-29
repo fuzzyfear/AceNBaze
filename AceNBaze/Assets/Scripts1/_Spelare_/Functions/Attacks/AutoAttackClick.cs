@@ -94,8 +94,6 @@ public class AutoAttackClick : _FunctionBase
 
         float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
 
-
-
         while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
         {
 
@@ -118,25 +116,24 @@ public class AutoAttackClick : _FunctionBase
     private void StopMovment(CharacterBaseAbilitys baseAbilitys, LockManager modifier)
     {
 
-
+        #region Lock SetAgentIsStopped
         bool locked;
 #if UNITY_EDITOR
         locked = modifier.SetAgentIsStopped.LockAction(_keyName);
 #else
         locked = modifier.SetAgentIsStopped.LockAction(_keyHash);
 #endif
-
-
+        #endregion
         if (locked)
         {
             modifier.SetAgentIsStopped.UseAction(baseAbilitys, true, _keyHash);
-
+            #region Lock SetAgentMovingDestination
 #if UNITY_EDITOR
             locked = modifier.SetAgentMovingDestination.LockAction(_keyName);
 #else
             locked = modifier.SetAgentMovingDestination.LockAction(_keyHash);
 #endif
-
+            #endregion
             if (locked)
             {
                 modifier.SetAgentMovingDestination.UseAction(baseAbilitys, baseAbilitys.mainTransform.position, _keyHash);

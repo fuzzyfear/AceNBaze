@@ -21,25 +21,24 @@ public class MovingToggle : _FunctionBase
         if (_uppdateMovmentDestination)
         {
 
-
+            #region Lock SetAgentMovingDestination 
             bool locked;
 #if UNITY_EDITOR
             locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyName);
-           modifier.lockManager.SetAgentMovingDestination.SoftLock(_keyName);
 #else
             locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyHash);
 #endif
-
+            #endregion
             if (locked)
             {
-
+                //Sets moving speed to walking
+                #region Lock SetAgentMovingSpeed
 #if UNITY_EDITOR
                 locked = modifier.lockManager.SetAgentMovingSpeed.LockAction(_keyName);
 #else
                 locked = modifier.lockManager.SetAgentMovingSpeed.LockAction(_keyHash);
 #endif
-
-                //Sets moving speed to walking
+                #endregion   
                 if (locked)
                 {
                     modifier.lockManager.SetAgentMovingSpeed.UseAction(baseAbilitys, -1.0f, true, _keyHash);

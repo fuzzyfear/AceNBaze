@@ -6,7 +6,6 @@ public class DashClick :_FunctionBase
 {
 
     [SerializeField] private bool _Isdashing = false;
-    public float dashDist = 4;
     private Coroutine dashing;
 
     public DashClick() : base() { }
@@ -26,6 +25,7 @@ public class DashClick :_FunctionBase
 
     IEnumerator Dashing(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
+        #region Locks SetAgentIsStopped, SetAgentMovingDestination, SetAgentMovingSpeed
         bool locked;
         //Locks all the movment actions
         do
@@ -42,16 +42,11 @@ public class DashClick :_FunctionBase
 
             yield return locked;
         } while (!locked);
+        #endregion
 
 
 
 
-        Vector3 mouse = Input.mousePosition;
-        Ray castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
-
-        Vector3 mheading = (castPoint.origin - baseAbilitys.agent.transform.position);
-        float mdist = mheading.magnitude;
-        Vector3 mdir = mheading / mdist;
 
         float draineSpeed = baseAbilitys.characterStats.cStats.dashStaminaDraineSpeed;
 
@@ -63,15 +58,20 @@ public class DashClick :_FunctionBase
 
             yield return new WaitForSeconds(draineSpeed);
 
+            #region Lock SetStamina 
+
+
 #if UNITY_EDITOR
             locked = modifier.lockManager.SetStamina.OwnesOrLock(_keyName);
 #else
             locked = modifier.lockManager.SetStamina.OwnesOrLock(_keyHash);
 #endif
+            #endregion
             if (locked)
             {
                 float stamina = baseAbilitys.characterStats.cStats.staminaCurrent;
                 stamina       = Mathf.MoveTowards(stamina, 0, draineSpeed * Time.deltaTime);
+
                 modifier.lockManager.SetStamina.UseAction(baseAbilitys, stamina, _keyHash);
                 modifier.lockManager.SetStamina.UnLockAction(_keyHash);
             }
@@ -80,8 +80,6 @@ public class DashClick :_FunctionBase
 
             baseAbilitys.agent.Move(baseAbilitys.mainTransform.position + mdir * dashDist);
 
-
-            yield return baseAbilitys.characterStats.cStats.staminaCurrent == baseAbilitys.characterStats.cStats.staminMax;
         }
 
 
@@ -94,5 +92,13 @@ public class DashClick :_FunctionBase
         _Isdashing = false;
     }
 
+    private Vector3 GetMousDirFromAgent(CharacterBaseAbilitys baseAbilitys)
+    {
+        Vector3 mouse = Input.mousePosition;
+        Ray castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
 
+        Vector3 mheading = (castPoint.origin - baseAbilitys.agent.transform.position);
+        float mdist = mheading.magnitude;
+        return = mheading / mdist;
+    }
 }

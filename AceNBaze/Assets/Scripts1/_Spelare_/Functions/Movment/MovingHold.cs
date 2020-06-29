@@ -13,24 +13,33 @@ public class MovingHold : _FunctionBase
     {
         if (Input.GetKey(Controlls.instanse.movment))
         {
+
+            #region Lock SetAgentMovingDestination
             bool locked;
 #if UNITY_EDITOR
             locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyName);
 #else
             locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyHash);
 #endif
-
+            #endregion
             if (locked)
             {
                 //Sets moving speed to walking
-                if (modifier.lockManager.SetAgentMovingSpeed.LockAction(_keyName))
+                #region Lock SetAgentMovingSpeed
+#if UNITY_EDITOR
+                locked = modifier.lockManager.SetAgentMovingSpeed.LockAction(_keyName);
+#else
+                locked = modifier.lockManager.SetAgentMovingSpeed.LockAction(_keyHash);
+#endif
+                #endregion
+                if (locked)
                 {
                     modifier.lockManager.SetAgentMovingSpeed.UseAction(baseAbilitys, -1.0f, true, _keyHash);
                     modifier.lockManager.SetAgentMovingSpeed.UnLockAction(_keyHash);
                 }
+        
 
-
-                Vector3     mouse    = Input.mousePosition;
+                Vector3    mouse    = Input.mousePosition;
                 Ray        castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
                 RaycastHit hit;
 
@@ -47,7 +56,6 @@ public class MovingHold : _FunctionBase
             StopMovment(baseAbilitys, modifier.lockManager);
         }
     }
-
     /// <summary>
     /// Stops the movment of the player 
     /// </summary>
@@ -56,16 +64,33 @@ public class MovingHold : _FunctionBase
     private void StopMovment(CharacterBaseAbilitys baseAbilitys, LockManager modifier)
     {
 
-        if (modifier.SetAgentIsStopped.LockAction(_keyName))
+        #region Lock SetAgentIsStopped
+        bool locked;
+#if UNITY_EDITOR
+        locked = modifier.SetAgentIsStopped.LockAction(_keyName);
+#else
+        locked = modifier.SetAgentIsStopped.LockAction(_keyHash);
+#endif
+        #endregion
+        if (locked)
         {
             modifier.SetAgentIsStopped.UseAction(baseAbilitys, true, _keyHash);
-            if (modifier.SetAgentMovingDestination.LockAction(keyName: _keyName))
+            #region Lock SetAgentMovingDestination
+#if UNITY_EDITOR
+            locked = modifier.SetAgentMovingDestination.LockAction(_keyName);
+#else
+            locked = modifier.SetAgentMovingDestination.LockAction(_keyHash);
+#endif
+            #endregion
+            if (locked)
             {
                 modifier.SetAgentMovingDestination.UseAction(baseAbilitys, baseAbilitys.mainTransform.position, _keyHash);
                 modifier.SetAgentMovingDestination.UnLockAction(_keyHash);
             }
             modifier.SetAgentIsStopped.UseAction(baseAbilitys, false, _keyHash);
             modifier.SetAgentIsStopped.UnLockAction(_keyHash);
+
+
         }
     }
 
