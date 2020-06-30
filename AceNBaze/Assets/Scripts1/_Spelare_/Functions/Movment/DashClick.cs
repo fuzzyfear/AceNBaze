@@ -17,21 +17,6 @@ public class DashClick :_FunctionBase
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-
-
-
-        //TODO: fixa dashen
-     
-
-
-
-
-
-
-       
-
-
-
         if (Input.GetKeyDown(Controlls.instanse.dash) && !_Isdashing)
         {
             _Isdashing = true;
@@ -51,19 +36,23 @@ public class DashClick :_FunctionBase
 
     IEnumerator Dashing(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        #region Locks SetAgentIsStopped, SetAgentMovingDestination, SetAgentMovingSpeed
+        #region Locks all agent related actions
         bool locked;
         //Locks all the movment actions
         do
         {
 #if UNITY_EDITOR
-            locked = (modifier.lockManager.SetAgentIsStopped.OwnesOrLock(_keyName) &&
+            locked = (modifier.lockManager.SetAgentIsStopped.OwnesOrLock(_keyName)         &&
                       modifier.lockManager.SetAgentMovingDestination.OwnesOrLock(_keyName) &&
-                      modifier.lockManager.SetAgentMovingSpeed.OwnesOrLock(_keyName));
+                      modifier.lockManager.SetAgentMovingSpeed.OwnesOrLock(_keyName)       &&
+                      modifier.lockManager.SetAgentMove.OwnesOrLock(_keyName)              &&
+                      modifier.lockManager.SetAgentUppdateRotation.OwnesOrLock(_keyName)   );
 #else
             locked = (modifier.lockManager.SetAgentIsStopped.OwnesOrLock(_keyHash)         &&
                       modifier.lockManager.SetAgentMovingDestination.OwnesOrLock(_keyHash) &&
-                      modifier.lockManager.SetAgentMovingSpeed.OwnesOrLock(_keyHash)       );
+                      modifier.lockManager.SetAgentMovingSpeed.OwnesOrLock(_keyHash)       &&
+                      modifier.lockManager.SetAgentMove.OwnesOrLock(_keyHash)              &&
+                      modifier.lockManager.SetAgentUppdateRotation.OwnesOrLock(_keyHash)   );
 #endif
 
             yield return locked;
@@ -75,8 +64,8 @@ public class DashClick :_FunctionBase
 
         #region Sets up agnet for dash
         modifier.lockManager.SetAgentMovingSpeed.UseAction(baseAbilitys, baseAbilitys.characterStats.cStats.dashSpeed, true, _keyHash);
-
         modifier.lockManager.SetAgentIsStopped.UseAction(baseAbilitys, true, _keyHash);
+        modifier.lockManager.SetAgentUppdateRotation.UseAction(baseAbilitys,false, _keyHash);
         #endregion
 
 
@@ -90,6 +79,27 @@ public class DashClick :_FunctionBase
         Vector3 dir;
         bool onGround = GetMousDirFromAgent(baseAbilitys, out dir);
 
+   
+        #region Locks transforms rotation Rotation
+        do
+        {
+#if UNITY_EDITOR
+            locked = modifier.lockManager.SetTransformRotationFromQuaternion.OwnesOrLock(_keyName) && 
+                     modifier.lockManager.SetTransformRotationFromVector.OwnesOrLock(_keyName)     ;
+#else
+            locked = modifier.lockManager.SetTransformRotationFromQuaternion.OwnesOrLock(_keyHash) && 
+                     modifier.lockManager.SetTransformRotationFromVector.OwnesOrLock(_keyHash)     ;
+#endif
+            yield return locked;
+        } while (!locked);
+        #endregion
+
+
+        modifier.lockManager.SetTransformRotationFromVector.UseAction(baseAbilitys, dir,_keyHash);
+
+        #region the dash
+
+        modifier.lockManager.SetAgentMove.UseAction(baseAbilitys, dir  * Time.smoothDeltaTime, _keyHash);
         while (!Input.GetKeyDown(Controlls.instanse.dash) &&
                baseAbilitys.characterStats.cStats.staminaCurrent > 0 &&
                         onGround)
@@ -98,26 +108,36 @@ public class DashClick :_FunctionBase
 
             modifier.lockManager.SetStamina.UseAction(baseAbilitys, stamina, _keyHash);
 
+            modifier.lockManager.SetAgentMove.UseAction(baseAbilitys, dir * dashspeed * Time.smoothDeltaTime, _keyHash);
+            
 
-            baseAbilitys.agent.Move(dir * dashspeed * Time.deltaTime);
-
-            yield return baseAbilitys.characterStats.cStats.staminaCurrent == 0;//new WaitForSeconds(draineSpeed);
+            yield return baseAbilitys.characterStats.cStats.staminaCurrent == 0;
         }
-
-
+        #endregion
         modifier.lockManager.SetAgentMovingDestination.UseAction(baseAbilitys, baseAbilitys.mainTransform.position, _keyHash);
-        modifier.lockManager.SetAgentIsStopped.UseAction(baseAbilitys, false, _keyHash);
 
 
 
-        //reseets the speed
+
+        #region Unlocks transforms rotation Rotation
+        modifier.lockManager.SetTransformRotationFromQuaternion.UnLockAction(_keyHash);
+        modifier.lockManager.SetTransformRotationFromVector.UnLockAction(_keyHash);
+        #endregion
+
+
+        #region return agent to walk 
         modifier.lockManager.SetAgentMovingSpeed.UseAction(baseAbilitys, -1, true, _keyHash);
+        modifier.lockManager.SetAgentIsStopped.UseAction(baseAbilitys, false, _keyHash);
+        modifier.lockManager.SetAgentUppdateRotation.UseAction(baseAbilitys, true, _keyHash);
+        #endregion
 
-        //unLocks all the movment actions
-        #region Unlock SetAgentIsStopped, SetAgentMovingDestination, SetAgentMovingSpeed
+
+        #region Unlock all agent related actions
         modifier.lockManager.SetAgentIsStopped.UnLockAction(_keyHash);
-        modifier.lockManager.SetAgentMovingDestination.UnLockAction(_keyName);
-        modifier.lockManager.SetAgentMovingSpeed.UnLockAction(_keyName);
+        modifier.lockManager.SetAgentMovingDestination.UnLockAction(_keyHash);
+        modifier.lockManager.SetAgentMovingSpeed.UnLockAction(_keyHash);
+        modifier.lockManager.SetAgentMove.UnLockAction(_keyHash);
+        modifier.lockManager.SetAgentUppdateRotation.UnLockAction(_keyHash);
         #endregion
 
         modifier.lockManager.SetStamina.SofUntLock(_keyName);
@@ -158,26 +178,5 @@ public class DashClick :_FunctionBase
     }
 
    
-    /// <summary>
-    /// Stops the movment of the player 
-    /// </summary>
-    /// <param name="baseAbilitys"></param>
-    /// <param name="modifier"></param>
-    private void StopMovment(CharacterBaseAbilitys baseAbilitys, LockManager modifier)
-    {
-
-  
-            modifier.SetAgentIsStopped.UseAction(baseAbilitys, true, _keyHash);
-
-
-                modifier.SetAgentMovingDestination.UseAction(baseAbilitys, baseAbilitys.mainTransform.position, _keyHash);
-                modifier.SetAgentMovingDestination.UnLockAction(_keyHash);
-            
-            modifier.SetAgentIsStopped.UseAction(baseAbilitys, false, _keyHash);
-            modifier.SetAgentIsStopped.UnLockAction(_keyHash);
-
-    
-        
-    }
 
 }

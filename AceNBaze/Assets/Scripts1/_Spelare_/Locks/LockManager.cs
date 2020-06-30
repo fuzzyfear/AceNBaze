@@ -12,78 +12,112 @@ public class LockManager : MonoBehaviour
     /// <returns></returns>
     public Lock[] DEBUG_GetLocks()
     {
-        return new Lock[] { SetAgentMovingDestination  ,
-                            SetAgentIsStopped          ,
-                            SetAgentMovingSpeed        ,
-                            SetAgentMove               ,
-
-                            SetLife                    ,
-                            SetStamina                 ,
-                            SetAttackCollDown          ,
-                            ApplayDamage               ,
-
-                            SetAnimationVariableInt    ,
-                            SetAnimationVariableFloat  ,
-                            SetAnimationVariableBool   ,
-                            SetAnimationVariableTrigger };
+        return new Lock[] {SetTransformRotationFromVector     ,
+                           SetTransformRotationFromQuaternion ,
+                                                              
+                            SetAgentMovingDestination         ,
+                            SetAgentIsStopped                 ,
+                            SetAgentUppdateRotation           ,
+                            SetAgentMovingSpeed               ,
+                            SetAgentMove                      ,
+                                                              
+                            SetLife                           ,
+                            SetStamina                        ,
+                            SetAttackCollDown                 ,
+                            ApplayDamage                      ,
+                                                              
+                            SetAnimationVariableInt           ,
+                            SetAnimationVariableFloat         ,
+                            SetAnimationVariableBool          ,
+                            SetAnimationVariableTrigger        };
 
     }
     #endregion
+
     //NOT: DONT FORGET TO ADSetAnimationVariableTriggerD NEW LOCKS TO THE DEBUG_GetLocks FUNCTION!!!!!
+
+    /// <summary>
+    /// <para>_Summarey: read the name</para>
+    /// <para><b>_Action Input description_</b></para>
+    /// <para>    Vector3 : the new rotation</para>
+    /// </summary> 
+    public Lock<Vector3>                SetTransformRotationFromVector     = new Lock<Vector3>                ("SetTransformRotationFromVector"     , SetTransformRotationFromVectorAction     );
+    /// <summary>
+    /// <para>_Summarey: read the name</para>
+    /// <para><b>_Action Input description_</b></para>
+    /// <para>    Quaternion : the new rotation</para>
+    /// </summary>                                       
+    public Lock<Quaternion>             SetTransformRotationFromQuaternion = new Lock<Quaternion>             ("SetTransformRotationFromQuaternion" , SetTransformRotationFromQuaternionAction );
+                                                                                                                                                                                        
+                                                                                                                                                                                    
     /// <summary>
     /// <para>_Summarey: rapper for agent.SetDestination</para>
     /// <para><b>_Action Input description_</b></para>
     /// <para>    Vector3 : the new destination</para>
-    /// </summary>
-    public Lock<Vector3>                SetAgentMovingDestination   = new Lock<Vector3>                ("SetAgentMovingDestination" , SetAgentMovingDestinationAction   );
+    /// </summary>                                                                                                 
+    public Lock<Vector3>                SetAgentMovingDestination          = new Lock<Vector3>                ("SetAgentMovingDestination"          , SetAgentMovingDestinationAction          );
     /// <summary>
     /// <para>_Summarey: rapper for agent.isStopped  </para>
     /// <para><b>_Action Input description_</b></para>
     /// <para>    bool  : agent.IsStopped sets to this value</para>
-    /// </summary>
-    public Lock<bool>                   SetAgentIsStopped           = new Lock<bool>                   ("SetAgentIsStopped"         , SetAgentIsStoppedAction           );
+    /// </summary>                                                                                                
+    public Lock<bool>                   SetAgentIsStopped                  = new Lock<bool>                   ("SetAgentIsStopped"                  , SetAgentIsStoppedAction                  );
+    /// <summary>
+    /// <para>_Summarey: rapper for agent.updateRotation  </para>
+    /// <para><b>_Action Input description_</b></para>
+    /// <para>    bool  : aagent.updateRotation sets to this value</para>
+    /// </summary>    
+    public Lock<bool>                   SetAgentUppdateRotation            = new Lock<bool>                   ("SetAgentUppdateRotation"            , SetAgentUppdateRotationAction            );
     /// <summary>
     /// <para>_Summarey: rapper for agent.speed,can applay status effekts on speedefor setting it  </para>
     /// <para><b>_Action Input description_</b></para>
     /// <para>    float : New speed, set to -1 to use default movment speed from the character stats</para>
     /// <para>    bool  : Shulde status effekt be applayd  defult true, (like -10% momvent)</para>
-    /// </summary>
-    public Lock<float,bool>             SetAgentMovingSpeed         = new Lock<float,bool>             ("SetAgentMovingSpeed"       , SetAgentMovingSpeedAction         );
+    /// </summary>                                                                                                
+    public Lock<float,bool>             SetAgentMovingSpeed                = new Lock<float,bool>             ("SetAgentMovingSpeed"                , SetAgentMovingSpeedAction                );
     /// <summary>
     /// <para>_Summarey: rapper for agent.Move</para>
     /// <para><b>_Action Input description_</b></para>
     /// <para>    float : New speed, set to -1 to use default movment speed from the character stats</para>
     /// <para>    bool  : Shulde status effekt be applayd  defult true, (like -10% momvent)</para>
-    /// </summary>
-    public Lock<Vector3> SetAgentMove = new Lock<Vector3>("SetAgentMove", SetAgentMoveAction);
-
-
-
-
-    public Lock<int>                    SetLife                     = new Lock<int>                    ("SetLife"                   , SetLifeAction                     );
-    public Lock<float>                  SetStamina                  = new Lock<float>                  ("SetStamina"                , SetStaminaAction                  );
+    /// </summary>                                                                                                
+    public Lock<Vector3>                SetAgentMove                       = new Lock<Vector3>                ("SetAgentMove"                       , SetAgentMoveAction                       );
+                                                                                                                                                                                               
+                                                                                                                                                                                               
+                                                                                                                                                                                               
+                                                                                                                                                                                               
+    public Lock<int>                    SetLife                            = new Lock<int>                    ("SetLife"                            , SetLifeAction                            );
+    public Lock<float>                  SetStamina                         = new Lock<float>                  ("SetStamina"                         , SetStaminaAction                         );
     /// <summary>
+    /// <para>_Summarey: uppdates curent weapon cooldonw</para>
     /// <para><b>_Action Input description_</b></para>
     /// <para>    float : the current "attack stamina"/attac colldown,</para>
-    /// </summary>
-    public Lock<float>                  SetAttackCollDown           = new Lock<float>                  ("SetAttackCollDown"         , SetAttackCollDownAction           );
+    /// </summary>                                                                                                
+    public Lock<float>                  SetAttackCollDown                  = new Lock<float>                  ("SetAttackCollDown"                  , SetAttackCollDownAction                  );
     /// <summary>
+    /// <para>_Summarey: applays damage on character by hiting it with the given weapon</para>
     /// <para><b>_Action Input description_</b></para>
     /// <para>    CharackterStats.Weapon : the weapon that delt the attack</para>
-    /// </summary>
-    public Lock<CharackterStats.Weapon> ApplayDamage                = new Lock<CharackterStats.Weapon> ("ApplayDamage"              , ApplayDamageAction                );
-                                                        
-                                                           
-    public Lock<string, int>            SetAnimationVariableInt     = new Lock<string, int>            ("SetAnimationVariableInt"   , SetAnimationVariableIntAction     );
-    public Lock<string, float>          SetAnimationVariableFloat   = new Lock<string, float>          ("SetAnimationVariableFloat" , SetAnimationVariableFloatAction   );
-    public Lock<string, bool>           SetAnimationVariableBool    = new Lock<string, bool>           ("SetAnimationVariableBool"  , SetAnimationVariableBoolAction    );
-    public Lock<string>                 SetAnimationVariableTrigger = new Lock<string>                 ("SetAnimationVariableBool"  , SetAnimationVariableTriggerAction );
-                                                           
+    /// </summary>                                                                                                
+    public Lock<CharackterStats.Weapon> ApplayDamage                       = new Lock<CharackterStats.Weapon> ("ApplayDamage"                       , ApplayDamageAction                       );
+                                                                                                                                                                                               
+                                                                                                                                                                                               
+    public Lock<string, int>            SetAnimationVariableInt            = new Lock<string, int>            ("SetAnimationVariableInt"            , SetAnimationVariableIntAction            );
+    public Lock<string, float>          SetAnimationVariableFloat          = new Lock<string, float>          ("SetAnimationVariableFloat"          , SetAnimationVariableFloatAction          );
+    public Lock<string, bool>           SetAnimationVariableBool           = new Lock<string, bool>           ("SetAnimationVariableBool"           , SetAnimationVariableBoolAction           );
+    public Lock<string>                 SetAnimationVariableTrigger        = new Lock<string>                 ("SetAnimationVariableBool"           , SetAnimationVariableTriggerAction        );
 
 
 
 
-
+    static void SetTransformRotationFromVectorAction(CharacterBaseAbilitys characterBase, Vector3 dir)
+    {
+        characterBase.mainTransform.rotation = Quaternion.LookRotation(dir);
+    }
+    static void SetTransformRotationFromQuaternionAction(CharacterBaseAbilitys characterBase, Quaternion dir)
+    {
+        characterBase.mainTransform.rotation = dir;
+    }
 
     static void SetAgentMovingDestinationAction(CharacterBaseAbilitys characterBase, Vector3 pos)
     {
@@ -92,6 +126,10 @@ public class LockManager : MonoBehaviour
     static void SetAgentIsStoppedAction(CharacterBaseAbilitys characterBase, bool stopped)
     {
         characterBase.agent.isStopped = stopped;
+    }
+    static void SetAgentUppdateRotationAction(CharacterBaseAbilitys characterBase, bool uppdate)
+    {
+        characterBase.agent.updateRotation = uppdate;
     }
     static void SetAgentMovingSpeedAction(CharacterBaseAbilitys characterBase, float newSpeed = -1.0f, bool applayStatusEffeks = true)
     {
@@ -108,8 +146,6 @@ public class LockManager : MonoBehaviour
     {
         characterBase.agent.Move(dir);
     }
-
-
 
 
     static void SetLifeAction(CharacterBaseAbilitys characterBase, int hp)

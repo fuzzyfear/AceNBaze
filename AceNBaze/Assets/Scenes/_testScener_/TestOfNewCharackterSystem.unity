@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1319,7 +1319,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 467805039}
   m_LocalRotation: {x: 0.39044836, y: 0.346829, z: -0.16172901, w: 0.83731925}
-  m_LocalPosition: {x: -10, y: 15.904, z: -10}
+  m_LocalPosition: {x: -14.18, y: 21.23, z: -8.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1388,7 +1388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fccb17d9cb7fc7458547a4d762b4b76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1360927082}
+  player: {fileID: 1763683208}
 --- !u!1 &484657859
 GameObject:
   m_ObjectHideFlags: 0
@@ -5716,6 +5716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d7ca9d072712948be4dd7faff70b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: 
   _Isdashing: 0
 --- !u!1 &1914171500
 GameObject:

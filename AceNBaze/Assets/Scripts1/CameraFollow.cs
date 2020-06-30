@@ -13,8 +13,13 @@ public class CameraFollow : MonoBehaviour
         startPos = transform.position;
 		offset = player.transform.position;
     }
+    //lagade efter karaktären 
+    //void Update()
+    //{
+    //    transform.position = startPos + player.transform.position - offset;
+    //}
 
-    void Update()
+    private void LateUpdate()
     {
         transform.position = startPos + player.transform.position - offset;
     }

@@ -66,6 +66,10 @@ public abstract class Lock: MonoBehaviour
     // Functions to lock and unlock 
     //==================================================================================================
 
+
+
+    #region SoftLock
+
     public bool SoftLock() { return _softLock; }
 #if UNITY_EDITOR
     public void SoftLock(string keyName)
@@ -100,10 +104,15 @@ public abstract class Lock: MonoBehaviour
         _softLock = _SoftLocks > 0;
     }
 #endif
+    #endregion
 
-
+    #region Owner controlls
     public bool OwneLock(string keyName) { return ControllKey(keyName); }
     public bool OwneLock(int    KeyHash) { return ControllKey(KeyHash); }
+
+    public bool OwneLockOrFree(string keyName) { return ControllKey() || ControllKey(keyName); }
+    public bool OwneLockOrFree(int    KeyHash) { return ControllKey() || ControllKey(KeyHash); }
+    #endregion
 
     /// <summary>
     /// Controlls if the key holder ownes the lock, attempts to lock it if not
