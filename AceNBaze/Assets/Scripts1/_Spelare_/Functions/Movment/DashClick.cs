@@ -1,9 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Class that handles a simple dash
+/// the dash only works as long ass you hovers above the ground, 
+/// that should be fixed for later
+/// </summary>
 public class DashClick :_FunctionBase
-{
+{[TextArea]
+    public string text;
 
     [SerializeField] private bool _Isdashing = false;
     private Coroutine dashing;
@@ -13,28 +18,17 @@ public class DashClick :_FunctionBase
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
 
-        är här
+
+
         //TODO: fixa dashen
-        Vector3 mouse = Input.mousePosition;
-
-        Ray castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
-
-        Vector3 baser = baseAbilitys.agent.transform.position;
-        baser.y = 0;
-        Vector3 test = new Vector3(castPoint.origin.x, 0, castPoint.origin.z);
-
-        Vector3 mheading = (test - baser);
-        float mdist = mheading.magnitude;
-
-
-
-        Debug.DrawRay(castPoint.origin, 10f*(mheading / mdist), Color.red);
-        //Debug.DrawRay(castPoint.origin, 2*(castPoint.direction));
+     
 
 
 
 
 
+
+       
 
 
 
@@ -86,14 +80,23 @@ public class DashClick :_FunctionBase
 
         #region Actual dash
         modifier.lockManager.SetStamina.SoftLock(_keyName);
-        Vector3 dir = GetMousDirFromAgent(baseAbilitys);
+
+
+
+
+        Vector3 dir;
+        bool onGround = GetMousDirFromAgent(baseAbilitys, out dir);
+
+
 
         float stamina     = baseAbilitys.characterStats.cStats.staminaCurrent;
         float draineSpeed = baseAbilitys.characterStats.cStats.dashStaminaDraineSpeed;
         float dashspeed   = baseAbilitys.characterStats.cStats.dashSpeed;
+        baseAbilitys.agent.isStopped = true;
 
-        while (!Input.GetKeyDown(Controlls.instanse.dash) && 
-               baseAbilitys.characterStats.cStats.staminaCurrent > 0)
+        while (!Input.GetKeyDown(Controlls.instanse.dash)            && 
+               baseAbilitys.characterStats.cStats.staminaCurrent > 0 &&
+                        onGround)
         {
 
 
@@ -116,6 +119,7 @@ public class DashClick :_FunctionBase
             }
 
             baseAbilitys.agent.Move(dir * dashspeed * Time.deltaTime);
+            
 
             yield return baseAbilitys.characterStats.cStats.staminaCurrent == 0;//new WaitForSeconds(draineSpeed);
         }
@@ -135,14 +139,36 @@ public class DashClick :_FunctionBase
         _Isdashing = false;
     }
 
-    private Vector3 GetMousDirFromAgent(CharacterBaseAbilitys baseAbilitys)
-    {
-        Vector3 mouse = Input.mousePosition;
-        Ray castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
 
-        Vector3 mheading = (castPoint.origin - baseAbilitys.agent.transform.position);
-        float mdist = mheading.magnitude;
-        return  mheading / mdist;
+
+
+    /// <summary>
+    /// Finds the point on the ground the mouse is over,
+    /// clacks dir from the player to that point.
+    /// OBS this only works as long as the mous is over grund.
+    /// should figure out a better solution that can handle 
+    /// holls but this works for now
+    /// </summary>
+    /// <param name="baseAbilitys"></param>
+    /// <param name="dir"></param>
+    /// <returns></returns>
+    private bool GetMousDirFromAgent(CharacterBaseAbilitys baseAbilitys, out Vector3 dir)
+    {
+        Ray castPoint = baseAbilitys.camar.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        bool didHitGorund = Physics.Raycast(castPoint, out hit, baseAbilitys.maskes.GrundMask);
+        dir = Vector3.zero;
+
+    
+        if (didHitGorund)
+        {
+            Debug.DrawRay(hit.point, 20 * (Vector3.up));
+            Vector3 mheading = (hit.point - baseAbilitys.agent.transform.position);
+            float mdist = mheading.magnitude;
+            dir = mheading / mdist;
+        }
+        return didHitGorund;
     }
 
    
