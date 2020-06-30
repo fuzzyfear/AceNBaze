@@ -22,10 +22,10 @@ public class DashClick :_FunctionBase
             _Isdashing = true;
 
 
-            //TEMP
-            CharackterStats.Stats temp = baseAbilitys.characterStats.cStats;
-            temp.staminaCurrent = baseAbilitys.characterStats.cStats.staminMax;
-            baseAbilitys.characterStats.cStats = temp;
+            //TEMP fylde på dashen
+            //CharackterStats.Stats temp = baseAbilitys.characterStats.cStats;
+            //temp.staminaCurrent = baseAbilitys.characterStats.cStats.staminMax;
+            //baseAbilitys.characterStats.cStats = temp;
 
             if (dashing != null)
                 StopCoroutine(dashing);
