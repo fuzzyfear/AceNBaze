@@ -70,63 +70,47 @@ public class DashClick :_FunctionBase
         } while (!locked);
         #endregion
 
-
-
-        StopMovment(baseAbilitys, modifier.lockManager);
-
-        modifier.lockManager.SetAgentMovingSpeed.UseAction(baseAbilitys, baseAbilitys.characterStats.cStats.dashSpeed,true, _keyHash);
-
-     
-
-        #region Actual dash
         modifier.lockManager.SetStamina.SoftLock(_keyName);
 
 
+        #region Sets up agnet for dash
+        modifier.lockManager.SetAgentMovingSpeed.UseAction(baseAbilitys, baseAbilitys.characterStats.cStats.dashSpeed, true, _keyHash);
+
+        modifier.lockManager.SetAgentIsStopped.UseAction(baseAbilitys, true, _keyHash);
+        #endregion
+
+
+        #region Get variabler from baseabilitys
+        float stamina     = baseAbilitys.characterStats.cStats.staminaCurrent;
+        float draineSpeed = baseAbilitys.characterStats.cStats.dashStaminaDraineSpeed;
+        float dashspeed   = baseAbilitys.characterStats.cStats.dashSpeed;
+        #endregion
 
 
         Vector3 dir;
         bool onGround = GetMousDirFromAgent(baseAbilitys, out dir);
 
-
-
-        float stamina     = baseAbilitys.characterStats.cStats.staminaCurrent;
-        float draineSpeed = baseAbilitys.characterStats.cStats.dashStaminaDraineSpeed;
-        float dashspeed   = baseAbilitys.characterStats.cStats.dashSpeed;
-        baseAbilitys.agent.isStopped = true;
-
-        while (!Input.GetKeyDown(Controlls.instanse.dash)            && 
+        while (!Input.GetKeyDown(Controlls.instanse.dash) &&
                baseAbilitys.characterStats.cStats.staminaCurrent > 0 &&
                         onGround)
         {
+            stamina = Mathf.MoveTowards(stamina, 0, draineSpeed * Time.deltaTime);
 
+            modifier.lockManager.SetStamina.UseAction(baseAbilitys, stamina, _keyHash);
 
-            #region Lock SetStamina 
-
-
-#if UNITY_EDITOR
-            locked = modifier.lockManager.SetStamina.OwnesOrLock(_keyName);
-#else
-            locked = modifier.lockManager.SetStamina.OwnesOrLock(_keyHash);
-#endif
-            #endregion
-            if (locked)
-            {
-
-                stamina = Mathf.MoveTowards(stamina, 0, draineSpeed * Time.deltaTime);
-
-                modifier.lockManager.SetStamina.UseAction(baseAbilitys, stamina, _keyHash);
-                modifier.lockManager.SetStamina.UnLockAction(_keyHash);
-            }
 
             baseAbilitys.agent.Move(dir * dashspeed * Time.deltaTime);
-            
 
             yield return baseAbilitys.characterStats.cStats.staminaCurrent == 0;//new WaitForSeconds(draineSpeed);
         }
 
-        modifier.lockManager.SetStamina.SofUntLock(_keyName);
-        #endregion
 
+        modifier.lockManager.SetAgentMovingDestination.UseAction(baseAbilitys, baseAbilitys.mainTransform.position, _keyHash);
+        modifier.lockManager.SetAgentIsStopped.UseAction(baseAbilitys, false, _keyHash);
+
+
+
+        //reseets the speed
         modifier.lockManager.SetAgentMovingSpeed.UseAction(baseAbilitys, -1, true, _keyHash);
 
         //unLocks all the movment actions
@@ -135,6 +119,8 @@ public class DashClick :_FunctionBase
         modifier.lockManager.SetAgentMovingDestination.UnLockAction(_keyName);
         modifier.lockManager.SetAgentMovingSpeed.UnLockAction(_keyName);
         #endregion
+
+        modifier.lockManager.SetStamina.SofUntLock(_keyName);
 
         _Isdashing = false;
     }

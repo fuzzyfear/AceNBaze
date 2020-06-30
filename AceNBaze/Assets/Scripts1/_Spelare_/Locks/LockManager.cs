@@ -14,8 +14,8 @@ public class LockManager : MonoBehaviour
     {
         return new Lock[] { SetAgentMovingDestination  ,
                             SetAgentIsStopped          ,
-                            SetAgentIsStopped          ,
                             SetAgentMovingSpeed        ,
+                            SetAgentMove               ,
 
                             SetLife                    ,
                             SetStamina                 ,
@@ -31,21 +31,34 @@ public class LockManager : MonoBehaviour
     #endregion
     //NOT: DONT FORGET TO ADSetAnimationVariableTriggerD NEW LOCKS TO THE DEBUG_GetLocks FUNCTION!!!!!
     /// <summary>
+    /// <para>_Summarey: rapper for agent.SetDestination</para>
     /// <para><b>_Action Input description_</b></para>
     /// <para>    Vector3 : the new destination</para>
     /// </summary>
     public Lock<Vector3>                SetAgentMovingDestination   = new Lock<Vector3>                ("SetAgentMovingDestination" , SetAgentMovingDestinationAction   );
     /// <summary>
+    /// <para>_Summarey: rapper for agent.isStopped  </para>
     /// <para><b>_Action Input description_</b></para>
     /// <para>    bool  : agent.IsStopped sets to this value</para>
     /// </summary>
     public Lock<bool>                   SetAgentIsStopped           = new Lock<bool>                   ("SetAgentIsStopped"         , SetAgentIsStoppedAction           );
     /// <summary>
+    /// <para>_Summarey: rapper for agent.speed,can applay status effekts on speedefor setting it  </para>
     /// <para><b>_Action Input description_</b></para>
     /// <para>    float : New speed, set to -1 to use default movment speed from the character stats</para>
     /// <para>    bool  : Shulde status effekt be applayd  defult true, (like -10% momvent)</para>
     /// </summary>
     public Lock<float,bool>             SetAgentMovingSpeed         = new Lock<float,bool>             ("SetAgentMovingSpeed"       , SetAgentMovingSpeedAction         );
+    /// <summary>
+    /// <para>_Summarey: rapper for agent.Move</para>
+    /// <para><b>_Action Input description_</b></para>
+    /// <para>    float : New speed, set to -1 to use default movment speed from the character stats</para>
+    /// <para>    bool  : Shulde status effekt be applayd  defult true, (like -10% momvent)</para>
+    /// </summary>
+    public Lock<Vector3> SetAgentMove = new Lock<Vector3>("SetAgentMove", SetAgentMoveAction);
+
+
+
 
     public Lock<int>                    SetLife                     = new Lock<int>                    ("SetLife"                   , SetLifeAction                     );
     public Lock<float>                  SetStamina                  = new Lock<float>                  ("SetStamina"                , SetStaminaAction                  );
@@ -91,6 +104,13 @@ public class LockManager : MonoBehaviour
 
         characterBase.agent.speed = speed;
     }
+    static void SetAgentMoveAction(CharacterBaseAbilitys characterBase, Vector3 dir)
+    {
+        characterBase.agent.Move(dir);
+    }
+
+
+
 
     static void SetLifeAction(CharacterBaseAbilitys characterBase, int hp)
     {
