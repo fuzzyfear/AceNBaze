@@ -19,6 +19,7 @@ public class AutoAttackClick : _FunctionBase
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
+        #region attack
         if (Input.GetKey(Controlls.instanse.attack))
         {
 
@@ -45,26 +46,29 @@ public class AutoAttackClick : _FunctionBase
                             Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
                         else
                             Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
-
+                            
                     }
                     else
                     {
                         Debug.Log("Miss, enemy not in range " + dist);
                     }
-                    StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
+                    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
+                    //  StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
                 }
             }
         }
-        else if(Input.anyKeyDown)
+        #endregion
+        #region Cansle attack
+        else if (Input.anyKeyDown)
         {
             targetAbilitis = null;
         }
-        else if(targetAbilitis != null)
+        #endregion
+        #region Auto attack
+        else if (targetAbilitis != null)
         {
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
             {
-                
- 
                     float dist = Vector3.Distance(baseAbilitys.agent.transform.position, targetAbilitis.transform.root.position);
 
                     if (dist <= baseAbilitys.characterStats.cStats.weapon.weaponRange)
@@ -78,34 +82,36 @@ public class AutoAttackClick : _FunctionBase
                     {
                         Debug.Log("Miss, enemy not in range " + dist);
                         targetAbilitis = null;
-                }
-                    StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
-               
-                
+                    }
+                    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
+                    //StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
+
+
             }
         }
+        #endregion
 
     }
 
-    IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
-    {
-        float colldown = 0f;
-        modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
+    //IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
+    //{
+    //    float colldown = 0f;
+    //    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
 
-        float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
+    //    float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
 
-        while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
-        {
+    //    while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
+    //    {
 
-            yield return new WaitForSeconds(colldownSpeed);
-            colldown = Mathf.MoveTowards(colldown, 1f, 0.1f);//  Mathf.Clamp01(colldown + colldownSpeed);
-            Debug.Log(colldown);
-            modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
-     
+    //        yield return new WaitForSeconds(colldownSpeed);
+    //        colldown = Mathf.MoveTowards(colldown, 1f, 0.1f);//  Mathf.Clamp01(colldown + colldownSpeed);
+    //        Debug.Log(colldown);
+    //        modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
 
-        }
 
-    }
+    //    }
+
+    //}
 
 
     /// <summary>

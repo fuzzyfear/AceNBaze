@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class CharackterStats : MonoBehaviour
 {
+
+
+  //NOTE: alla slides (stamina, weapon stamina m.m) har max värde 1 pga engklare att hantera då, varia deras längd med återhämtnings hastighetn 
+
+
+
     /// <summary>
     /// Temporary unit scriptable object system has ben implemented
     /// have puted in a bunche of things that could be need in the finel

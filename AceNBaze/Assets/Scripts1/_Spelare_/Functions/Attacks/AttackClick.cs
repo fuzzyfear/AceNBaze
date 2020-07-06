@@ -19,7 +19,7 @@ public class AttackClick : _FunctionBase
            
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
             {
-                Vector3    mouse = Input.mousePosition;
+                Vector3    mouse     = Input.mousePosition;
                 Ray        castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
                 RaycastHit hit;
 
@@ -46,34 +46,35 @@ public class AttackClick : _FunctionBase
                     {
                         Debug.Log("Miss, enemy not in range " + dist);
                     }
-                    StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
+                    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
+                    //StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
                 }
             }
         }
        
     }
 
-    IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
-    {
-        float colldown = 0f;
-        modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
+    //IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
+    //{
+    //    float colldown = 0f;
+    //    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
 
-        float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
-
-
-
-        while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
-        {
-
-            yield return new WaitForSeconds(colldownSpeed);
-            colldown = Mathf.MoveTowards(colldown, 1f, 0.1f*Time.deltaTime);//  Mathf.Clamp01(colldown + colldownSpeed);
-            Debug.Log(colldown);
-            modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
+    //    float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
 
 
-        }
 
-    }
+    //    while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
+    //    {
+
+    //        yield return new WaitForSeconds(colldownSpeed);
+    //        colldown = Mathf.MoveTowards(colldown, 1f, 0.1f*Time.deltaTime);//  Mathf.Clamp01(colldown + colldownSpeed);
+    //        Debug.Log(colldown);
+    //        modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
+
+
+    //    }
+
+    //}
 
 
     /// <summary>
