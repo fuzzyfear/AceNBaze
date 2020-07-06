@@ -188,7 +188,6 @@ public class AnimationFlagger : MonoBehaviour
 
     [SerializeField] private AnimationFlag[] _flags;
 
-    public AnimationFlag flag = new AnimationFlag("F1");
 
     private void Awake()
     {

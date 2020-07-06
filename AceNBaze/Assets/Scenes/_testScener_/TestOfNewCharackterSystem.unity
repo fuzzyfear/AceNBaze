@@ -1031,8 +1031,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1084828375}
-  - component: {fileID: 358100425}
   - component: {fileID: 7089396042775665138}
+  - component: {fileID: 358100425}
   m_Layer: 0
   m_Name: _Model
   m_TagString: Untagged
@@ -12432,11 +12432,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2d6cd586811c3a4cbfad3e557223126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flag:
-    _flagName: actionFlag
+  _flags:
+  - _flagName: F1
     _flag: 0
-    _currentLockName: free
-    _currentLockHash: 1294909896
+    _currentLockName: 
+    _currentLockHash: 0
 --- !u!114 &7808702264748615399
 MonoBehaviour:
   m_ObjectHideFlags: 0
