@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class AnimationFlagger : MonoBehaviour
 {
+
+    /// <summary>
+    /// actions that can be don on a flagg
+    /// </summary>
+    public enum FlagActions  {LOCK, UNLOCK, SET };
+
     #region Flag structure
     protected static string LockfreeName = "free";
     protected static int    Lockfreehash = 1294909896;
@@ -46,18 +52,18 @@ public class AnimationFlagger : MonoBehaviour
        
 
         #region Owner controlls
-        public bool OwneFlag(string keyName)       { return ControllKey(keyName); }
-        public bool OwneFlag(int KeyHash)          { return ControllKey(KeyHash); }
+        private bool OwneFlag(string keyName)       { return ControllKey(keyName); }
+        private bool OwneFlag(int KeyHash)          { return ControllKey(KeyHash); }
 
-        public bool OwneFlagOrFree(string keyName) { return ControllKey() || ControllKey(keyName); }
-        public bool OwneFlagOrFree(int KeyHash)    { return ControllKey() || ControllKey(KeyHash); }
+        private bool OwneFlagOrFree(string keyName) { return ControllKey() || ControllKey(keyName); }
+        private bool OwneFlagOrFree(int KeyHash)    { return ControllKey() || ControllKey(KeyHash); }
         #endregion
 
 
 
 
         /// <summary>
-        /// Locks the flag so only the class with the key can cuse it 
+        /// Locks the flag so only the class with the key can cuse it. Returns true if the flag could be locked or if it allredy is lockde by the key
         /// </summary>
         /// <param name="keyName"></param>
         /// <returns>true if the flag could be locked or if it allredy is lockde by the key</returns>
@@ -102,7 +108,7 @@ public class AnimationFlagger : MonoBehaviour
         /// Locks the flag so only the class with the key can cuse it 
         /// </summary>
         /// <param name="keyName"></param>
-        /// <returns>true if the flag could be locked or if it allredy is lockde by the key</returns>
+        /// <returns>true if the flag could be unlocked or if it allredy is lockde by the key</returns>
         public bool UnLockFlag(string keyName)
         {
             bool succses = ControllKey(keyName);
@@ -176,17 +182,62 @@ public class AnimationFlagger : MonoBehaviour
     [SerializeField] private Dictionary<string, AnimationFlag> flags;
 
 
-    public AnimationFlag flag = new AnimationFlag("actionFlag");
+    public AnimationFlag flag = new AnimationFlag("F1");
+    private void Awake()
+    {
+        flags = new Dictionary<string, AnimationFlag>();
+        flags.Add("F1", new AnimationFlag("F1"));
+    }
 
+
+ 
 
 
     /// <summary>
-    /// Used by the animator to trigger the flag
+    /// Modifas a value on a flagg, will return true if it was abble to preform the action
     /// </summary>
-    public void TriggerFlag()
+    /// <param name="flagName">Flag that will be modified [aviable flags is: F1]</param>
+    /// <param name="action"></param>
+    /// <returns>true it the action could be preformed and was succes full</returns>
+    public bool ActionOnFlag(string flagName, FlagActions action)
     {
 
+        bool succes = false;
+        AnimationFlag flag;
+        if (flags.TryGetValue(flagName ,out flag))
+        {
+            switch (action)
+            {
+                case FlagActions.LOCK:
+                    succes = flag.LockFlag(flagName);
+                break;
+                case FlagActions.UNLOCK:
+                    succes = flag.UnLockFlag(flagName);
+                    break;
+                case FlagActions.SET:
+                    succes = flag.SetFlag(flagName,false);
+                    break;
+                default:
+                    Debug.LogError("tried do the action " + action + " whitch dosent exist");
+                    break;
+            }
+
+            flags[flagName] = flag;
+        }
+        else
+        {
+            Debug.LogError("tried to read flag " + flagName + " whitch dosent exist");
+        }
+        return succes;
 
     }
+
+    /// <summary>
+    /// returns the value of the flag, returns true if the flag has been triggerd 
+    /// </summary>
+    /// <param name="flag"> list of avialbe triggers: F1</param>
+    /// <returns>value of the flag (true => the animation has triggerd it)</returns>
+    public bool ControllFlag(string flag) { return flags[flag].flag; }
+
 
 }
