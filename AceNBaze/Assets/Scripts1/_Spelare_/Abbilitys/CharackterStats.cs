@@ -25,7 +25,7 @@ public class CharackterStats : MonoBehaviour
         [Space]
         [Header("Opperation variables")]
         [SerializeField] private float _attackStamina;
-        private const float _maxStamina = 1f;
+        private const float            _maxStamina = 1f;
         [SerializeField] private bool  _notRecovering;
         [SerializeField] private float _recoveringSpeed;
         public float attakcStamina

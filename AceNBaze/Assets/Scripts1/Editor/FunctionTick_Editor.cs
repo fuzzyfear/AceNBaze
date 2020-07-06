@@ -80,18 +80,13 @@ public class FunctionTick_Editor : Editor
     {
         SyncList(listFunc, listActiv);
 
-   
-   
-
-
         for (int i = 0; i < listFunc.arraySize; ++i)
         {
             EditorGUILayout.BeginHorizontal();
 
 
-              
+               EditorGUILayout.PropertyField(listFunc.GetArrayElementAtIndex(i),GUIContent.none);
 
-                EditorGUILayout.PropertyField(listFunc.GetArrayElementAtIndex(i),GUIContent.none);
                
                 ContentButtons(listFunc, listActiv, i);
 

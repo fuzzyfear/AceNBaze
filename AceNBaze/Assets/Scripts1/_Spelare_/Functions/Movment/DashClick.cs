@@ -7,8 +7,7 @@ using UnityEngine;
 /// that should be fixed for later
 /// </summary>
 public class DashClick :_FunctionBase
-{[TextArea]
-    public string text;
+{
 
     [SerializeField] private bool _Isdashing = false;
     private Coroutine dashing;
