@@ -60,7 +60,7 @@ public class AnimationFlagger : MonoBehaviour
         #endregion
 
 
-
+        #region Lock managmant
 
         /// <summary>
         /// Locks the flag so only the class with the key can cuse it. Returns true if the flag could be locked or if it allredy is lockde by the key
@@ -136,7 +136,7 @@ public class AnimationFlagger : MonoBehaviour
         }
 
 
-
+        #endregion
 
 
 
@@ -173,20 +173,27 @@ public class AnimationFlagger : MonoBehaviour
         }
 
 
+        /// <summary>
+        /// Should only be caled by animatoioner, do not call this class 
+        /// from script!
+        /// </summary>
+        public void TriggerFlag() { _flag = true; }
+        
+
     }
     #endregion
 
 
+    private Dictionary<string, int> _flagIndexDictionary;
 
-
-    [SerializeField] private Dictionary<string, AnimationFlag> flags;
-
+    [SerializeField] private AnimationFlag[] _flags;
 
     public AnimationFlag flag = new AnimationFlag("F1");
+
     private void Awake()
     {
-        flags = new Dictionary<string, AnimationFlag>();
-        flags.Add("F1", new AnimationFlag("F1"));
+        _flagIndexDictionary = new Dictionary<string, int>();
+
     }
 
 
@@ -203,26 +210,26 @@ public class AnimationFlagger : MonoBehaviour
     {
 
         bool succes = false;
-        AnimationFlag flag;
-        if (flags.TryGetValue(flagName ,out flag))
+        int flag;
+        if (_flagIndexDictionary.TryGetValue(flagName ,out flag))
         {
             switch (action)
             {
                 case FlagActions.LOCK:
-                    succes = flag.LockFlag(flagName);
+                    succes = _flags[flag].LockFlag(flagName);
                 break;
                 case FlagActions.UNLOCK:
-                    succes = flag.UnLockFlag(flagName);
+                    succes = _flags[flag].UnLockFlag(flagName);
                     break;
                 case FlagActions.SET:
-                    succes = flag.SetFlag(flagName,false);
+                    succes = _flags[flag].SetFlag(flagName,false);
                     break;
                 default:
                     Debug.LogError("tried do the action " + action + " whitch dosent exist");
                     break;
             }
 
-            flags[flagName] = flag;
+          
         }
         else
         {
@@ -237,7 +244,28 @@ public class AnimationFlagger : MonoBehaviour
     /// </summary>
     /// <param name="flag"> list of avialbe triggers: F1</param>
     /// <returns>value of the flag (true => the animation has triggerd it)</returns>
-    public bool ControllFlag(string flag) { return flags[flag].flag; }
+    public bool ControllFlag(string flag)
+    {
 
 
+        return _flags[_flagIndexDictionary[flag]].flag;
+    }
+
+
+    /// <summary>
+    /// Only to be called by animations, do not call from script
+    /// </summary>
+    /// <param name="flagName">the flag that shuld be triggerd</param>
+    public void TriggerFlag(string flagName)
+    {
+        int flag;
+        if (_flagIndexDictionary.TryGetValue(flagName, out flag))
+        {
+            _flags[flag].TriggerFlag();
+        }
+        else
+        {
+            Debug.LogError("Attemted to trigger flag " + flagName + " whitch dosent exist");
+        }
+    }
 }

@@ -29,6 +29,7 @@ public class LockManager_Editor : Editor
     {
         //  base.OnInspectorGUI();
         serializedObject.Update();
+
         Lock[] locks = lockManager.DEBUG_GetLocks();
 
         foreach (Lock actionLock in locks)

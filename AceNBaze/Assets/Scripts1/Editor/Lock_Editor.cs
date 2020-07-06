@@ -8,6 +8,7 @@ public class Lock_Editor : Editor
 {
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+         base.OnInspectorGUI();
+
     }
 }
