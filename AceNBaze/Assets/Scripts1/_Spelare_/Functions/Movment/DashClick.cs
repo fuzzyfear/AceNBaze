@@ -1,13 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
 /// <summary>
 /// Class that handles a simple dash
 /// the dash only works as long ass you hovers above the ground, 
 /// that should be fixed for later
 /// </summary>
+/// 
 public class DashClick :_FunctionBase
 {
+
+
+
+
 
     [SerializeField] private bool _Isdashing = false;
     private Coroutine dashing;
@@ -19,12 +27,6 @@ public class DashClick :_FunctionBase
         if (Input.GetKeyDown(Controlls.instanse.dash) && !_Isdashing)
         {
             _Isdashing = true;
-
-
-            //TEMP fylde på dashen
-            //CharackterStats.Stats temp = baseAbilitys.characterStats.cStats;
-            //temp.staminaCurrent = baseAbilitys.characterStats.cStats.staminMax;
-            //baseAbilitys.characterStats.cStats = temp;
 
             if (dashing != null)
                 StopCoroutine(dashing);
@@ -75,10 +77,8 @@ public class DashClick :_FunctionBase
         #endregion
 
 
-        Vector3 dir;
-        bool onGround = GetMousDirFromAgent(baseAbilitys, out dir);
-
-   
+        Vector3 dir = modifier.commonFunctionMethods.GetDirAgentToMouse(baseAbilitys);
+     
         #region Locks transforms rotation Rotation
         do
         {
@@ -100,8 +100,7 @@ public class DashClick :_FunctionBase
 
         modifier.lockManager.SetAgentMove.UseAction(baseAbilitys, dir  * Time.smoothDeltaTime, _keyHash);
         while (!Input.GetKeyDown(Controlls.instanse.dash) &&
-               baseAbilitys.characterStats.cStats.staminaCurrent > 0 &&
-                        onGround)
+               baseAbilitys.characterStats.cStats.staminaCurrent > 0)
         {
             stamina = Mathf.MoveTowards(stamina, 0, draineSpeed * Time.deltaTime);
 
@@ -145,37 +144,5 @@ public class DashClick :_FunctionBase
     }
 
 
-
-
-    /// <summary>
-    /// Finds the point on the ground the mouse is over,
-    /// clacks dir from the player to that point.
-    /// OBS this only works as long as the mous is over grund.
-    /// should figure out a better solution that can handle 
-    /// holls but this works for now
-    /// </summary>
-    /// <param name="baseAbilitys"></param>
-    /// <param name="dir"></param>
-    /// <returns></returns>
-    private bool GetMousDirFromAgent(CharacterBaseAbilitys baseAbilitys, out Vector3 dir)
-    {
-        Ray castPoint = baseAbilitys.camar.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        bool didHitGorund = Physics.Raycast(castPoint, out hit, baseAbilitys.maskes.GrundMask);
-        dir = Vector3.zero;
-
-    
-        if (didHitGorund)
-        {
-            Debug.DrawRay(hit.point, 20 * (Vector3.up));
-            Vector3 mheading = (hit.point - baseAbilitys.agent.transform.position);
-            float mdist = mheading.magnitude;
-            dir = mheading / mdist;
-        }
-        return didHitGorund;
-    }
-
-   
 
 }

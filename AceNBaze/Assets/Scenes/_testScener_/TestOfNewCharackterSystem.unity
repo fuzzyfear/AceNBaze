@@ -5762,7 +5762,9 @@ MonoBehaviour:
   - {fileID: 1903484468}
   - {fileID: 1903484471}
   - {fileID: 1903484472}
-  _functionActive: 01010100000100000101
+  - {fileID: 1903484473}
+  - {fileID: 1903484475}
+  _functionActive: 010101000001000001010101
 --- !u!195 &1763683211
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -6374,6 +6376,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1903484466}
+  - component: {fileID: 1903484474}
+  - component: {fileID: 1903484475}
   - component: {fileID: 6601653119882133709}
   - component: {fileID: 1022959607084416775}
   - component: {fileID: 7808702264748615399}
@@ -6384,6 +6388,7 @@ GameObject:
   - component: {fileID: 1903484470}
   - component: {fileID: 1903484471}
   - component: {fileID: 1903484472}
+  - component: {fileID: 1903484473}
   m_Layer: 0
   m_Name: _Functions
   m_TagString: Untagged
@@ -6483,6 +6488,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HpSlider: {fileID: 118724835}
+--- !u!114 &1903484473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903484465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b8dc867b4e76ad4c8350efda8a3cdeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1903484474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903484465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17b145c09392ae34ab93d4fe01b45e59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1903484475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903484465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba222d471b1ed1f48997829ddacad1ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnlyHerForTheHeader: 0
 --- !u!1 &1914171500
 GameObject:
   m_ObjectHideFlags: 0
@@ -12419,6 +12461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lockManager: {fileID: 9120941660252832086}
+  commonFunctionMethods: {fileID: 1903484474}
   animationFlagger: {fileID: 7089396042775665138}
 --- !u!114 &7089396042775665138
 MonoBehaviour:

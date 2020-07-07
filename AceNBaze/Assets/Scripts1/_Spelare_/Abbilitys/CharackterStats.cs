@@ -6,8 +6,7 @@ public class CharackterStats : MonoBehaviour
 {
 
 
-  //NOTE: alla slides (stamina, weapon stamina m.m) har max värde 1 pga engklare att hantera då, varia deras längd med återhämtnings hastighetn 
-
+  
 
 
     /// <summary>
@@ -75,15 +74,12 @@ public class CharackterStats : MonoBehaviour
 
     }
 
-
-
-
-
         [System.Serializable]
     public struct Stats
     {
         public int     level;
         public int     movmentSpeed;
+
         [Space]
         public int     maxHP     , currentHP;
         [Space]
@@ -97,8 +93,11 @@ public class CharackterStats : MonoBehaviour
         [Tooltip("StaminaMax/dashTime")]
         public float dashStaminaDraineSpeed;
         [Space]
+
+
         public Weapon  weapon;               // for now redo to scriptable objet 
         public Vector3 armor;                // Vec3(type          , weight, protection)                   for now redo to scriptable objet 
+
         public Vector3[] statusEffekts;     // vec3(what to effekt, type of effekt, how mutch to effekt)  for now redo to scriptable objet 
 
         public void loadDefultStas(CharacterInfo BaseStats)
@@ -134,8 +133,25 @@ public class CharackterStats : MonoBehaviour
     [SerializeField] private CharacterInfo _baseStats;
 
 
-    public Stats cStats { get { return _characterStats; }
-                                  set { _characterStats = value; } }
+    /*Användes inte just nu pga satsar på modularitet, så räknar 
+     * om värdet istället. tar dock inte bort än pga kan tänkas 
+     * behöva användas om det visar sig vara för innefektivt med
+     * det andra.
+     */
+    #region not used now
+    //[SerializeField] private Vector3 _dirLooking;
+    //[SerializeField] private Vector3 _dirMoving;
+    //public Vector3 dirLooking { get { return _dirLooking; } set { _dirLooking = value; } }
+    //public Vector3 dirMoving  { get { return _dirMoving;  } set { _dirMoving  = value; } }
+    #endregion
+
+
+    public Stats cStats { get { return _characterStats; } set { _characterStats = value; } }
+
+
+
+
+
 
 
     private void Start()
@@ -146,37 +162,15 @@ public class CharackterStats : MonoBehaviour
 
     }
 
-    //TODO: Fundera på att ta bort dessa, så att stats endast lagarar funktrioner
-    // bygg möjligen in det i något
-    /// <summary>
-    /// Returns current movmentSpeed with status effekts 
-    /// Example: base speed 10 
-    ///          status effekts: -10% base speed and 5 speed
-    ///          return speed = 10 - 10*0.1 +5 = 14 speed
-    /// </summary>
-    /// <returns></returns>
-    public int GetMovmentSpeed()
-    {
-        //TODO: Add so status effekts effekts the speed;
-        int currentSpeed = cStats.movmentSpeed;
-        return currentSpeed;
-    }
-    /// <summary>
-    /// Getter for base speed
-    /// </summary>
-    /// <returns></returns>
-    public int GetBaseMovmentSpeed()
-    {
-        return cStats.movmentSpeed;
-    }
 
 
 
 
-    private void OnDrawGizmos()
-    {
-        Debug.DrawRay(transform.root.position, Vector3.forward * _characterStats.weapon.weaponRange);
-    }
+
+    //private void OnDrawGizmos()
+    //{
+    //    Debug.DrawRay(transform.root.position, Vector3.forward * _characterStats.weapon.weaponRange);
+    //}
 
 
 }
