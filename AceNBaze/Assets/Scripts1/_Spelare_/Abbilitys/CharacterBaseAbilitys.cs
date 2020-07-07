@@ -20,6 +20,18 @@ public class CharacterBaseAbilitys : MonoBehaviour
     }
 
 
+
+
+    [System.Serializable]
+    public struct OperationFalgs
+    {
+        bool paring;
+    }
+
+
+
+
+
     [SerializeField] private layerMaskes     _layerMaskes;
     [Space]
     [SerializeField] private NavMeshAgent    _agnet;

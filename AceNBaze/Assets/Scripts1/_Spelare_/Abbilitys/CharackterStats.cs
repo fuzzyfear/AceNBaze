@@ -148,13 +148,15 @@ public class CharackterStats : MonoBehaviour
 
     public Stats cStats { get { return _characterStats; } set { _characterStats = value; } }
 
+    //TODO: flyta till separat charactarWorkingscript
+    #region Opertions flags
+    [SerializeField] private bool _parying = false;
+    public bool parying { get { return _parying; } set { _parying = value; } }
+    #endregion
 
 
 
-
-
-
-    private void Start()
+            private void Start()
     {
         _characterStats.loadDefultStas(_baseStats);
         _characterStats.SetWeapon(new Weapon(_baseStats.attackColldown, _baseStats.dmg, _baseStats.attackRange));
@@ -167,10 +169,6 @@ public class CharackterStats : MonoBehaviour
 
 
 
-    //private void OnDrawGizmos()
-    //{
-    //    Debug.DrawRay(transform.root.position, Vector3.forward * _characterStats.weapon.weaponRange);
-    //}
-
+    
 
 }

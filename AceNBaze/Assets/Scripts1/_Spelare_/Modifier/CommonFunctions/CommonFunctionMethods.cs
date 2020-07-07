@@ -46,8 +46,6 @@ public class CommonFunctionMethods : MonoBehaviour
         return mheading / mdist;
     }
 
-
-
     /// <summary>
     /// <para>Returns how mutch pary strenght tha character curently has in diffrent directions </para>
     /// <para>Totaly 8 directions </para>

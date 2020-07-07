@@ -18,16 +18,6 @@ public class FunctionTick : MonoBehaviour
     [SerializeField] private bool[]                _functionActive;//on of swithces for the functions, will be ised for debugs and development
 
 
-
-
-
-
-    private void Start()
-    {
-        
-    }
-
-
     public void Update()
     {
         //foreach (_FunctionBase func in _functions)
