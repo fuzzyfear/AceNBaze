@@ -12,12 +12,14 @@ public class CharackterStats_Editor : Editor
     SerializedProperty _characterStats_prop;
     const string       _characterStats_name = "_characterStats";
 
-
+    SerializedProperty _characterWorkingStats_prop;
+    const string       _characterWorkingStats_name = "_characterWorkingStats";
 
     private void OnEnable()
     {
-        _baseStats_prop      = serializedObject.FindProperty(_baseStats_name);
-        _characterStats_prop = serializedObject.FindProperty(_characterStats_name);
+        _baseStats_prop             = serializedObject.FindProperty(_baseStats_name);
+        _characterStats_prop        = serializedObject.FindProperty(_characterStats_name);
+        _characterWorkingStats_prop = serializedObject.FindProperty(_characterWorkingStats_name);
 
     }
 
@@ -35,6 +37,9 @@ public class CharackterStats_Editor : Editor
       
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(_characterStats_prop, true);
+
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(_characterWorkingStats_prop, true);
 
         serializedObject.ApplyModifiedProperties();
     }

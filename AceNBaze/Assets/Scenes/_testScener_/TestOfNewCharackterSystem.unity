@@ -2944,6 +2944,7 @@ GameObject:
   m_Component:
   - component: {fileID: 970918562}
   - component: {fileID: 970918563}
+  - component: {fileID: 970918564}
   m_Layer: 0
   m_Name: _CharackterStats
   m_TagString: Untagged
@@ -3001,7 +3002,21 @@ MonoBehaviour:
       _recoveringSpeed: 0
     armor: {x: 0, y: 0, z: 0}
     statusEffekts: []
+  _characterWorkingStats: {fileID: 970918564}
   _baseStats: {fileID: 11400000, guid: 2c53328f8ddd7ee41877fdd97a1b0e23, type: 2}
+--- !u!114 &970918564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970918561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77616b917d0ad534992a119bc5e9c6ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _blocking: 0
 --- !u!1 &978227082
 GameObject:
   m_ObjectHideFlags: 0
@@ -6524,7 +6539,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba222d471b1ed1f48997829ddacad1ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnlyHerForTheHeader: 0
+  LokingDir: {x: 0, y: 0, z: 0}
+  MovingDir: {x: 0, y: 0, z: 0}
+  f2: {x: 0, y: 0, z: 0}
+  b2: {x: 0, y: 0, z: 0}
+  r2: {x: 0, y: 0, z: 0}
+  l2: {x: 0, y: 0, z: 0}
+  fr2: {x: 0, y: 0, z: 0}
+  fl2: {x: 0, y: 0, z: 0}
+  br2: {x: 0, y: 0, z: 0}
+  bl2: {x: 0, y: 0, z: 0}
+  fm: 0
+  bm: 0
+  rm: 0
+  lm: 0
+  frm: 0
+  flm: 0
+  brm: 0
+  blm: 0
 --- !u!1 &1914171500
 GameObject:
   m_ObjectHideFlags: 0
@@ -11145,6 +11177,7 @@ MonoBehaviour:
       _recoveringSpeed: 0
     armor: {x: 0, y: 0, z: 0}
     statusEffekts: []
+  _characterWorkingStats: {fileID: 0}
   _baseStats: {fileID: 11400000, guid: 0265f587889f302459bbce29ddde200a, type: 2}
 --- !u!1 &116084122159897559
 GameObject:

@@ -32,7 +32,9 @@ public class LockManager : MonoBehaviour
                             SetAnimationVariableInt           ,
                             SetAnimationVariableFloat         ,
                             SetAnimationVariableBool          ,
-                            SetAnimationVariableTrigger        };
+                            SetAnimationVariableTrigger       ,
+
+                            SetParry                           };
 
     }
     #endregion
@@ -96,7 +98,6 @@ public class LockManager : MonoBehaviour
     #endregion
 
 
-
     public Lock<int>                    SetLife                            = new Lock<int>                    ("SetLife"                            , SetLifeAction                            );
     public Lock<float>                  SetStamina                         = new Lock<float>                  ("SetStamina"                         , SetStaminaAction                         );
 
@@ -124,21 +125,20 @@ public class LockManager : MonoBehaviour
     #endregion
 
 
-    /*Användes inte just nu pga satsar på modularitet, så räknar 
- * om värdet istället. tar dock inte bort än pga kan tänkas 
- * behöva användas om det visar sig vara för innefektivt med
- * det andra.
- */
-    #region not used now
-    //public Lock<Vector3>                SetDirLook                         = new Lock<Vector3>                ("SetDirLook"                         , SetDirLookAction                         );
-    //public Lock<Vector3>                SetDirMoving                       = new Lock<Vector3>                ("SetDirMoving"                       , SetDirMovingAction                       );
+
+    #region Working stats functions locks
+    public Lock<bool>                   SetParry                           = new Lock<bool>                  ("SetParryA"                          , SetParryAction                            );
     #endregion
 
 
 
+    //===============================================================================================================
+    //Actions
+    //===============================================================================================================
 
 
-    #region transform
+
+    #region transform Actions
     static void SetTransformLookAtAction(CharacterBaseAbilitys characterBase, Vector3 lookAtMe)
     {
         characterBase.mainTransform.LookAt(lookAtMe);
@@ -153,7 +153,7 @@ public class LockManager : MonoBehaviour
     }
     #endregion
 
-    #region movment agent stuff
+    #region movment agent stuff Actions
     static void SetAgentMovingDestinationAction(CharacterBaseAbilitys characterBase, Vector3 pos)
     {
          characterBase.agent.SetDestination(pos);
@@ -183,7 +183,7 @@ public class LockManager : MonoBehaviour
     }
     #endregion
 
-    #region animation 
+    #region animation Actions
     static void SetAnimationVariableIntAction(CharacterBaseAbilitys characterBase, string variableName, int value)
     {
         characterBase.animator.SetInteger(variableName, value);
@@ -202,23 +202,9 @@ public class LockManager : MonoBehaviour
     }
     #endregion
 
-    /*Användes inte just nu pga satsar på modularitet, så räknar 
-     * om värdet istället. tar dock inte bort än pga kan tänkas 
-     * behöva användas om det visar sig vara för innefektivt med
-     * det andra.
-     */
-    #region not used now
-    //static void SetDirLookAction(CharacterBaseAbilitys characterBase, Vector3 dir)
-    //{
-    //    characterBase.characterStats.dirLooking = dir;
-    //}
-    //static void SetDirMovingAction(CharacterBaseAbilitys characterBase, Vector3 dir)
-    //{
-    //    characterBase.characterStats.dirMoving = dir;
-    //}
-    #endregion
 
-    #region stamina, life 
+
+    #region stamina, life Actions
     static void SetLifeAction(CharacterBaseAbilitys characterBase, int hp)
     {
         CharackterStats.Stats stats = characterBase.characterStats.cStats;
@@ -233,7 +219,7 @@ public class LockManager : MonoBehaviour
     }
     #endregion
 
-    #region weapons and damage
+    #region weapons and damage Actions
     static void SetAttackCollDownAction(CharacterBaseAbilitys characterBase, float colldown)
     {
         CharackterStats.Stats stats = characterBase.characterStats.cStats;
@@ -251,4 +237,45 @@ public class LockManager : MonoBehaviour
     }
     #endregion
 
+
+
+    #region Working stats functions Actions
+
+
+    static void SetParryAction(CharacterBaseAbilitys characterBase, bool isParry)
+    {
+        characterBase.characterStats.cWstats.parry = isParry;
+    }
+
+
+
+    #endregion
+
+
 }
+
+#region not used now
+/*Användes inte just nu pga satsar på modularitet, så räknar 
+* om värdet istället. tar dock inte bort än pga kan tänkas 
+* behöva användas om det visar sig vara för innefektivt med
+* det andra.
+*/
+//public Lock<Vector3>                SetDirLook                         = new Lock<Vector3>                ("SetDirLook"                         , SetDirLookAction                         );
+//public Lock<Vector3>                SetDirMoving                       = new Lock<Vector3>                ("SetDirMoving"                       , SetDirMovingAction                       );
+#endregion
+
+#region not used now
+/*Användes inte just nu pga satsar på modularitet, så räknar 
+ * om värdet istället. tar dock inte bort än pga kan tänkas 
+ * behöva användas om det visar sig vara för innefektivt med
+ * det andra.
+ */
+//static void SetDirLookAction(CharacterBaseAbilitys characterBase, Vector3 dir)
+//{
+//    characterBase.characterStats.dirLooking = dir;
+//}
+//static void SetDirMovingAction(CharacterBaseAbilitys characterBase, Vector3 dir)
+//{
+//    characterBase.characterStats.dirMoving = dir;
+//}
+#endregion

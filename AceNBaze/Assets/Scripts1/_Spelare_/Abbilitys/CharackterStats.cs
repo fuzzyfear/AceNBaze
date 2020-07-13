@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+/// <summary>
+/// Contains all the characters stats like life, weapon, level
+/// will calculate the valus of stats from level and base stats 
+/// (and skill tree if we choses to use it)
+/// </summary>
+
+[RequireComponent(typeof(CharacterWorkingStat))]
 public class CharackterStats : MonoBehaviour
 {
 
-
-  
-
+    
 
     /// <summary>
     /// Temporary unit scriptable object system has ben implemented
@@ -129,34 +136,25 @@ public class CharackterStats : MonoBehaviour
     }
 
 
-    [SerializeField] private Stats         _characterStats;
-    [SerializeField] private CharacterInfo _baseStats;
+    [SerializeField] private Stats                _characterStats;
+    [SerializeField] private CharacterWorkingStat _characterWorkingStats;
+    [SerializeField] private CharacterInfo        _baseStats;
 
 
-    /*Användes inte just nu pga satsar på modularitet, så räknar 
-     * om värdet istället. tar dock inte bort än pga kan tänkas 
-     * behöva användas om det visar sig vara för innefektivt med
-     * det andra.
-     */
-    #region not used now
-    //[SerializeField] private Vector3 _dirLooking;
-    //[SerializeField] private Vector3 _dirMoving;
-    //public Vector3 dirLooking { get { return _dirLooking; } set { _dirLooking = value; } }
-    //public Vector3 dirMoving  { get { return _dirMoving;  } set { _dirMoving  = value; } }
-    #endregion
 
-
+    /// <summary>
+    /// All stats like level, life, weapon and so on
+    /// </summary>
     public Stats cStats { get { return _characterStats; } set { _characterStats = value; } }
 
-    //TODO: flyta till separat charactarWorkingscript
-    #region Opertions flags
-    [SerializeField] private bool _parying = false;
-    public bool parying { get { return _parying; } set { _parying = value; } }
-    #endregion
+    /// <summary>
+    /// Conatins bool flags to indicagte work
+    /// </summary>
+    public CharacterWorkingStat cWstats => _characterWorkingStats;
 
 
 
-            private void Start()
+    private void Start()
     {
         _characterStats.loadDefultStas(_baseStats);
         _characterStats.SetWeapon(new Weapon(_baseStats.attackColldown, _baseStats.dmg, _baseStats.attackRange));
