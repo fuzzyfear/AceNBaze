@@ -5766,20 +5766,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _abilitys: {fileID: 783089043}
   _Modifier: {fileID: 6849821294543718136}
-  _functions:
+  _functions_update:
   - {fileID: 1903484469}
-  - {fileID: 1903484470}
   - {fileID: 6601653119882133709}
   - {fileID: 1022959607084416775}
   - {fileID: 7808702264748615399}
   - {fileID: 1845106995314458527}
-  - {fileID: 1903484468}
-  - {fileID: 1903484468}
-  - {fileID: 1903484471}
+  - {fileID: 1903484467}
   - {fileID: 1903484472}
+  - {fileID: 1903484471}
+  - {fileID: 1903484470}
   - {fileID: 1903484473}
+  - {fileID: 1903484476}
+  _functionActive_update: 0101000001000101010101
+  _functions_late_update:
   - {fileID: 1903484475}
-  _functionActive: 010101000001000001010101
+  _functionActive_late_update: 01
 --- !u!195 &1763683211
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -6404,6 +6406,7 @@ GameObject:
   - component: {fileID: 1903484471}
   - component: {fileID: 1903484472}
   - component: {fileID: 1903484473}
+  - component: {fileID: 1903484476}
   m_Layer: 0
   m_Name: _Functions
   m_TagString: Untagged
@@ -6541,22 +6544,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LokingDir: {x: 0, y: 0, z: 0}
   MovingDir: {x: 0, y: 0, z: 0}
-  f2: {x: 0, y: 0, z: 0}
-  b2: {x: 0, y: 0, z: 0}
-  r2: {x: 0, y: 0, z: 0}
-  l2: {x: 0, y: 0, z: 0}
-  fr2: {x: 0, y: 0, z: 0}
-  fl2: {x: 0, y: 0, z: 0}
-  br2: {x: 0, y: 0, z: 0}
-  bl2: {x: 0, y: 0, z: 0}
-  fm: 0
-  bm: 0
-  rm: 0
-  lm: 0
-  frm: 0
-  flm: 0
-  brm: 0
-  blm: 0
+  dirs2:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  dirs:
+  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: -1}
+  - {x: 1, y: 0, z: 0}
+  - {x: -1, y: 0, z: 0}
+  - {x: 0.7, y: 0, z: 0.7}
+  - {x: -0.7, y: 0, z: 0.7}
+  - {x: 0.7, y: 0, z: -0.7}
+  - {x: -0.7, y: 0, z: -0.7}
+  blockCubes:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &1903484476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903484465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7681ae1f0921ac84db89167c2d87703b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  temp_blockTime: 0.5
 --- !u!1 &1914171500
 GameObject:
   m_ObjectHideFlags: 0
@@ -9778,8 +9805,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _abilitys: {fileID: 116084122506800357}
   _Modifier: {fileID: 0}
-  _functions: []
-  _functionActive: 
+  _functions_update: []
+  _functionActive_update: 
+  _functions_late_update: []
+  _functionActive_late_update: 
 --- !u!195 &116084121358826237
 NavMeshAgent:
   m_ObjectHideFlags: 0

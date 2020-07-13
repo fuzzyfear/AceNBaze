@@ -17,27 +17,50 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
     [SerializeField] private Vector3 MovingDir;
 
 
-   public Vector3 f2;
-   public Vector3 b2;
-   public Vector3 r2;
-   public Vector3 l2;
-   public Vector3 fr2;
-   public Vector3 fl2;
-   public Vector3 br2;
-   public Vector3 bl2;
 
-    public float fm;
-    public float bm;
-    public float rm;
-    public float lm;
-    public float frm;
-    public float flm;
-    public float brm;
-    public float blm;
+    [SerializeField] private Vector3[] dirs2 = new Vector3[8];
 
 
+        [SerializeField] private Vector3[] dirs = {new Vector3( 0.0f, 0.0f,  1.0f),
+                      new Vector3( 0.0f, 0.0f, -1.0f),
+                      new Vector3( 1.0f, 0.0f,  0.0f),
+                      new Vector3(-1.0f, 0.0f,  0.0f),
+                      new Vector3( 0.7f, 0.0f,  0.7f),
+                      new Vector3(-0.7f, 0.0f,  0.7f),
+                      new Vector3( 0.7f, 0.0f, -0.7f),
+                      new Vector3(-0.7f, 0.0f, -0.7f) };
 
-    public DEBUG_F_LokingAndMovmenDir() : base() { }
+
+    // blockCubes[0] world space forward          
+    // blockCubes[1] world space backlwards       
+    // blockCubes[2] world space right            
+    // blockCubes[3] world space leaft            
+    // blockCubes[4] world space forward-right    
+    // blockCubes[5] world space forward-leaft    
+    // blockCubes[5] world space backlwards-right 
+    // blockCubes[5] world space backlwards-leaft 
+    [SerializeField] private GameObject[] blockCubes = new GameObject[8];
+
+
+
+ 
+
+    public DEBUG_F_LokingAndMovmenDir() : base()
+    {
+      
+
+    }
+
+    private void Start()
+    {
+        for (int i = 0; i < blockCubes.Length; ++i)
+        {
+                blockCubes[i] = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                Destroy(blockCubes[i].GetComponent<BoxCollider>());
+            //blockCubes[i].SetActive(false);
+        }
+    }
+
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
@@ -47,72 +70,35 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
 
 
         Vector3 pos = baseAbilitys.mainTransform.position;
-
-
-
-
-        #region Parer directions
-        Vector3 f = new Vector3(  0, 0,  1 )     ;
-        Vector3 b = new Vector3(  0, 0, -1 )     ;
-        Vector3 r = new Vector3(  1, 0,  0 )     ;
-        Vector3 l = new Vector3( -1, 0,  0 )     ;
-        float grad = 0.7f;
-        Vector3 fr = new Vector3( grad, 0,  grad);
-        Vector3 fl = new Vector3(-grad, 0,  grad);
-        Vector3 br = new Vector3( grad, 0, -grad);
-        Vector3 bl = new Vector3(-grad, 0, -grad);
- 
-        Debug.DrawRay(pos, r *2f, Color.green);
-        Debug.DrawRay(pos, l *2f, Color.green);
-        Debug.DrawRay(pos, f *2f, Color.green);
-        Debug.DrawRay(pos, b *2f, Color.green);
-        Debug.DrawRay(pos, br*2f, Color.green);
-        Debug.DrawRay(pos, bl*2f, Color.green);
-        Debug.DrawRay(pos, fl*2f, Color.green);
-        Debug.DrawRay(pos, fr*2f, Color.green);
-        #endregion
-
-
-        float[] test = modifier.commonFunctionMethods.GetCharacterParyData(baseAbilitys);
-
-        fm = test[0];// f2.magnitude;
-        bm = test[1];//b2.magnitude;
-        rm = test[2];//r2.magnitude;
-        lm = test[3];//l2.magnitude;
-        frm = test[4];//fr2.magnitude;
-        flm = test[5];//fl2.magnitude;
-        brm = test[6];//br2.magnitude;
-        blm = test[7];//bl2.magnitude;
-
-        #region how mutch is agent turned toward parer directions
-        f2  = f  * fm;// Mathf.Clamp01( Vector3.Dot(f, LokingDir ));// new Vector3(  0                           , 0,  Mathf.Clamp01(LokingDir.z)  );
-        b2  = b  * bm;// Mathf.Clamp01( Vector3.Dot(b, LokingDir ));//new Vector3(  0                           , 0, -Mathf.Clamp01(-LokingDir.z) );
-        r2  = r  * rm;// Mathf.Clamp01( Vector3.Dot(r, LokingDir ));//new Vector3(  Mathf.Clamp01(LokingDir.x)  , 0,  0                           );
-        l2  = l  * lm;// Mathf.Clamp01( Vector3.Dot(l, LokingDir ));//new Vector3( -Mathf.Clamp01(- LokingDir.x), 0,  0                           );
-        fr2 = fr * frm;// Mathf.Clamp01( Vector3.Dot(fr, LokingDir));
-        fl2 = fl * flm;// Mathf.Clamp01( Vector3.Dot(fl, LokingDir));
-        br2 = br * brm;// Mathf.Clamp01( Vector3.Dot(br, LokingDir));
-        bl2 = bl * blm;// Mathf.Clamp01( Vector3.Dot(bl, LokingDir));
-
-
     
 
-        
 
 
-        Debug.DrawRay(pos, r2  * 2f, Color.magenta);
-        Debug.DrawRay(pos, l2  * 2f, Color.magenta);
-        Debug.DrawRay(pos, f2  * 2f, Color.magenta);
-        Debug.DrawRay(pos, b2  * 2f, Color.magenta);
-        Debug.DrawRay(pos, br2 * 2f, Color.magenta);
-        Debug.DrawRay(pos, bl2 * 2f, Color.magenta);
-        Debug.DrawRay(pos, fl2 * 2f, Color.magenta);
-        Debug.DrawRay(pos, fr2 * 2f, Color.magenta);
-        #endregion
+        //Dirs
+        for (int i = 0; i < 8; ++i)
+            Debug.DrawRay(pos, dirs[i] * 2f, Color.green);
 
 
 
-        Debug.DrawRay(pos, LokingDir * 2, Color.blue);
+        float[] test = modifier.commonFunctionMethods.GetCharacterParryData(baseAbilitys);
+        for (int i = 0; i < 8; ++i)
+            dirs2[i] = dirs[i] * test[i];
+
+        // how mutch looking in the dirs
+        for (int i = 0; i < 8; ++i)
+            Debug.DrawRay(pos, dirs2[i] * 2f, Color.magenta);
+
+
+        for (int i = 0; i < 8; ++i)
+        {
+            blockCubes[i].transform.position = pos + dirs2[i] * 2f;
+            blockCubes[i].transform.localScale = new Vector3(test[i], test[i]*((baseAbilitys.characterStats.cWstats.parry) ? 4f: 1f) , test[i]);
+        }
+
+
+
+
+            Debug.DrawRay(pos, LokingDir * 2, Color.blue);
         Debug.DrawRay(pos, MovingDir * 2, Color.red);
 
 

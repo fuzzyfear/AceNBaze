@@ -10,6 +10,7 @@ using UnityEngine;
 /// maybe chanign later 
 /// 
 /// </summary>
+// TODO: detta är temporärt innan ett ordentligt system har implementeras
 public class Controlls : MonoBehaviour
 {
     public static Controlls instanse;

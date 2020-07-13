@@ -2,17 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class F_SimpleBlocking : MonoBehaviour
+public class F_SimpleBlocking : _FunctionBase
 {
-    // Start is called before the first frame update
-    void Start()
+    [Tooltip("in sec")]
+    public float temp_blockTime = 0.5f;
+
+
+  
+
+    
+
+    public F_SimpleBlocking() : base() { }
+
+    public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        
+        if (!baseAbilitys.characterStats.cWstats.parry && Input.GetKeyDown(Controlls.instanse.block))
+        {
+            StartCoroutine(Blocking(baseAbilitys, modifier));
+        }
+       
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private IEnumerator Blocking(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        
+
+        modifier.lockManager.SetParry.UseAction(baseAbilitys, true, _keyHash);
+
+        yield return new WaitForSeconds(temp_blockTime);
+
+
+        modifier.lockManager.SetParry.UseAction(baseAbilitys, false, _keyHash);
+
+
     }
 }

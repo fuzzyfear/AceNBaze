@@ -10,11 +10,20 @@ public class FunctionTick_Editor : Editor
 
     FunctionTick functionTick;
 
-    SerializedProperty _functions_prop;
-    const string       _functions_name = "_functions";
+    SerializedProperty _functions_update_prop;
+    const string       _functions_update_name = "_functions_update";
 
-    SerializedProperty _functionActive_prop;
-    const string        _functionActive_name = "_functionActive";
+    SerializedProperty _functionActive_update_prop;
+    const string       _functionActive_update_name = "_functionActive_update";
+
+
+    SerializedProperty _functions_late_update_prop;
+    const string       _functions_late_update_name = "_functions_late_update";
+
+    SerializedProperty _functionActive_late_update_prop;
+    const string       _functionActive_late_update_name = "_functionActive_late_update";
+
+
 
     SerializedProperty _abilitys_prop;
     const string       _abilitys_name = "_abilitys";
@@ -39,10 +48,12 @@ public class FunctionTick_Editor : Editor
     {
         functionTick = target as FunctionTick;
 
-        _functions_prop      = serializedObject.FindProperty(_functions_name);
-        _functionActive_prop = serializedObject.FindProperty(_functionActive_name);
-        _abilitys_prop       = serializedObject.FindProperty(_abilitys_name);
-        _Modifier_prop       = serializedObject.FindProperty(_Modifier_name);
+        _functions_update_prop           = serializedObject.FindProperty(_functions_update_name);
+        _functionActive_update_prop      = serializedObject.FindProperty(_functionActive_update_name);
+        _functions_late_update_prop      = serializedObject.FindProperty(_functions_late_update_name);
+        _functionActive_late_update_prop = serializedObject.FindProperty(_functionActive_late_update_name);
+        _abilitys_prop                   = serializedObject.FindProperty(_abilitys_name);
+        _Modifier_prop                   = serializedObject.FindProperty(_Modifier_name);
     
      
     }
@@ -50,7 +61,7 @@ public class FunctionTick_Editor : Editor
 
     public override void OnInspectorGUI()
     {
-       //  base.OnInspectorGUI();
+       // base.OnInspectorGUI();
 
 
 
@@ -70,7 +81,14 @@ public class FunctionTick_Editor : Editor
 
         EditorGUILayout.Space();
 
-        displayList(_functions_prop, _functionActive_prop);
+        GUILayout.Label("");
+        EditorGUILayout.HelpBox("Functions that needs to be uppdated in normal uppdate", MessageType.Info);
+        displayList(_functions_update_prop, _functionActive_update_prop);
+
+
+        GUILayout.Label("");
+        EditorGUILayout.HelpBox("Functions that needs to be uppdated after the animation, physics and navmesh uppdate", MessageType.Info);
+        displayList(_functions_late_update_prop, _functionActive_late_update_prop);
 
         serializedObject.ApplyModifiedProperties();
     }

@@ -61,7 +61,7 @@ public class CommonFunctionMethods : MonoBehaviour
     /// <para> Each dir range between 0 -> 1, grades how strong the pary is in that dir      </para>
     /// </summary> 
     /// <returns>float list with pary data</returns>
-    public float[] GetCharacterParyData(CharacterBaseAbilitys baseAbilitys)
+    public float[] GetCharacterParryData(CharacterBaseAbilitys baseAbilitys)
     {
         float[] parydata  = new float[8];
 
