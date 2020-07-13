@@ -2,26 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingToggle : _FunctionBase
+public class F_MovingClick : _FunctionBase
 {
-
-    [SerializeField] private bool _uppdateMovmentDestination = false;
-
-
-    public MovingToggle() : base() { }
+    public F_MovingClick() : base() { }
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-
         if (Input.GetKeyDown(Controlls.instanse.movment))
-            _uppdateMovmentDestination = !_uppdateMovmentDestination;
-        else if (Input.anyKeyDown)
-            _uppdateMovmentDestination = false; // to stop movment
-        
-        if (_uppdateMovmentDestination)
         {
-
-            #region Lock SetAgentMovingDestination 
+            #region Lock SetAgentMovingDestination
             bool locked;
 #if UNITY_EDITOR
             locked = modifier.lockManager.SetAgentMovingDestination.LockAction(_keyName);
@@ -38,14 +27,15 @@ public class MovingToggle : _FunctionBase
 #else
                 locked = modifier.lockManager.SetAgentMovingSpeed.LockAction(_keyHash);
 #endif
-                #endregion   
+                #endregion
                 if (locked)
                 {
                     modifier.lockManager.SetAgentMovingSpeed.UseAction(baseAbilitys, -1.0f, true, _keyHash);
                     modifier.lockManager.SetAgentMovingSpeed.UnLockAction(_keyHash);
                 }
 
-                Vector3    mouse     = Input.mousePosition;
+
+                Vector3     mouse    = Input.mousePosition;
                 Ray        castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
                 RaycastHit hit;
 
@@ -58,5 +48,7 @@ public class MovingToggle : _FunctionBase
             }
         }
     }
+
+    
 
 }

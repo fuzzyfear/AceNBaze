@@ -3016,7 +3016,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77616b917d0ad534992a119bc5e9c6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blocking: 0
+  _parry: 0
 --- !u!1 &978227082
 GameObject:
   m_ObjectHideFlags: 0
@@ -5773,7 +5773,7 @@ MonoBehaviour:
   - {fileID: 1022959607084416775}
   - {fileID: 7808702264748615399}
   - {fileID: 1845106995314458527}
-  - {fileID: 1903484467}
+  - {fileID: 1903484468}
   - {fileID: 1903484468}
   - {fileID: 1903484471}
   - {fileID: 1903484472}
@@ -6391,8 +6391,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1903484466}
-  - component: {fileID: 1903484474}
   - component: {fileID: 1903484475}
+  - component: {fileID: 1903484474}
   - component: {fileID: 6601653119882133709}
   - component: {fileID: 1022959607084416775}
   - component: {fileID: 7808702264748615399}

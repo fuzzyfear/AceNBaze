@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingHold : _FunctionBase
+public class F_MovingHold : _FunctionBase
 {
 
-    public MovingHold() : base() { }
+    public F_MovingHold() : base() { }
 
 
 
