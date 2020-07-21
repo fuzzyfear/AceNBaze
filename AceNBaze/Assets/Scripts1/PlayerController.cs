@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
 	public Camera cam;
 	public NavMeshAgent agent;
 	public CharacterInfo playerStats;
-	public Slider hp;
+
+    public Slider hp;
     public Slider dashBar;
     public Slider attackbar;
 	public LayerMask enemy;
@@ -270,6 +271,7 @@ public class PlayerController : MonoBehaviour
         }
 		attackSpeed = true;
 	}
+
     IEnumerator WaitForDashSpeed()
     {
         dashBar.value = 0f;
@@ -367,7 +369,7 @@ public class PlayerController : MonoBehaviour
 				{
 					Debug.Log("Miss, enemy not in range");
 					moveAndAttack = false;
-					attackSpeed = false;
+					attackSpeed   = false;
 					StartCoroutine(WaitForAttackSpeed());
 				}
 			}
