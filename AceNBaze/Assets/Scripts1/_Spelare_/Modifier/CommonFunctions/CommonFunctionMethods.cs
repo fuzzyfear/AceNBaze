@@ -6,10 +6,8 @@ using UnityEngine;
 
 /// <summary>
 /// Contains common functions that will be by more then one function.
-/// is abbstaract so it will exist one type for the player and one for the AI
-/// NOT: the abstarct function should only be private, 
 /// </summary>
-public abstract class CommonFunctionMethods : MonoBehaviour
+public  class CommonFunctionMethods : MonoBehaviour
 {
 
     /// <summary>
@@ -50,7 +48,7 @@ public abstract class CommonFunctionMethods : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>Returns how mutch pary strenght tha character curently has in diffrent directions </para>
+    /// <para>Returns how mutch parry/attack strenght the character currently has in diffrent directions </para>
     /// <para>Totaly 8 directions </para>
     /// <para>returns a float array(parydata):         </para>
     /// <para>parydata[0] world space forward          </para>
@@ -61,16 +59,12 @@ public abstract class CommonFunctionMethods : MonoBehaviour
     /// <para>parydata[5] world space forward-leaft    </para>
     /// <para>parydata[5] world space backlwards-right </para>
     /// <para>parydata[5] world space backlwards-leaft </para>
-    /// <para> Each dir range between 0 -> 1, grades how strong the pary is in that dir      </para>
+    /// <para> Each dir range between 0 -> 1, grades how strong the parry/attack is in that dir</para>
     /// </summary> 
     /// <returns>float list with pary data</returns>
-    public float[] GetCharacterParryData(CharacterBaseAbilitys baseAbilitys)
+    public float[] GetCharacterParryData(Vector3 LookingDir)
     {
         float[] parydata  = new float[8];
-
-        //TODO: Gör om denna till en genererl getLookingDir istället, för då kan detta återanvändas till fienderan.
-        Vector3 LokingDir = GetLookingDir(baseAbilitys);
-
 
         #region diraction variables
         const float forward_x  =  0f, forward_z  = 1f;
@@ -85,14 +79,14 @@ public abstract class CommonFunctionMethods : MonoBehaviour
         #endregion
 
         #region calcs dot(dir, lookingdir)
-        parydata[0] = (forward_x        * LokingDir.x) + (forward_z        * LokingDir.z);
-        parydata[1] = (backward_x       * LokingDir.x) + (backward_z       * LokingDir.z);
-        parydata[2] = (right_x          * LokingDir.x) + (right_z          * LokingDir.z);
-        parydata[3] = (leaft_x          * LokingDir.x) + (leaft_z          * LokingDir.z);
-        parydata[4] = (forward_right_x  * LokingDir.x) + (forward_right_z  * LokingDir.z);
-        parydata[5] = (forward_leaft_x  * LokingDir.x) + (forward_leaft_z  * LokingDir.z);
-        parydata[6] = (backward_right_x * LokingDir.x) + (backward_right_z * LokingDir.z);
-        parydata[7] = (backward_leaft_x * LokingDir.x) + (backward_leaft_z * LokingDir.z);
+        parydata[0] = (forward_x        * LookingDir.x) + (forward_z        * LookingDir.z);
+        parydata[1] = (backward_x       * LookingDir.x) + (backward_z       * LookingDir.z);
+        parydata[2] = (right_x          * LookingDir.x) + (right_z          * LookingDir.z);
+        parydata[3] = (leaft_x          * LookingDir.x) + (leaft_z          * LookingDir.z);
+        parydata[4] = (forward_right_x  * LookingDir.x) + (forward_right_z  * LookingDir.z);
+        parydata[5] = (forward_leaft_x  * LookingDir.x) + (forward_leaft_z  * LookingDir.z);
+        parydata[6] = (backward_right_x * LookingDir.x) + (backward_right_z * LookingDir.z);
+        parydata[7] = (backward_leaft_x * LookingDir.x) + (backward_leaft_z * LookingDir.z);
         #endregion
 
         #region clamps out negativ valus
@@ -110,17 +104,72 @@ public abstract class CommonFunctionMethods : MonoBehaviour
 
 
 
-   
 
 
 
-    #region abstract methods
+    public bool InAttackRange(CharacterBaseAbilitys baseAbilitys,Vector3 LookingDir)
+    {
+        float[] parydata = new float[8];
 
-    protected abstract Vector3 GetLookingDir(CharacterBaseAbilitys baseAbilitys);
+        #region diraction variables
+        const float forward_x = 0f, forward_z = 1f;
+        const float backward_x = 0f, backward_z = -1f;
+        const float right_x = 1f, right_z = 0f;
+        const float leaft_x = -1f, leaft_z = 0f;
 
-    #endregion
+        const float forward_right_x = 0.7f, forward_right_z = 0.7f;
+        const float forward_leaft_x = -0.7f, forward_leaft_z = 0.7f;
+        const float backward_right_x = 0.7f, backward_right_z = -0.7f;
+        const float backward_leaft_x = -0.7f, backward_leaft_z = -0.7f;
+        #endregion
+        Vector3 point = baseAbilitys.mainTransform.position;
+
+        #region calcs dot(dir, lookingdir)
+        parydata[0] = (forward_x * LookingDir.x) + (forward_z * LookingDir.z);
+        parydata[1] = (backward_x * LookingDir.x) + (backward_z * LookingDir.z);
+        parydata[2] = (right_x * LookingDir.x) + (right_z * LookingDir.z);
+        parydata[3] = (leaft_x * LookingDir.x) + (leaft_z * LookingDir.z);
+        parydata[4] = (forward_right_x * LookingDir.x) + (forward_right_z * LookingDir.z);
+        parydata[5] = (forward_leaft_x * LookingDir.x) + (forward_leaft_z * LookingDir.z);
+        parydata[6] = (backward_right_x * LookingDir.x) + (backward_right_z * LookingDir.z);
+        parydata[7] = (backward_leaft_x * LookingDir.x) + (backward_leaft_z * LookingDir.z);
+        #endregion
+
+        #region clamps out negativ valus
+        parydata[0] = Mathf.Clamp01(parydata[0]);
+        parydata[1] = Mathf.Clamp01(parydata[1]);
+        parydata[2] = Mathf.Clamp01(parydata[2]);
+        parydata[3] = Mathf.Clamp01(parydata[3]);
+        parydata[4] = Mathf.Clamp01(parydata[4]);
+        parydata[5] = Mathf.Clamp01(parydata[5]);
+        parydata[6] = Mathf.Clamp01(parydata[6]);
+        parydata[7] = Mathf.Clamp01(parydata[7]);
+        #endregion
 
 
+
+
+        List<Ray> attackDis = new List<Ray>();
+
+        bool returnValue;
+
+
+        if (parydata[0] > 0.0f) { attackDis.Add(new Ray(point, new Vector3(forward_x, 0, forward_z))); }//castForward
+        if (parydata[1] > 0.0f) { attackDis.Add(new Ray(point, new Vector3(backward_x, 0, backward_z))); }//castbackward
+        if (parydata[2] > 0.0f) { attackDis.Add(new Ray(point, new Vector3(right_x, 0, right_z))); }//castRight
+        if (parydata[3] > 0.0f) { attackDis.Add(new Ray(point, new Vector3(leaft_x, 0, leaft_z))); }//castLeaft
+        if (parydata[4] > 0.0f) { attackDis.Add(new Ray(point, new Vector3(forward_right_x, 0, forward_right_z))); }//castForward_right
+        if (parydata[5] > 0.0f) { attackDis.Add(new Ray(point, new Vector3(forward_leaft_x, 0, forward_leaft_z))); }//castForward_leaft
+        if (parydata[6] > 0.0f) { attackDis.Add(new Ray(point, new Vector3(backward_right_x, 0, backward_right_z))); }//castBackward_right
+        if (parydata[7] > 0.0f) { attackDis.Add(new Ray(point, new Vector3(backward_leaft_x, 0, backward_leaft_z))); }//castBackward_leaft
+
+
+    
+ 
+
+        
+        return true;
+    }
 
 
 }

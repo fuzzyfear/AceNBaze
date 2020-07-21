@@ -38,6 +38,7 @@ public class F_MoveToTargetAutoAttack : _FunctionBase
             {
                 float dist = Vector3.Distance(baseAbilitys.agent.transform.position, targetAbilitis.transform.root.position);
 
+
                 #region In Range
                 if (dist <= baseAbilitys.characterStats.cStats.weapon.weaponRange)
                 {
@@ -48,8 +49,10 @@ public class F_MoveToTargetAutoAttack : _FunctionBase
                     else
                     {
                         Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
+                 
+
+
                         modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
-                        //   StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
                     }
                         
                 }
@@ -120,27 +123,5 @@ public class F_MoveToTargetAutoAttack : _FunctionBase
     }
 
 
-    //IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
-    //{
-    //    float colldown = 0f;
-    //    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
-
-    //    float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
-
-
-
-    //    while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
-    //    {
-
-    //        yield return new WaitForSeconds(colldownSpeed);
-    //        colldown = Mathf.MoveTowards(colldown, 1f, 0.1f);//  Mathf.Clamp01(colldown + colldownSpeed);
-    //        Debug.Log(colldown);
-
-    //        modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
-
-
-    //    }
-
-    //}
 
 }

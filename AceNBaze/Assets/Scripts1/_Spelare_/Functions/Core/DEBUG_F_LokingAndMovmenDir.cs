@@ -80,7 +80,7 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
 
 
 
-        float[] test = modifier.commonFunctionMethods.GetCharacterParryData(baseAbilitys);
+        float[] test = modifier.commonFunctionMethods.GetCharacterParryData(LokingDir);
         for (int i = 0; i < 8; ++i)
             dirs2[i] = dirs[i] * test[i];
 
