@@ -5,9 +5,11 @@ using UnityEngine;
 
 
 /// <summary>
-/// Contains common functions that will be by more then one function
+/// Contains common functions that will be by more then one function.
+/// is abbstaract so it will exist one type for the player and one for the AI
+/// NOT: the abstarct function should only be private, 
 /// </summary>
-public class CommonFunctionMethods : MonoBehaviour
+public abstract class CommonFunctionMethods : MonoBehaviour
 {
 
     /// <summary>
@@ -22,6 +24,7 @@ public class CommonFunctionMethods : MonoBehaviour
         //part if needed
         return baseAbilitys.agent.velocity.normalized;
     }
+
 
     /// <summary>
     /// Gets the direction between the agent and the mouse cursor on plane that 
@@ -40,7 +43,7 @@ public class CommonFunctionMethods : MonoBehaviour
         //Asume that all the raycast will hit
         playerPlane.Raycast(castPoint, out dist);
 
-        Vector3 mheading = (castPoint.GetPoint(dist) - playerPos);
+        Vector3 mheading = (castPoint.GetPoint(dist) - playerPos);// (castPoint.GetPoint(dist) - playerPos);
         float   mdist    = mheading.magnitude;
 
         return mheading / mdist;
@@ -65,7 +68,8 @@ public class CommonFunctionMethods : MonoBehaviour
     {
         float[] parydata  = new float[8];
 
-        Vector3 LokingDir = GetDirAgentToMouse(baseAbilitys);
+        //TODO: Gör om denna till en genererl getLookingDir istället, för då kan detta återanvändas till fienderan.
+        Vector3 LokingDir = GetLookingDir(baseAbilitys);
 
 
         #region diraction variables
@@ -103,4 +107,20 @@ public class CommonFunctionMethods : MonoBehaviour
         #endregion
         return parydata;
     }
+
+
+
+   
+
+
+
+    #region abstract methods
+
+    protected abstract Vector3 GetLookingDir(CharacterBaseAbilitys baseAbilitys);
+
+    #endregion
+
+
+
+
 }

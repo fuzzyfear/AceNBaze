@@ -230,8 +230,8 @@ public class LockManager : MonoBehaviour
     {
         //TODO: uppdate weapon type later 
         //TODO: do so stats effekt plays in the damage resived
-        CharackterStats.Stats stats = characterBase.characterStats.cStats;
-        stats.currentHP -= damage.weaponDamage;
+        CharackterStats.Stats stats         = characterBase.characterStats.cStats;
+        stats.currentHP                    -= damage.weaponDamage;
         characterBase.characterStats.cStats = stats;
 
     }
