@@ -53,7 +53,6 @@ public class F_AttackCollDownBar : _FunctionBase
 
             yield return new WaitForSeconds(colldownSpeed);
             colldown = Mathf.MoveTowards(colldown, 1f, 0.1f);//  Mathf.Clamp01(colldown + colldownSpeed);
-            Debug.Log(colldown);
             modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
 
 
