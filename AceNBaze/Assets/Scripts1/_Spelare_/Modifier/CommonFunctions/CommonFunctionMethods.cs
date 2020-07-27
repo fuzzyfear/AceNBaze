@@ -50,21 +50,35 @@ public  class CommonFunctionMethods : MonoBehaviour
     /// <summary>
     /// <para>Returns how mutch parry/attack strenght the character currently has in diffrent directions </para>
     /// <para>Totaly 8 directions </para>
-    /// <para>returns a float array(parydata):         </para>
-    /// <para>parydata[0] world space forward          </para>
-    /// <para>parydata[1] world space backlwards       </para>
-    /// <para>parydata[2] world space right            </para>
-    /// <para>parydata[3] world space leaft            </para>
-    /// <para>parydata[4] world space forward-right    </para>
-    /// <para>parydata[5] world space forward-leaft    </para>
-    /// <para>parydata[5] world space backlwards-right </para>
-    /// <para>parydata[5] world space backlwards-leaft </para>
+    /// <para>returns a float array(direction facing data):         </para>
+    /// <para>parydata[0] world space forward                       </para>
+    /// <para>parydata[1] world space forward-right                 </para>
+    /// <para>parydata[2] world space right                         </para>
+    /// <para>parydata[3] world space backlwards-right              </para>
+    /// <para>parydata[4] world space backlwards                    </para>
+    /// <para>parydata[5] world space backlwards-leaft              </para>
+    /// <para>parydata[5] world space leaft                         </para>
+    /// <para>parydata[5] world space forward-leaft                 </para>
     /// <para> Each dir range between 0 -> 1, grades how strong the parry/attack is in that dir</para>
     /// </summary> 
     /// <returns>float list with pary data</returns>
-    public float[] GetCharacterParryData(Vector3 LookingDir)
+    public float[] GetCharacterDirectionData(Vector3 LookingDir)
     {
-        float[] parydata  = new float[8];
+        float[] dirFacingData  = new float[8];
+
+        #region dirFacingData_visulated
+        // X is the character and [0] -> [7] is the data from the list
+        //           [0]
+        //        [7]   [1]
+        //     [6]    X    [2]
+        //        [5]   [3]
+        //           [4]
+        #endregion
+
+
+      
+
+
 
         #region diraction variables
         const float forward_x  =  0f, forward_z  = 1f;
@@ -79,31 +93,65 @@ public  class CommonFunctionMethods : MonoBehaviour
         #endregion
 
         #region calcs dot(dir, lookingdir)
-        parydata[0] = (forward_x        * LookingDir.x) + (forward_z        * LookingDir.z);
-        parydata[1] = (backward_x       * LookingDir.x) + (backward_z       * LookingDir.z);
-        parydata[2] = (right_x          * LookingDir.x) + (right_z          * LookingDir.z);
-        parydata[3] = (leaft_x          * LookingDir.x) + (leaft_z          * LookingDir.z);
-        parydata[4] = (forward_right_x  * LookingDir.x) + (forward_right_z  * LookingDir.z);
-        parydata[5] = (forward_leaft_x  * LookingDir.x) + (forward_leaft_z  * LookingDir.z);
-        parydata[6] = (backward_right_x * LookingDir.x) + (backward_right_z * LookingDir.z);
-        parydata[7] = (backward_leaft_x * LookingDir.x) + (backward_leaft_z * LookingDir.z);
+        dirFacingData[0] = (forward_x        * LookingDir.x) + (forward_z        * LookingDir.z);
+        dirFacingData[1] = (backward_x       * LookingDir.x) + (backward_z       * LookingDir.z);
+        dirFacingData[2] = (right_x          * LookingDir.x) + (right_z          * LookingDir.z);
+        dirFacingData[3] = (leaft_x          * LookingDir.x) + (leaft_z          * LookingDir.z);
+        dirFacingData[4] = (forward_right_x  * LookingDir.x) + (forward_right_z  * LookingDir.z);
+        dirFacingData[5] = (forward_leaft_x  * LookingDir.x) + (forward_leaft_z  * LookingDir.z);
+        dirFacingData[6] = (backward_right_x * LookingDir.x) + (backward_right_z * LookingDir.z);
+        dirFacingData[7] = (backward_leaft_x * LookingDir.x) + (backward_leaft_z * LookingDir.z);
         #endregion
 
         #region clamps out negativ valus
-        parydata[0] = Mathf.Clamp01(parydata[0]);
-        parydata[1] = Mathf.Clamp01(parydata[1]);
-        parydata[2] = Mathf.Clamp01(parydata[2]);
-        parydata[3] = Mathf.Clamp01(parydata[3]);
-        parydata[4] = Mathf.Clamp01(parydata[4]);
-        parydata[5] = Mathf.Clamp01(parydata[5]);
-        parydata[6] = Mathf.Clamp01(parydata[6]);
-        parydata[7] = Mathf.Clamp01(parydata[7]);
+        dirFacingData[0] = Mathf.Clamp01(dirFacingData[0]);
+        dirFacingData[1] = Mathf.Clamp01(dirFacingData[1]);
+        dirFacingData[2] = Mathf.Clamp01(dirFacingData[2]);
+        dirFacingData[3] = Mathf.Clamp01(dirFacingData[3]);
+        dirFacingData[4] = Mathf.Clamp01(dirFacingData[4]);
+        dirFacingData[5] = Mathf.Clamp01(dirFacingData[5]);
+        dirFacingData[6] = Mathf.Clamp01(dirFacingData[6]);
+        dirFacingData[7] = Mathf.Clamp01(dirFacingData[7]);
         #endregion
-        return parydata;
+        return dirFacingData;
     }
 
 
 
+
+    /// <summary>
+    /// <para>Calculates how mutch damages that is applyed in every direktion</para>
+    /// <para>Totaly 8 directions </para>
+    /// <para>returns a float array(damage_data):         </para>
+    /// <para>parydata[0] damage applyed world space forward                       </para>
+    /// <para>parydata[1] damage applyed world space forward-right                 </para>
+    /// <para>parydata[2] damage applyed world space right                         </para>
+    /// <para>parydata[3] damage applyed world space backlwards-right              </para>
+    /// <para>parydata[4] damage applyed world space backlwards                    </para>
+    /// <para>parydata[5] damage applyed world space backlwards-leaft              </para>
+    /// <para>parydata[5] damage applyed world space leaft                         </para>
+    /// <para>parydata[5] damage applyed world space forward-leaft                 </para>
+    /// </summary> 
+    /// <returns>float list with damage data</returns>
+    public float[] ParryAttack(float[] parryData, float parryStrengh, float[] attackData, float attackStrengh)
+    {
+
+        #region dirFacingData_visulated
+        // X is the character and [0] -> [7] is the data from the list
+        //           [0]
+        //        [7]   [1]
+        //     [6]    X    [2]
+        //        [5]   [3]
+        //           [4]
+        #endregion
+        float[] damage = new float[8];
+        //Calculates damage in all directions 
+        for (int i = 0; i < 8; ++i)
+            damage[i] = parryData[i] * parryStrengh - attackData[(i + 4) % 8] * attackStrengh;
+
+
+        return damage;
+    }
 
 
 
