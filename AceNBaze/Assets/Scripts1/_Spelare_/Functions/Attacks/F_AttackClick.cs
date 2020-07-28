@@ -14,19 +14,25 @@ public class F_AttackClick : _FunctionBase
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        if (Input.GetKeyDown(Controlls.instanse.attack))
-        {
+
+
+        //BEFOR_MERGE: remove this 
+        baseAbilitys.characterStats.cWstats.DEBUG_attacking = false;
+
+        //if (Input.GetKeyDown(Controlls.instanse.attack))
+        //{
 
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
             {
-                Vector3    mouse     = Input.mousePosition;
-                Ray        castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
+
                 RaycastHit hit;
+
+                Ray castPoint = new Ray(baseAbilitys.mainTransform.position, baseAbilitys.transform.forward);
 
                 CharacterBaseAbilitys targetAbilitis    = null;
                 LockManager           targetLockManager = null;
              
-                if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, baseAbilitys.maskes.EnemyMask))
+                if (Physics.SphereCast(castPoint,1, out hit, baseAbilitys.characterStats.cStats.weapon.weaponRange, baseAbilitys.maskes.EnemyMask))
                 {
                     targetAbilitis    = hit.transform.root.GetChild(FunctionTick.CharackterAbilityChildIndex).GetComponent<CharacterBaseAbilitys>();
                     targetLockManager = hit.transform.root.GetChild(FunctionTick.LockManagerChildIndex).GetComponent<LockManager>();
@@ -35,9 +41,10 @@ public class F_AttackClick : _FunctionBase
 
                 //Dos the attack, "swings the weapon"
                 PreformAttack(baseAbilitys, modifier, targetAbilitis, targetLockManager);
-
+                //BEFOR_MERGE: remove this 
+                baseAbilitys.characterStats.cWstats.DEBUG_attacking = true;
             }
-        }
+        //}
        
     }
 
@@ -48,33 +55,13 @@ public class F_AttackClick : _FunctionBase
         attackerModifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
         if(targetAbilitis != null)
         {
-            float dist = Vector3.Distance(baseAbilitys.agent.transform.position, targetAbilitis.mainTransform.position);
-
-            if (dist <= baseAbilitys.characterStats.cStats.weapon.weaponRange)
-            {
-
-                StopMovment(baseAbilitys, attackerModifier.lockManager);
-
-                //  if (targetAbilitis == null) { Debug.LogError(" the top rot of target dosent have funktion ticker"); }
-
+          
+                //StopMovment(baseAbilitys, attackerModifier.lockManager);
 
                 float damage = CalcDamage(baseAbilitys, attackerModifier, targetAbilitis);
+                //applays the damage to the target
+                targetLockManager.ApplayDamage.UseAction(targetAbilitis, damage, _keyHash);
 
-                
-
-
-
-
-               // if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon, _keyHash))
-               //     Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
-               // else
-               //     Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
-
-            }
-            else
-            {
-                Debug.Log("Miss, enemy not in range " + dist);
-            }
 
         }
     }
@@ -88,11 +75,19 @@ public class F_AttackClick : _FunctionBase
         float damage = 0;
 
         Vector3 targetLookingDir = targetAbilitis.mainTransform.forward;
-        Vector3 playerLookingDir = modifier.commonFunctionMethods.GetDirAgentToMouse(baseAbilitys);
+        Vector3 playerLookingDir = baseAbilitys.mainTransform.forward; //modifier.commonFunctionMethods.GetDirAgentToMouse(baseAbilitys);
 
 
         float[] targetParryData  = modifier.commonFunctionMethods.GetCharacterDirectionData(targetLookingDir);
-        float[] playerAttackData = modifier.commonFunctionMethods.GetCharacterDirectionData(targetLookingDir);
+        #region get the attack data
+        float[] tempAttackData = modifier.commonFunctionMethods.GetCharacterDirectionData(playerLookingDir);
+        float[] playerAttackData = new float[tempAttackData.Length];
+        playerAttackData[(int)tempAttackData[8]] = tempAttackData[(int)tempAttackData[8]];
+        #endregion
+
+
+
+
 
         float[] damageData = new float[8];
 

@@ -12,6 +12,8 @@ using UnityEngine;
 public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
 {
 
+    public bool IS_AI = false;
+
     [Header("ONLY FOR DEBUGG, REMOVE BEFOR DOIN FINAL BUILD")]
     [SerializeField] private Vector3 LokingDir;
     [SerializeField] private Vector3 MovingDir;
@@ -48,7 +50,7 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
 
     #endregion
 
-
+    #region debug chapes
     // blockCubes[0] world space forward          
     // blockCubes[1] world space backlwards       
     // blockCubes[2] world space right            
@@ -60,8 +62,8 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
     [SerializeField] private GameObject[] blockCubes = new GameObject[8];
 
     GameObject attackCube;
+    #endregion
 
- 
 
     public DEBUG_F_LokingAndMovmenDir() : base()
     {
@@ -86,8 +88,8 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
 
-         LokingDir = modifier.commonFunctionMethods.GetDirAgentToMouse(baseAbilitys);
-         MovingDir = modifier.commonFunctionMethods.GetAgentMovingDir(baseAbilitys);
+        LokingDir  = baseAbilitys.transform.forward;// (IS_AI) ? baseAbilitys.transform.forward : modifier.commonFunctionMethods.GetDirAgentToMouse(baseAbilitys);
+        MovingDir  = modifier.commonFunctionMethods.GetAgentMovingDir(baseAbilitys);
 
 
         Vector3 pos = baseAbilitys.mainTransform.position;
@@ -112,13 +114,21 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
         #region debug block
         for (int i = 0; i < 8; ++i)
         {
-            blockCubes[i].transform.position = pos + dirs2[i] * 2f;
+            blockCubes[i].transform.position = pos + dirs[i] * 2f;
             blockCubes[i].transform.localScale = new Vector3(test[i], test[i]*((baseAbilitys.characterStats.cWstats.parry) ? 4f: 1f) , test[i]);
         }
         #endregion
 
         #region debug attack dir
-        attackCube.transform.position = pos + dirs2[(int)test[8]] * 4f;
+        attackCube.transform.position = pos + dirs[(int)test[8]] * (baseAbilitys.characterStats.cStats.weapon.weaponRange);
+
+        //BEFOR_MERGE: remove this 
+        if(baseAbilitys.characterStats.cWstats.DEBUG_attacking)
+            attackCube.transform.localScale = new Vector3(2, 2,2);
+        else
+            attackCube.transform.localScale = new Vector3(1, 1,1);
+
+
         #endregion
 
 

@@ -3479,7 +3479,7 @@ MonoBehaviour:
     dashStaminaDraineSpeed: 0
     weapon:
       coldownTime: 0
-      weaponDamage: 0
+      weaponDamage: 1.5
       weaponRange: 0
       weaponWeight: 0
       weaponType: 0
@@ -10999,14 +10999,15 @@ MonoBehaviour:
   _abilitys: {fileID: 116084122506800357}
   _Modifier: {fileID: 116084122506800360}
   _functions_update:
-  - {fileID: 116084121227005773}
   - {fileID: 116084121227005770}
   - {fileID: 116084121227005772}
   - {fileID: 116084121227005771}
+  - {fileID: 116084121227005773}
   _functionActive_update: 01010101
   _functions_late_update:
+  - {fileID: 116084121227005773}
   - {fileID: 116084121227005768}
-  _functionActive_late_update: 01
+  _functionActive_late_update: 0001
 --- !u!195 &116084121358826237
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -11055,7 +11056,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 116084121358826238}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.48, z: -4.49}
+  m_LocalPosition: {x: -1.99, y: 0.48, z: -2.63}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 116084122506800356}
@@ -12410,7 +12411,7 @@ MonoBehaviour:
     dashStaminaDraineSpeed: 0
     weapon:
       coldownTime: 0
-      weaponDamage: 0
+      weaponDamage: 1.5
       weaponRange: 0
       weaponWeight: 0
       weaponType: 0

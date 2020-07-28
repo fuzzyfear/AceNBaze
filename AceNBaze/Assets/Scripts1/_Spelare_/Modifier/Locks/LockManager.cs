@@ -127,7 +127,8 @@ public class LockManager : MonoBehaviour
 
 
     #region Working stats functions locks
-    public Lock<bool>                   SetParry                           = new Lock<bool>                  ("SetParryA"                          , SetParryAction                            );
+    public Lock<bool>                   SetParry                           = new Lock<bool>                  ("SetParry"                          , SetParryAction                            );
+   
     #endregion
 
 
@@ -228,8 +229,7 @@ public class LockManager : MonoBehaviour
     }
     static void ApplayDamageAction(CharacterBaseAbilitys characterBase, float damage)
     {
-        //TODO: uppdate weapon type later 
-        //TODO: do so stats effekt plays in the damage resived
+
         CharackterStats.Stats stats         = characterBase.characterStats.cStats;
         stats.currentHP                    -= damage;
         characterBase.characterStats.cStats = stats;
@@ -246,7 +246,6 @@ public class LockManager : MonoBehaviour
     {
         characterBase.characterStats.cWstats.parry = isParry;
     }
-
 
 
     #endregion

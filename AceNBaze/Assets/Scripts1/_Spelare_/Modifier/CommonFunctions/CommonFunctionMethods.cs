@@ -137,8 +137,8 @@ public  class CommonFunctionMethods : MonoBehaviour
     /// <para>parydata[3] damage applyed world space backlwards-right              </para>
     /// <para>parydata[4] damage applyed world space backlwards                    </para>
     /// <para>parydata[5] damage applyed world space backlwards-leaft              </para>
-    /// <para>parydata[5] damage applyed world space leaft                         </para>
-    /// <para>parydata[5] damage applyed world space forward-leaft                 </para>
+    /// <para>parydata[6] damage applyed world space leaft                         </para>
+    /// <para>parydata[7] damage applyed world space forward-leaft                 </para>
     /// </summary> 
     /// <returns>float list with damage data</returns>
     public float[] ParryAttack(float[] parryData, float parryStrengh, float[] attackData, float attackStrengh)
@@ -155,8 +155,13 @@ public  class CommonFunctionMethods : MonoBehaviour
         float[] damage = new float[8];
         //Calculates damage in all directions 
         for (int i = 0; i < 8; ++i)
-            damage[i] = parryData[i] * parryStrengh - attackData[(i + 4) % 8] * attackStrengh;
+        {
+            damage[i] =  attackData[(i + 4) % 8] * attackStrengh - parryData[i] * parryStrengh;
+            damage[i] = (damage[i] < 0) ? 0 : damage[i];
+        }
+   
 
+ 
 
         return damage;
     }

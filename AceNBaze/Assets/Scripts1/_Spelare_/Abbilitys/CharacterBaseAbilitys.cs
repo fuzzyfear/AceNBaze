@@ -13,9 +13,10 @@ public class CharacterBaseAbilitys : MonoBehaviour
         [SerializeField] private LayerMask _enemyMask;
         [SerializeField] private LayerMask _itemMask;
 
-        public LayerMask GrundMask => _grundMask;
-        public LayerMask EnemyMask => _enemyMask;
-        public LayerMask ItemMask  => _itemMask;
+        public LayerMask GrundMask  => _grundMask;
+        public LayerMask EnemyMask  => _enemyMask;
+        public LayerMask ItemMask   => _itemMask;
+
 
     }
 

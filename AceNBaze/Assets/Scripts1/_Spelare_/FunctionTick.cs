@@ -9,7 +9,7 @@ public class FunctionTick : MonoBehaviour
     #region Index of the children 
     public static int CharackterAbilityChildIndex = 0;
     public static int CharackterStatsChildIndex   = 1;
-    public static int LockManagerChildIndex       = 3;
+    public static int LockManagerChildIndex       = 2;
     #endregion
 
 
@@ -28,9 +28,6 @@ public class FunctionTick : MonoBehaviour
 
     public void Update()
     {
-
-
-
         int length = _functions_update.Length;
         for (int i = 0; i < length; ++i)
             if (_functionActive_update[i])
