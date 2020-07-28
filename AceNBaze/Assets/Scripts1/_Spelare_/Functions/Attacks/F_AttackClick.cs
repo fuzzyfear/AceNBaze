@@ -16,43 +16,59 @@ public class F_AttackClick : _FunctionBase
     {
         if (Input.GetKeyDown(Controlls.instanse.attack))
         {
-           
+
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
             {
                 Vector3    mouse     = Input.mousePosition;
                 Ray        castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
                 RaycastHit hit;
 
+                CharacterBaseAbilitys targetAbilitis = null;
+             
                 if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, baseAbilitys.maskes.EnemyMask))
-                {
-                    float dist  = Vector3.Distance(baseAbilitys.agent.transform.position, hit.collider.transform.root.position);
+                    targetAbilitis = hit.transform.root.GetChild(FunctionTick.CharackterAbilityChildIndex).GetComponent<CharacterBaseAbilitys>();
 
-                    if(dist <= baseAbilitys.characterStats.cStats.weapon.weaponRange)
-                    {
 
-                        StopMovment(baseAbilitys, modifier.lockManager);
+                PreformAttack(baseAbilitys, modifier, targetAbilitis);
 
-                        CharacterBaseAbilitys targetAbilitis = hit.transform.root.GetChild(FunctionTick.CharackterAbilityChildIndex).GetComponent<CharacterBaseAbilitys>();
-                        if(targetAbilitis == null)
-                            Debug.LogError(" the top rot of target dosent have funktion ticker");
-
-                        if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon , _keyHash))
-                            Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
-                        else
-                            Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
-
-                    }
-                    else
-                    {
-                        Debug.Log("Miss, enemy not in range " + dist);
-                    }
-                    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
-                    //StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
-                }
             }
         }
        
     }
+
+
+
+    private void PreformAttack(CharacterBaseAbilitys baseAbilitys, Modifier modifier, CharacterBaseAbilitys targetAbilitis = null)
+    {
+        modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
+        if(targetAbilitis != null)
+        {
+            float dist = Vector3.Distance(baseAbilitys.agent.transform.position, targetAbilitis.mainTransform.position);
+
+            if (dist <= baseAbilitys.characterStats.cStats.weapon.weaponRange)
+            {
+
+                StopMovment(baseAbilitys, modifier.lockManager);
+
+                if (targetAbilitis == null)
+                    Debug.LogError(" the top rot of target dosent have funktion ticker");
+
+                if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon, _keyHash))
+                    Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
+                else
+                    Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
+
+            }
+            else
+            {
+                Debug.Log("Miss, enemy not in range " + dist);
+            }
+
+        }
+    }
+
+
+
 
 
     /// <summary>

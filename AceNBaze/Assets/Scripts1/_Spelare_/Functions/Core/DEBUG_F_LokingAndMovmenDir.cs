@@ -118,7 +118,7 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
         #endregion
 
         #region debug attack dir
-        attackCube.transform.position = pos + dirs2[(int)test[8]] * 5f;
+        attackCube.transform.position = pos + dirs2[(int)test[8]] * 4f;
         #endregion
 
 
