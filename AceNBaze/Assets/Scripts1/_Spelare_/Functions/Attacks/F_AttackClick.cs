@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// Simple click to attack if in range.
+/// Simple click to move skript
 /// </summary>
 public class F_AttackClick : _FunctionBase
 {
@@ -14,60 +14,67 @@ public class F_AttackClick : _FunctionBase
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-
-
-
         if (Input.GetKeyDown(Controlls.instanse.attack))
         {
 
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
             {
-
+                Vector3 mouse = Input.mousePosition;
+                Ray castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
                 RaycastHit hit;
 
-                Ray castPoint = new Ray(baseAbilitys.mainTransform.position, baseAbilitys.transform.forward);
-
-                CharacterBaseAbilitys targetAbilitis    = null;
-                LockManager           targetLockManager = null;
-             
-                if (Physics.SphereCast(castPoint,1, out hit, baseAbilitys.characterStats.cStats.weapon.weaponRange, baseAbilitys.maskes.EnemyMask))
+                if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, baseAbilitys.maskes.EnemyMask))
                 {
-                    targetAbilitis    = hit.transform.root.GetChild(FunctionTick.CharackterAbilityChildIndex).GetComponent<CharacterBaseAbilitys>();
-                    targetLockManager = hit.transform.root.GetChild(FunctionTick.LockManagerChildIndex).GetComponent<LockManager>();
-                }
-                
+                    float dist = Vector3.Distance(baseAbilitys.agent.transform.position, hit.collider.transform.root.position);
 
-                //Dos the attack, "swings the weapon"
-                PreformAttack(baseAbilitys, modifier, targetAbilitis, targetLockManager);
-        
+                    if (dist <= baseAbilitys.characterStats.cStats.weapon.weaponRange)
+                    {
+
+                        StopMovment(baseAbilitys, modifier.lockManager);
+
+                        CharacterBaseAbilitys targetAbilitis = hit.transform.root.GetChild(FunctionTick.CharackterAbilityChildIndex).GetComponent<CharacterBaseAbilitys>();
+                        if (targetAbilitis == null)
+                            Debug.LogError(" the top rot of target dosent have funktion ticker");
+
+                        if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon.weaponDamage, _keyHash))
+                            Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
+                        else
+                            Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
+
+                    }
+                    else
+                    {
+                        Debug.Log("Miss, enemy not in range " + dist);
+                    }
+                    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
+                    //StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
+                }
             }
         }
 
     }
 
+    //IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
+    //{
+    //    float colldown = 0f;
+    //    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
 
-
-    private void PreformAttack(CharacterBaseAbilitys baseAbilitys, Modifier attackerModifier, CharacterBaseAbilitys targetAbilitis = null, LockManager targetLockManager = null)
-    {
-        attackerModifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
-        if(targetAbilitis != null)
-        {
-          
-                //StopMovment(baseAbilitys, attackerModifier.lockManager);
-
-                float damage = attackerModifier.commonFunctionMethods.CalcDamage(baseAbilitys, targetAbilitis);
-                //applays the damage to the target
-                targetLockManager.ApplayDamage.UseAction(targetAbilitis, damage, _keyHash);
-
-
-        }
-    }
+    //    float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
 
 
 
+    //    while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
+    //    {
 
- 
+    //        yield return new WaitForSeconds(colldownSpeed);
+    //        colldown = Mathf.MoveTowards(colldown, 1f, 0.1f*Time.deltaTime);//  Mathf.Clamp01(colldown + colldownSpeed);
+    //        Debug.Log(colldown);
+    //        modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
 
+
+    //    }
+
+    //}
 
 
     /// <summary>
@@ -78,25 +85,25 @@ public class F_AttackClick : _FunctionBase
     private void StopMovment(CharacterBaseAbilitys baseAbilitys, LockManager modifier)
     {
 
-#region Lock SetAgentIsStopped
+        #region Lock SetAgentIsStopped
         bool locked;
 #if UNITY_EDITOR
         locked = modifier.SetAgentIsStopped.LockAction(_keyName);
 #else
         locked = modifier.SetAgentIsStopped.LockAction(_keyHash);
 #endif
-#endregion
+        #endregion
         if (locked)
         {
             modifier.SetAgentIsStopped.UseAction(baseAbilitys, true, _keyHash);
-           
-#region Lock SetAgentMovingDestination
+
+            #region Lock SetAgentMovingDestination
 #if UNITY_EDITOR
             locked = modifier.SetAgentMovingDestination.LockAction(_keyName);
 #else
             locked = modifier.SetAgentMovingDestination.LockAction(_keyHash);
 #endif
-#endregion
+            #endregion
             if (locked)
             {
                 modifier.SetAgentMovingDestination.UseAction(baseAbilitys, baseAbilitys.mainTransform.position, _keyHash);
