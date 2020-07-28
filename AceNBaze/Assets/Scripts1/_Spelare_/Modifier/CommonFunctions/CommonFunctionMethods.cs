@@ -167,4 +167,52 @@ public  class CommonFunctionMethods : MonoBehaviour
     }
 
 
+
+    /// <summary>
+    /// Calculates damages from attack and parry data.
+    /// </summary>
+    /// <param name="attackerAbilititys"></param>
+    /// <param name="targetAbilitis"></param>
+    /// <returns> the damage that should be aplied to the target</returns>
+    public float CalcDamage(CharacterBaseAbilitys attackerAbilititys, CharacterBaseAbilitys targetAbilitis)
+    {
+
+        float damage = 0;
+
+        Vector3 targetLookingDir = targetAbilitis.mainTransform.forward;
+        Vector3 attackerLookingDir = attackerAbilititys.mainTransform.forward; //modifier.commonFunctionMethods.GetDirAgentToMouse(baseAbilitys);
+
+
+        float[] targetParryData = GetCharacterDirectionData(targetLookingDir);
+        #region get the attack data
+        float[] tempAttackData = GetCharacterDirectionData(attackerLookingDir);
+        float[] attackerAttackData = new float[tempAttackData.Length];
+        attackerAttackData[(int)tempAttackData[8]] = tempAttackData[(int)tempAttackData[8]];
+        #endregion
+
+
+
+
+
+        float[] damageData = new float[8];
+
+        if (targetAbilitis.characterStats.cWstats.parry)
+        {
+            damageData = ParryAttack(targetParryData   , targetAbilitis.characterStats.cStats.weapon.parryStrengh,
+                                     attackerAttackData, attackerAbilititys.characterStats.cStats.weapon.weaponDamage);
+        }
+        else
+        {
+            float wDamage = attackerAbilititys.characterStats.cStats.weapon.weaponDamage;
+            for (int i = 0; i < 8; ++i)
+                damageData[i] = attackerAttackData[i] * wDamage;
+        }
+
+        for (int i = 0; i < 8; ++i)
+            damage += damageData[i];
+
+        return damage;
+
+    }
+
 }

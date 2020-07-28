@@ -58,7 +58,7 @@ public class F_AttackClick : _FunctionBase
           
                 //StopMovment(baseAbilitys, attackerModifier.lockManager);
 
-                float damage = CalcDamage(baseAbilitys, attackerModifier, targetAbilitis);
+                float damage = attackerModifier.commonFunctionMethods.CalcDamage(baseAbilitys, targetAbilitis);
                 //applays the damage to the target
                 targetLockManager.ApplayDamage.UseAction(targetAbilitis, damage, _keyHash);
 
@@ -69,47 +69,7 @@ public class F_AttackClick : _FunctionBase
 
 
 
-    private float CalcDamage(CharacterBaseAbilitys baseAbilitys, Modifier modifier, CharacterBaseAbilitys targetAbilitis)
-    {
-
-        float damage = 0;
-
-        Vector3 targetLookingDir = targetAbilitis.mainTransform.forward;
-        Vector3 playerLookingDir = baseAbilitys.mainTransform.forward; //modifier.commonFunctionMethods.GetDirAgentToMouse(baseAbilitys);
-
-
-        float[] targetParryData  = modifier.commonFunctionMethods.GetCharacterDirectionData(targetLookingDir);
-        #region get the attack data
-        float[] tempAttackData = modifier.commonFunctionMethods.GetCharacterDirectionData(playerLookingDir);
-        float[] playerAttackData = new float[tempAttackData.Length];
-        playerAttackData[(int)tempAttackData[8]] = tempAttackData[(int)tempAttackData[8]];
-        #endregion
-
-
-
-
-
-        float[] damageData = new float[8];
-
-        if (targetAbilitis.characterStats.cWstats.parry)
-        {
-            damageData = modifier.commonFunctionMethods.ParryAttack(targetParryData, targetAbilitis.characterStats.cStats.weapon.parryStrengh,
-                                                                      playerAttackData, baseAbilitys.characterStats.cStats.weapon.weaponDamage);
-        }
-        else
-        {
-            float wDamage = baseAbilitys.characterStats.cStats.weapon.weaponDamage;
-            for (int i = 0; i < 8; ++i)
-                damageData[i] = playerAttackData[i] * wDamage;
-        }
-
-        for (int i = 0; i < 8; ++i)
-            damage += damageData[i];
-
-        return damage;
-
-    }
-
+ 
 
 
 
