@@ -54,13 +54,14 @@ public class CharackterStats : MonoBehaviour
         }
         public bool NotColldown => _notRecovering;
 
-
+        //For now set to half attack damage; 
+        public float parryStrengh;
 
         public float collDownSpeed => _recoveringSpeed;
 
         public Weapon( float speed, int damage, float range)
         {
-
+          
             _attackStamina = _maxStamina;
             _notRecovering = true;
 
@@ -75,8 +76,8 @@ public class CharackterStats : MonoBehaviour
             weaponStatEffekt      = -1;
             weaponStatEffetkPower = -1;
 
+            parryStrengh = damage / 2;
 
-   
         }
 
     }
@@ -88,7 +89,7 @@ public class CharackterStats : MonoBehaviour
         public int     movmentSpeed;
 
         [Space]
-        public int     maxHP     , currentHP;
+        public float     maxHP     , currentHP;
         [Space]
         public float staminMax;
         public float staminaCurrent;

@@ -127,7 +127,6 @@ public  class CommonFunctionMethods : MonoBehaviour
     }
 
 
-
     /// <summary>
     /// <para>Calculates how mutch damages that is applyed in every direktion</para>
     /// <para>Totaly 8 directions </para>

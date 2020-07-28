@@ -6,8 +6,11 @@ using UnityEngine.AI;
 public class FunctionTick : MonoBehaviour
 {
     //index for the child that has the ability script on it
+    #region Index of the children 
     public static int CharackterAbilityChildIndex = 0;
-
+    public static int CharackterStatsChildIndex   = 1;
+    public static int LockManagerChildIndex       = 3;
+    #endregion
 
 
 

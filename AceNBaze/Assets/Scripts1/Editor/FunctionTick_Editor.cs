@@ -69,6 +69,7 @@ public class FunctionTick_Editor : Editor
         EditorGUILayout.HelpBox("The Order of the childern must be:" +
                                 " \n \n _CharackterAbilitys " +
                                 "\n _CharackterStats " +
+                                "\n _LockManager "+
                                 "\n _Functions \n _Model " +
                                 "\n ... \n \n " +
                                 "since code relyes on the order to acces them fast.", MessageType.Info);

@@ -113,7 +113,7 @@ public class LockManager : MonoBehaviour
     /// <para><b>_Action Input description_</b></para>
     /// <para>    CharackterStats.Weapon : the weapon that delt the attack</para>
     /// </summary>                                                                                                
-    public Lock<CharackterStats.Weapon> ApplayDamage                       = new Lock<CharackterStats.Weapon> ("ApplayDamage"                       , ApplayDamageAction                       );
+    public Lock<float>                  ApplayDamage                       = new Lock<float>                 ("ApplayDamage"                       , ApplayDamageAction                       );
     #endregion
 
 
@@ -207,8 +207,8 @@ public class LockManager : MonoBehaviour
     #region stamina, life Actions
     static void SetLifeAction(CharacterBaseAbilitys characterBase, int hp)
     {
-        CharackterStats.Stats stats = characterBase.characterStats.cStats;
-        stats.currentHP = hp;
+        CharackterStats.Stats stats         = characterBase.characterStats.cStats;
+        stats.currentHP                     = hp;
         characterBase.characterStats.cStats = stats;
     }
     static void SetStaminaAction(CharacterBaseAbilitys characterBase, float stamina)
@@ -226,12 +226,12 @@ public class LockManager : MonoBehaviour
         stats.weapon.attakcStamina = colldown;
         characterBase.characterStats.cStats = stats;
     }
-    static void ApplayDamageAction(CharacterBaseAbilitys characterBase, CharackterStats.Weapon damage)
+    static void ApplayDamageAction(CharacterBaseAbilitys characterBase, float damage)
     {
         //TODO: uppdate weapon type later 
         //TODO: do so stats effekt plays in the damage resived
         CharackterStats.Stats stats         = characterBase.characterStats.cStats;
-        stats.currentHP                    -= damage.weaponDamage;
+        stats.currentHP                    -= damage;
         characterBase.characterStats.cStats = stats;
 
     }

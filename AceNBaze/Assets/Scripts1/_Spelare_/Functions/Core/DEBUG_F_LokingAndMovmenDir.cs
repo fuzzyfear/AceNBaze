@@ -23,7 +23,7 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
 
 
 
-    #region diraction variables
+    #region dirs 
     const float forward_x = 0f, forward_z = 1f;
     const float backward_x = 0f, backward_z = -1f;
     const float right_x = 1f, right_z = 0f;
@@ -33,7 +33,7 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
     const float forward_leaft_x = -0.7f, forward_leaft_z = 0.7f;
     const float backward_right_x = 0.7f, backward_right_z = -0.7f;
     const float backward_leaft_x = -0.7f, backward_leaft_z = -0.7f;
-    #endregion
+
    
 
     private Vector3[] dirs = {new Vector3( forward_x       , 0.0f,  forward_z       ),
@@ -44,9 +44,9 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
                               new Vector3(backward_leaft_x , 0.0f, backward_leaft_z ),
                               new Vector3(leaft_x          , 0.0f, leaft_z          ),
                               new Vector3(forward_leaft_x  , 0.0f,  forward_leaft_z ) };
-   
-   
 
+
+    #endregion
 
 
     // blockCubes[0] world space forward          
