@@ -14,8 +14,7 @@ public class CharacterWorkingStat : MonoBehaviour
     public bool parry { get { return _parry; } set { _parry = value; } }
 
 
-   //BEFOR_MERGE: remove this 
-   public bool DEBUG_attacking;
+
 
  
 

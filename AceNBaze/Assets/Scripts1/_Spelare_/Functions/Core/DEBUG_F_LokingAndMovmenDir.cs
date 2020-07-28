@@ -122,11 +122,7 @@ public class DEBUG_F_LokingAndMovmenDir : _FunctionBase
         #region debug attack dir
         attackCube.transform.position = pos + dirs[(int)test[8]] * (baseAbilitys.characterStats.cStats.weapon.weaponRange);
 
-        //BEFOR_MERGE: remove this 
-        if(baseAbilitys.characterStats.cWstats.DEBUG_attacking)
-            attackCube.transform.localScale = new Vector3(2, 2,2);
-        else
-            attackCube.transform.localScale = new Vector3(1, 1,1);
+
 
 
         #endregion

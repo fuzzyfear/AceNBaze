@@ -10,8 +10,7 @@ public class DEBUG_F_ContinuslyAttack : _FunctionBase
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
   
-        //BEFOR_MERGE: remove this 
-        baseAbilitys.characterStats.cWstats.DEBUG_attacking = false;
+
  
         if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
         {
@@ -34,8 +33,7 @@ public class DEBUG_F_ContinuslyAttack : _FunctionBase
             //Dos the attack, "swings the weapon"
             PreformAttack(baseAbilitys, modifier, targetAbilitis, targetLockManager);
 
-            //BEFOR_MERGE: remove this 
-            baseAbilitys.characterStats.cWstats.DEBUG_attacking = true;
+ 
 
         }
 
