@@ -42,7 +42,7 @@ public class F_AutoAttackClick : _FunctionBase
                         if (targetAbilitis == null)
                             Debug.LogError(" the top rot of target dosent have funktion ticker");
 
-                        if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon, _keyHash))
+                        if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon.weaponDamage, _keyHash))
                             Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
                         else
                             Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
@@ -73,7 +73,7 @@ public class F_AutoAttackClick : _FunctionBase
 
                     if (dist <= baseAbilitys.characterStats.cStats.weapon.weaponRange)
                     {
-                        if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon, _keyHash))
+                        if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon.weaponDamage, _keyHash))
                             Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
                         else
                             Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");

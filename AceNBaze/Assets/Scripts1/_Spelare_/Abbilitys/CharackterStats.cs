@@ -25,7 +25,7 @@ public class CharackterStats : MonoBehaviour
     {
         [Header("Stats variables")]
         public float coldownTime;   //Attack cooldown (using 100/attack)
-        public int   weaponDamage;
+        public float weaponDamage;
         public float weaponRange;
         [Space]
         public int weaponWeight;  // later affect the speed, mabey remove
@@ -44,23 +44,25 @@ public class CharackterStats : MonoBehaviour
         {
             get
             {
+
                 return _attackStamina;
             }
             set
             {
                 _attackStamina    = value;
-                _notRecovering = (_attackStamina == _maxStamina);
+
             }
         }
-        public bool NotColldown => _notRecovering;
+        public bool NotColldown { get { return (_attackStamina == _maxStamina); } }// => _notRecovering;
 
-
+        //For now set to half attack damage; 
+        public float parryStrengh;
 
         public float collDownSpeed => _recoveringSpeed;
 
         public Weapon( float speed, int damage, float range)
         {
-
+          
             _attackStamina = _maxStamina;
             _notRecovering = true;
 
@@ -75,8 +77,8 @@ public class CharackterStats : MonoBehaviour
             weaponStatEffekt      = -1;
             weaponStatEffetkPower = -1;
 
+            parryStrengh = damage* 0.5f;
 
-   
         }
 
     }
@@ -88,7 +90,7 @@ public class CharackterStats : MonoBehaviour
         public int     movmentSpeed;
 
         [Space]
-        public int     maxHP     , currentHP;
+        public float     maxHP     , currentHP;
         [Space]
         public float staminMax;
         public float staminaCurrent;

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 100
   currentHP: 0
-  dmg: 100
-  attackSpeed: 900
+  dmg: 10
+  attackSpeed: 0
   dashCooldown: 1
   movementSpeed: 7
   baseDashTime: 0.5

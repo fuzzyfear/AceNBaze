@@ -12,18 +12,15 @@ public class F_AttackCollDownBar : _FunctionBase
 {
     public Slider AttackBar;
 
-    private Coroutine recovering;
+    private bool _onGoingCorutin = false;
 
     public F_AttackCollDownBar() : base() { }
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
 
-        if (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
+        if (!baseAbilitys.characterStats.cStats.weapon.NotColldown && !_onGoingCorutin)
         {
-            if (recovering != null)
-                StopCoroutine(recovering);
-
             StartCoroutine(RefileAttackBare(baseAbilitys, modifier));
         }
 
@@ -43,22 +40,24 @@ public class F_AttackCollDownBar : _FunctionBase
 
     IEnumerator RefileAttackBare(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
+        _onGoingCorutin = true;
         float colldown = baseAbilitys.characterStats.cStats.weapon.attakcStamina;
 
-
         float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
+ 
 
         while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
         {
 
+
+
             yield return new WaitForSeconds(colldownSpeed);
+
             colldown = Mathf.MoveTowards(colldown, 1f, 0.1f);//  Mathf.Clamp01(colldown + colldownSpeed);
-            Debug.Log(colldown);
             modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
 
-
         }
-
+        _onGoingCorutin = false;
     }
 
 

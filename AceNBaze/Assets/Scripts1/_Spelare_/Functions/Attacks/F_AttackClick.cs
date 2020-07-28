@@ -16,27 +16,27 @@ public class F_AttackClick : _FunctionBase
     {
         if (Input.GetKeyDown(Controlls.instanse.attack))
         {
-           
+
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
             {
-                Vector3    mouse     = Input.mousePosition;
-                Ray        castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
+                Vector3 mouse = Input.mousePosition;
+                Ray castPoint = baseAbilitys.camar.ScreenPointToRay(mouse);
                 RaycastHit hit;
 
                 if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, baseAbilitys.maskes.EnemyMask))
                 {
-                    float dist  = Vector3.Distance(baseAbilitys.agent.transform.position, hit.collider.transform.root.position);
+                    float dist = Vector3.Distance(baseAbilitys.agent.transform.position, hit.collider.transform.root.position);
 
-                    if(dist <= baseAbilitys.characterStats.cStats.weapon.weaponRange)
+                    if (dist <= baseAbilitys.characterStats.cStats.weapon.weaponRange)
                     {
 
                         StopMovment(baseAbilitys, modifier.lockManager);
 
                         CharacterBaseAbilitys targetAbilitis = hit.transform.root.GetChild(FunctionTick.CharackterAbilityChildIndex).GetComponent<CharacterBaseAbilitys>();
-                        if(targetAbilitis == null)
+                        if (targetAbilitis == null)
                             Debug.LogError(" the top rot of target dosent have funktion ticker");
 
-                        if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon , _keyHash))
+                        if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon.weaponDamage, _keyHash))
                             Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
                         else
                             Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
@@ -51,7 +51,7 @@ public class F_AttackClick : _FunctionBase
                 }
             }
         }
-       
+
     }
 
     //IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
@@ -96,7 +96,7 @@ public class F_AttackClick : _FunctionBase
         if (locked)
         {
             modifier.SetAgentIsStopped.UseAction(baseAbilitys, true, _keyHash);
-           
+
             #region Lock SetAgentMovingDestination
 #if UNITY_EDITOR
             locked = modifier.SetAgentMovingDestination.LockAction(_keyName);

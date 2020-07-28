@@ -16,8 +16,8 @@ public class CharacterWorkingStat : MonoBehaviour
 
 
 
+ 
 
 
 
-  
 }

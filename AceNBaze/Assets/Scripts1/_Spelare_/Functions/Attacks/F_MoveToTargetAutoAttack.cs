@@ -44,7 +44,7 @@ public class F_MoveToTargetAutoAttack : _FunctionBase
                 {
                     StopMovment(baseAbilitys, modifier.lockManager);
 
-                    if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon, _keyHash))
+                    if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon.weaponDamage, _keyHash))
                         Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
                     else
                     {
