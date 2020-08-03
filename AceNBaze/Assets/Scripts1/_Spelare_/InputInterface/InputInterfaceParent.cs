@@ -11,11 +11,6 @@ using UnityEngine;
 public abstract class InputInterfaceParent : MonoBehaviour
 {
 
-
-
-
-
-
     /* All actions/inputs have three versions: click, hold and release
      * witche will corespronde to the functons in Input.getkey..
 
