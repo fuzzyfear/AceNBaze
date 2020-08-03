@@ -13,7 +13,7 @@ public class F_MovingToggle : _FunctionBase
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
 
-        if (Input.GetKeyDown(Controlls.instanse.movment))
+        if (modifier.controller.Move_Click())
             _uppdateMovmentDestination = !_uppdateMovmentDestination;
         else if (Input.anyKeyDown)
             _uppdateMovmentDestination = false; // to stop movment

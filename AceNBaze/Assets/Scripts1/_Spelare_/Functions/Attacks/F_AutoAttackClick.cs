@@ -20,7 +20,7 @@ public class F_AutoAttackClick : _FunctionBase
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
         #region attack
-        if (Input.GetKey(Controlls.instanse.attack))
+        if (modifier.controller.Ability_1_Click())
         {
 
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)

@@ -14,7 +14,7 @@ public class F_AttackClick : _FunctionBase
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        if (Input.GetKeyDown(Controlls.instanse.attack))
+        if (modifier.controller.Attack_1_Click())
         {
 
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)

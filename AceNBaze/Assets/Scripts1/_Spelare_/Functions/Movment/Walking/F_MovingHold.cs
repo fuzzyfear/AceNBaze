@@ -11,7 +11,7 @@ public class F_MovingHold : _FunctionBase
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        if (Input.GetKey(Controlls.instanse.movment))
+        if (modifier.controller.Move_Click())
         {
 
             #region Lock SetAgentMovingDestination
@@ -51,7 +51,7 @@ public class F_MovingHold : _FunctionBase
                 modifier.lockManager.SetAgentMovingDestination.UnLockAction(_keyName);
             }
         }
-        else if (Input.GetKeyUp(Controlls.instanse.movment))
+        else if (modifier.controller.Move_Release())
         {
             StopMovment(baseAbilitys, modifier.lockManager);
         }

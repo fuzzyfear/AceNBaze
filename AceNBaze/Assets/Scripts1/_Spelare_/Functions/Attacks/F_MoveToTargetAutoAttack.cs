@@ -10,7 +10,7 @@ public class F_MoveToTargetAutoAttack : _FunctionBase
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
         #region Get attack Target
-        if (Input.GetKey(Controlls.instanse.attack))
+        if (modifier.controller.Attack_1_Click())
         {
 
             if (baseAbilitys.characterStats.cStats.weapon.NotColldown)
@@ -27,6 +27,7 @@ public class F_MoveToTargetAutoAttack : _FunctionBase
         }
         else if (Input.anyKeyDown)
         {
+
             targetAbilitis = null;
         }
         #endregion

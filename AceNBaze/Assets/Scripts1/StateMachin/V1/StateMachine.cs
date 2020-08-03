@@ -34,6 +34,7 @@ public class StateMachine : MonoBehaviour
 
     private void SwitchToNewState(Type nextState)
     {
+        
         CurrentState = _avilableStates[nextState];
         OnStateChanged?.Invoke(CurrentState);
         currentType = CurrentState.ToString();
