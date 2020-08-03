@@ -16,76 +16,130 @@ public abstract class InputInterfaceParent : MonoBehaviour
 
 
 
+    /* All actions/inputs have three versions: click, hold and release
+     * witche will corespronde to the functons in Input.getkey..
+
+     */ 
 
 
+
+    public virtual bool Move_Click()   { return false; }
+    public virtual bool Move_Hold()    { return false; }
+    public virtual bool Move_Release() { return false; }
+
+
+    public virtual bool Interact_Click()   { return false; }
+    public virtual bool Interact_Hold()    { return false; }
+    public virtual bool Interact_Release() { return false; }
 
 
     /// <summary>
-    /// Base function to indicate movment.
-    /// for player will it be a rapper for input.getkey(movmentButton)
+    /// Base function to parry (click)
     /// </summary>
-    /// <returns>True if movment action was triggerd</returns>
-    public abstract bool Move();
+    /// <returns></returns>
+    public virtual bool Parry_Click()   { return false; }
+    public virtual bool Parry_Hold()    { return false; }
+    public virtual bool Parry_Release() { return false; }
 
 
-    /// <summary>
-    /// Base function to intract.
-    /// <returns>True if interaction action was triggerd</returns>
-    public abstract bool Interact();
+
+    #region abilitys
+
+    /* Abilitys is things like dashe, teleport, status buff and so on
+     * esentialy any thing that isent part of the grund functionality
+     * (move, interact and parry) but isen an attack)
+     */
+
+
+    public virtual bool Ability_1_Click()  { return false; }
+    public virtual bool Ability_1_Hold()   { return false; }
+    public virtual bool Ability_1_Release(){ return false; }
+
+    public virtual bool Ability_2_Click()  { return false; }
+    public virtual bool Ability_2_Hold()   { return false; }
+    public virtual bool Ability_2_Release(){ return false; }
+
+
+    public virtual bool Ability_3_Click()  { return false; }
+    public virtual bool Ability_3_Hold()   { return false; }
+    public virtual bool Ability_3_Release(){ return false; }
+
+
+    public virtual bool Ability_4_Click()  { return false; }
+    public virtual bool Ability_4_Hold()   { return false; }
+    public virtual bool Ability_4_Release(){ return false; }
+
+
+    public virtual bool Ability_5_Click()  { return false; }
+    public virtual bool Ability_5_Hold()   { return false; }
+    public virtual bool Ability_5_Release(){ return false; }
+
+
+    public virtual bool Ability_6_Click()  { return false; }
+    public virtual bool Ability_6_Hold()   { return false; }
+    public virtual bool Ability_6_Release(){ return false; }
+
+
+    public virtual bool Ability_7_Click()  { return false; }
+    public virtual bool Ability_7_Hold()   { return false; }
+    public virtual bool Ability_7_Release(){ return false; }
+
+
+    public virtual bool Ability_8_Click()  { return false; }
+    public virtual bool Ability_8_Hold()   { return false; }
+    public virtual bool Ability_8_Release(){ return false; }
+
+
+    public virtual bool Ability_9_Click()  { return false; }
+    public virtual bool Ability_9_Hold()   { return false; }
+    public virtual bool Ability_9_Release(){ return false; }
+    #endregion
+
+
+
+
+
+
+
 
 
     #region Attacks
 
-    /// <summary>
-    /// genereic base attack 1
-    /// </summary>
-    /// <returns></returns>
-    public abstract bool Attack_1();
-    /// <summary>
-    /// genereic base attack 2
-    /// </summary>
-    /// <returns></returns>
-    public abstract bool Attack_2();
-    /// <summary>
-    /// genereic base attack 3
-    /// </summary>
-    /// <returns></returns>
-    public abstract bool Attack_3();
-    /// <summary>
-    /// genereic base attack 4
-    /// </summary>
-    /// <returns></returns>
-    public abstract bool Attack_4();
-    /// <summary>
-    /// genereic base attack 5
-    /// </summary>
-    /// <returns></returns>
-    public abstract bool Attack_5();
-    /// <summary>
-    /// genereic base attack 6
-    /// </summary>
-    /// <returns></returns>
-    public abstract bool Attack_6();
-    /// <summary>
-    /// genereic base attack 7
-    /// </summary>
-    /// <returns></returns>
-    public abstract bool Attack_7();
-    /// <summary>
-    /// genereic base attack 8
-    /// </summary>
-    /// <returns></returns>
-    public abstract bool Attack_8();
-    /// <summary>
-    /// genereic base attack 9
-    /// </summary>
-    /// <returns></returns>
-    public abstract bool Attack_9();
-    /// <summary>
-    /// genereic base attack 10
-    /// </summary>
-    /// <returns></returns>
-    public abstract bool Attack_10();
+    public virtual bool Attack_1_Click()  { return false; }
+    public virtual bool Attack_1_Hold()   { return false; }
+    public virtual bool Attack_1_Release(){ return false; }
+
+    public virtual bool Attack_2_Click()   { return false; }
+    public virtual bool Attack_2_Hold()    { return false; }
+    public virtual bool Attack_2_Releasek(){ return false; }
+
+    public virtual bool Attack_3_Click()  { return false; }
+    public virtual bool Attack_3_Hold()   { return false; }
+    public virtual bool Attack_3_Release(){ return false; }
+
+    public virtual bool Attack_4_Click()  { return false; }
+    public virtual bool Attack_4_Hold()   { return false; }
+    public virtual bool Attack_4_Release(){ return false; }
+
+    public virtual bool Attack_5_Click()  { return false; }
+    public virtual bool Attack_5_Hold()   { return false; }
+    public virtual bool Attack_5_Release(){ return false; }
+
+    public virtual bool Attack_6_Click()  { return false; }
+    public virtual bool Attack_6_Hold()   { return false; }
+    public virtual bool Attack_6_Release(){ return false; }
+
+    public virtual bool Attack_7_Click()  { return false; }
+    public virtual bool Attack_7_Hold()   { return false; }
+    public virtual bool Attack_7_Release(){ return false; }
+
+    public virtual bool Attack_8_Click()  { return false; }
+    public virtual bool Attack_8_Hold()   { return false; }
+    public virtual bool Attack_8_Release(){ return false; }
+
+    public virtual bool Attack_9_Click()  { return false; }
+    public virtual bool Attack_9_Hold()   { return false; }
+    public virtual bool Attack_9_Release(){ return false; }
 
     #endregion
 }
