@@ -12,7 +12,7 @@ public class Modifier : MonoBehaviour
     public LockManager           lockManager;
     public CommonFunctionMethods commonFunctionMethods;
     public AnimationFlagger      animationFlagger;
-
+    public InputInterfaceParent  controller;
 
 
 

@@ -3506,7 +3506,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parry: 0
-  DEBUG_attacking: 0
 --- !u!1 &978227082
 GameObject:
   m_ObjectHideFlags: 0
@@ -6614,6 +6613,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1763683209}
   - component: {fileID: 1763683210}
+  - component: {fileID: 1763683212}
   - component: {fileID: 1763683211}
   m_Layer: 10
   m_Name: DemoPlayer
@@ -6694,6 +6694,24 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1763683212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763683208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bddb76d321032c84db6c3351111bb156, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _controlls:
+    MOVMENT_KEY: 324
+    PARRY_KEY: 98
+    INTERACT_KEY: 323
+    DASH_KEY: 32
+    ATTACK_KEY: 323
 --- !u!1 &1769993121
 GameObject:
   m_ObjectHideFlags: 0
@@ -11040,6 +11058,7 @@ GameObject:
   m_Component:
   - component: {fileID: 116084121358826239}
   - component: {fileID: 116084121358826236}
+  - component: {fileID: 116084121358826240}
   - component: {fileID: 116084121358826237}
   m_Layer: 11
   m_Name: Enemy
@@ -11067,6 +11086,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &116084121358826240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116084121358826238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e6f4ed70706ce04bbf103c156a9b801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &116084121379980468
 Transform:
   m_ObjectHideFlags: 0
@@ -12456,7 +12487,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parry: 0
-  DEBUG_attacking: 0
 --- !u!1 &116084122186079996
 GameObject:
   m_ObjectHideFlags: 0
@@ -13263,6 +13293,7 @@ MonoBehaviour:
   lockManager: {fileID: 1819236966}
   commonFunctionMethods: {fileID: 116084121227005769}
   animationFlagger: {fileID: 116084121832291520}
+  controller: {fileID: 116084121358826240}
 --- !u!4 &116084122548760748
 Transform:
   m_ObjectHideFlags: 0
@@ -13772,6 +13803,7 @@ MonoBehaviour:
   lockManager: {fileID: 9120941660252832086}
   commonFunctionMethods: {fileID: 1903484474}
   animationFlagger: {fileID: 7089396042775665138}
+  controller: {fileID: 1763683212}
 --- !u!114 &7089396042775665138
 MonoBehaviour:
   m_ObjectHideFlags: 0
