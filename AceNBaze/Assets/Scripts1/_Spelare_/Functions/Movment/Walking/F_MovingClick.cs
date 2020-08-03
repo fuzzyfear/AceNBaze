@@ -8,7 +8,7 @@ public class F_MovingClick : _FunctionBase
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        if (Input.GetKeyDown(Controlls.instanse.movment))
+        if (modifier.controller.Move_Click())
         {
             #region Lock SetAgentMovingDestination
             bool locked;

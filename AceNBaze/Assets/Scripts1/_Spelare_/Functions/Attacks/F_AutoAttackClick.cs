@@ -59,7 +59,7 @@ public class F_AutoAttackClick : _FunctionBase
         }
         #endregion
         #region Cansle attack
-        else if (Input.anyKeyDown)
+        else if (modifier.controller.AnyInput_Click())
         {
             targetAbilitis = null;
         }
@@ -92,27 +92,6 @@ public class F_AutoAttackClick : _FunctionBase
         #endregion
 
     }
-
-    //IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
-    //{
-    //    float colldown = 0f;
-    //    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
-
-    //    float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
-
-    //    while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
-    //    {
-
-    //        yield return new WaitForSeconds(colldownSpeed);
-    //        colldown = Mathf.MoveTowards(colldown, 1f, 0.1f);//  Mathf.Clamp01(colldown + colldownSpeed);
-    //        Debug.Log(colldown);
-    //        modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
-
-
-    //    }
-
-    //}
-
 
     /// <summary>
     /// Stops the movment of the player 

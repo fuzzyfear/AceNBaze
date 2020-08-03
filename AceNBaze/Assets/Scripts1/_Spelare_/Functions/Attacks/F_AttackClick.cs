@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// Simple click to move skript
+/// Simple click to attack skript
 /// </summary>
 public class F_AttackClick : _FunctionBase
 {
@@ -47,35 +47,11 @@ public class F_AttackClick : _FunctionBase
                         Debug.Log("Miss, enemy not in range " + dist);
                     }
                     modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
-                    //StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
                 }
             }
         }
 
     }
-
-    //IEnumerator WaitForAttackSpeed(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
-    //{
-    //    float colldown = 0f;
-    //    modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
-
-    //    float colldownSpeed = baseAbilitys.characterStats.cStats.weapon.collDownSpeed;
-
-
-
-    //    while (!baseAbilitys.characterStats.cStats.weapon.NotColldown)
-    //    {
-
-    //        yield return new WaitForSeconds(colldownSpeed);
-    //        colldown = Mathf.MoveTowards(colldown, 1f, 0.1f*Time.deltaTime);//  Mathf.Clamp01(colldown + colldownSpeed);
-    //        Debug.Log(colldown);
-    //        modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, colldown, _keyHash);
-
-
-    //    }
-
-    //}
-
 
     /// <summary>
     /// Stops the movment of the player 

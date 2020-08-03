@@ -84,8 +84,6 @@ public class PlayerInputs : InputInterfaceParent
     #endregion
 
 
-
-
     #region usfull working inputs
 
     public override bool AnyInput_Click() { return Input.anyKeyDown; }

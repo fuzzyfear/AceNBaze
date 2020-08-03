@@ -24,7 +24,7 @@ public class F_DashClick :_FunctionBase
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        if (Input.GetKeyDown(Controlls.instanse.dash) && !_Isdashing)
+        if (modifier.controller.Ability_1_Click() && !_Isdashing)
         {
             _Isdashing = true;
 
@@ -99,7 +99,7 @@ public class F_DashClick :_FunctionBase
         #region the dash
 
         modifier.lockManager.SetAgentMove.UseAction(baseAbilitys, dir  * Time.smoothDeltaTime, _keyHash);
-        while (!Input.GetKeyDown(Controlls.instanse.dash) &&
+        while (!modifier.controller.Ability_1_Click() &&
                baseAbilitys.characterStats.cStats.staminaCurrent > 0)
         {
             stamina = Mathf.MoveTowards(stamina, 0, draineSpeed * Time.deltaTime);

@@ -15,7 +15,7 @@ public class F_MovingToggle : _FunctionBase
 
         if (modifier.controller.Move_Click())
             _uppdateMovmentDestination = !_uppdateMovmentDestination;
-        else if (Input.anyKeyDown)
+        else if (modifier.controller.AnyInput_Click())
             _uppdateMovmentDestination = false; // to stop movment
         
         if (_uppdateMovmentDestination)

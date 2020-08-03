@@ -16,7 +16,7 @@ public class F_SimpleBlocking : _FunctionBase
 
     public override void Tick(CharacterBaseAbilitys baseAbilitys, Modifier modifier)
     {
-        if (!baseAbilitys.characterStats.cWstats.parry && Input.GetKeyDown(Controlls.instanse.block))
+        if (!baseAbilitys.characterStats.cWstats.parry && modifier.controller.Parry_Click())
         {
             StartCoroutine(Blocking(baseAbilitys, modifier));
         }

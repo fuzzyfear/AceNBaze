@@ -25,7 +25,7 @@ public class F_MoveToTargetAutoAttack : _FunctionBase
                 }
             }
         }
-        else if (Input.anyKeyDown)
+        else if (modifier.controller.AnyInput_Click())
         {
 
             targetAbilitis = null;
