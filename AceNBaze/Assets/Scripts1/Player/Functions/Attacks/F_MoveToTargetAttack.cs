@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class F_MoveToTargetAutoAttack : _FunctionBase
+public class F_MoveToTargetAttack : _FunctionBase
 {
 
     [SerializeField] CharacterBaseAbilitys targetAbilitis;
@@ -48,7 +48,7 @@ public class F_MoveToTargetAutoAttack : _FunctionBase
                         Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
                     else
                     {
-                        Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
+                        //Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
                  
 
 

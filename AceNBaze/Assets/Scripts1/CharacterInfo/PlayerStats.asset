@@ -15,12 +15,12 @@ MonoBehaviour:
   HP: 100
   currentHP: 0
   dmg: 100
-  attackSpeed: 900
+  attackSpeed: 1
   dashCooldown: 1
-  movementSpeed: 7
+  movementSpeed: 12
   baseDashTime: 0.5
   bashDashSpeed: 70
   attackColldown: 8
-  attackRange: 5
+  attackRange: 7
   staminaColldown: 4
   staminaBaseMax: 1

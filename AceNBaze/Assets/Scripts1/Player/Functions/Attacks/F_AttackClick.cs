@@ -33,13 +33,13 @@ public class F_AttackClick : _FunctionBase
                         StopMovment(baseAbilitys, modifier.lockManager);
 
                         CharacterBaseAbilitys targetAbilitis = hit.transform.root.GetChild(FunctionTick.CharackterAbilityChildIndex).GetComponent<CharacterBaseAbilitys>();
-                        if(targetAbilitis == null)
-                            Debug.LogError(" the top rot of target dosent have funktion ticker");
+                        //if(targetAbilitis == null)
+                        //    Debug.LogError(" the top rot of target dosent have funktion ticker");
 
-                        if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon , _keyHash))
-                            Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
-                        else
-                            Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
+                        //if (!modifier.lockManager.ApplayDamage.UseAction(targetAbilitis, baseAbilitys.characterStats.cStats.weapon , _keyHash))
+                        //    Debug.Log("Could not applay damage, " + modifier.lockManager.ApplayDamage.CurrentLockName + " has locked the action");
+                        //else
+                        //    Debug.Log(targetAbilitis.transform.root.gameObject.name + " takes " + baseAbilitys.characterStats.cStats.weapon.weaponDamage + " dmg");
 
                     }
                     else
@@ -49,6 +49,11 @@ public class F_AttackClick : _FunctionBase
                     modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
                     //StartCoroutine(WaitForAttackSpeed(baseAbilitys, modifier));
                 }
+				else
+				{
+					Debug.Log("Miss, no target");
+					modifier.lockManager.SetAttackCollDown.UseAction(baseAbilitys, 0, _keyHash);
+				}
             }
         }
        

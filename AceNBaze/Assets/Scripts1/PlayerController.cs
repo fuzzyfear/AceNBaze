@@ -14,15 +14,14 @@ public class PlayerController : MonoBehaviour
     public Slider dashBar;
     public Slider attackbar;
 	public LayerMask enemy;
+    public Animator animator;
 
 
-[Space]
-[Header("Kontroller")]
+    [Header("Kontroller")]
     [SerializeField] private KeyCode MOVMENT_KEY_dash = KeyCode.Space;
     [SerializeField] private KeyCode MOVMENT_KEY      = KeyCode.Mouse1;
     [SerializeField] private KeyCode ATTACK_KEY       = KeyCode.Mouse0;
 
-    [Space]
     [Header("Attack saker")]
     [SerializeField] private GameObject enemyTargetToKill;
 	private RaycastHit attackTarget;
@@ -30,8 +29,7 @@ public class PlayerController : MonoBehaviour
 	private bool       attackSpeed = true;
     public bool moveAndAttack;
 
-    [Space]
-[Header("Sprint saker")]
+    [Header("Sprint saker")]
     [SerializeField] private float dashDistanse = 9f;
     [SerializeField] private float dashTime     = 9f;
 
@@ -41,15 +39,12 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private bool CandDash = true;
 
-
     private float stepDashRefil = 0f;
     private float attackRefil   = 0f;
-[Space]
-    [Header("inställnignar för testning ", order = 0)]
-    [Header("attack ", order = 1)]
+    [Header("Attack ", order = 1)]
     public bool onlyAttack = false;
 
-    [Header("Rörelse ",order =1)]
+    [Header("Movement ",order =1)]
     [Tooltip("falsk: måste klicka för att röra sig, sant: kan hålla nera musen för att röra sig ")]
     public bool ConstatMovment = false;
     [Tooltip("sant: klicka en gång för att börja röra på sig, en gång för att sluta")]
@@ -57,6 +52,9 @@ public class PlayerController : MonoBehaviour
 
 
     bool uppdatemovementTarget;
+
+    [SerializeField] CharacterBaseAbilitys targetAbilitis;
+
     private void Start()
 	{
 		agent.speed        = playerStats.movementSpeed;
@@ -69,28 +67,94 @@ public class PlayerController : MonoBehaviour
 
         dashBar.maxValue   = playerStats.dashCooldown;
         dashBar.value      = playerStats.dashCooldown;
-
-
-
- 
-
-
     }
 
 	void Update()
     {
-		MoveToMouse();
-        MoveDash();
+        MoveToMousePos();
+        if (moveAndAttack)
+            AttackTarget();
+        //MoveToMouse();
+        //MoveDash();
 
-        if (!onlyAttack){ MoveAndAttack();	}
-		else		    { OnlyAttack();		}
+        //if (!onlyAttack) { MoveAndAttack(); }
+        //else { OnlyAttack(); }
 
-		WaitToAttackUntilInRange();
+        //WaitToAttackUntilInRange();
+    }
+
+    void MoveToMousePos()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Vector3 mouse = Input.mousePosition;
+            Ray castPoint = cam.ScreenPointToRay(mouse);
+            RaycastHit hit;
+
+            //Attack enemy
+            if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, enemy))
+            {
+                Debug.Log("Attack enemy");
+                agent.SetDestination(hit.point);
+                enemyTargetToKill = hit.collider.transform.root.gameObject;
+                moveAndAttack = true;
+            }
+            //Move to position
+            else if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
+            {
+                Debug.Log("Move to position");
+                agent.SetDestination(hit.point);
+                moveAndAttack = false;
+            }
+        }
+    }
+
+    void AttackTarget()
+    {
+        float dist = Vector3.Distance(agent.transform.position, enemyTargetToKill.transform.position);
+
+        if (dist <= playerStats.attackRange)
+        {
+            agent.isStopped = true;
+            agent.SetDestination(agent.transform.position);
+            agent.isStopped = false;
+            if (attackSpeed)
+            {
+                Attack();
+                attackSpeed = false;
+                animator.SetBool("isAttacking", true);
+                StartCoroutine(WaitForAttackSpeed());
+            }
+        }
+    }
+
+	IEnumerator WaitForAttackSpeed()
+	{
+        attackbar.value = 0;
+        while (attackbar.value != attackbar.maxValue)
+        {
+            attackbar.value += 0.1f;
+            yield return new WaitForSeconds(playerStats.attackSpeed / 10f);
+        }
+        animator.SetBool("isAttacking", false);
+		attackSpeed = true;
 	}
+
+	void Attack()
+	{
+		Debug.Log(enemyTargetToKill.name + " takes " + playerStats.dmg + " dmg");
+	}
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.color = new Color (1, 1, 1, 0.1f);
+		Gizmos.DrawSphere(agent.transform.position, playerStats.attackRange);
+	}
+
+
 
     void MoveToMouse()
     {
-
         //Temp ändring för att ändra hur du rör dig
         if (toogleMovment)
         {
@@ -102,7 +166,6 @@ public class PlayerController : MonoBehaviour
         {
             uppdatemovementTarget = (ConstatMovment) ? Input.GetKey(MOVMENT_KEY) : Input.GetKeyDown(MOVMENT_KEY);
         }
-       
 
         if (uppdatemovementTarget)
 		{
@@ -117,10 +180,8 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-
     void MoveDash()
     {
-
         if (ConstatMovment)
         {
             if (Input.GetKey(MOVMENT_KEY_dash) && CandDash)
@@ -193,8 +254,6 @@ public class PlayerController : MonoBehaviour
                         castPoint.origin = Vector3.MoveTowards(castPoint.origin, agent.transform.position, 0.2f);
                         //  castPoint.origin -= mdir * 0.2f;
                     }
-
-
                 }
                 if (dashing)
                 {
@@ -206,9 +265,6 @@ public class PlayerController : MonoBehaviour
   
                     StartCoroutine(WaitForDashSpeed());
                 }
-
-
-
             }
         }
     }
@@ -259,51 +315,30 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	IEnumerator WaitForAttackSpeed()
-	{
-
-        attackbar.value = 0;
-
-        while (attackbar.value != attackbar.maxValue)
-        {
-            attackbar.value += 0.1f;
-            yield return new WaitForSeconds(playerStats.attackSpeed / 10f);
-        }
-		attackSpeed = true;
-	}
-
     IEnumerator WaitForDashSpeed()
     {
         dashBar.value = 0f;
-
         while (dashBar.value != dashBar.maxValue)
         {
             dashBar.value += 0.1f;
             yield return new WaitForSeconds(playerStats.dashCooldown/10f);
         }
-
         CandDash = true;
     }
+
     IEnumerator Dashing()
     {
-
          walkingSpeedNORMAL        = agent.speed;
          agent.speed               = walkingSpeedNORMAL * 10f;
          walkingAccelerationNORMAL = agent.acceleration;
          agent.acceleration        = agent.acceleration * 10f;
          CandDash                  = false;
 
-
-
         while (dashBar.value != dashBar.minValue)
         {
             dashBar.value -= 0.1f;
             yield return new WaitForSeconds(playerStats.dashCooldown / dashTime);
         }
-
-
-
-
         agent.speed = walkingSpeedNORMAL;
         agent.acceleration = walkingAccelerationNORMAL;
         dashing = false;
@@ -317,6 +352,7 @@ public class PlayerController : MonoBehaviour
 
         CandDash = true;
     }
+
     void WaitToAttackUntilInRange()
 	{
 		if (moveAndAttack)
@@ -343,13 +379,6 @@ public class PlayerController : MonoBehaviour
                 {
                     distBetweenStartAndGoal = agent.remainingDistance;
                 }
-                
-
-
-
-
-
-			
 			}
 			if (distBetweenStartAndGoal <= playerStats.attackRange)
 			{
@@ -376,16 +405,4 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	void Attack()
-	{
-		attackTarget.collider.transform.root.gameObject.GetComponent<TargetDummyBehaviour>().TakeDmg(playerStats.dmg);
-		Debug.Log(attackTarget.collider.gameObject.name + " takes " + playerStats.dmg + " dmg");
-		moveAndAttack = false;
-	}
-
-	private void OnDrawGizmos()
-	{
-		Gizmos.color = new Color (1, 1, 1, 0.1f);
-		Gizmos.DrawSphere(agent.transform.position, playerStats.attackRange);
-	}
 }
