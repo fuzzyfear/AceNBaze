@@ -10,50 +10,45 @@ public class PlayerController : MonoBehaviour
 	public NavMeshAgent agent;
 	public CharacterInfo playerStats;
 
-    public Slider hp;
-    public Slider dashBar;
-    public Slider attackbar;
 	public LayerMask enemy;
     public Animator animator;
 
+    [Header("Controlls")]
+    [SerializeField] private KeyCode DASH = KeyCode.Space;
+    [SerializeField] private KeyCode INTERACT = KeyCode.Mouse0;
 
-    [Header("Kontroller")]
-    [SerializeField] private KeyCode MOVMENT_KEY_dash = KeyCode.Space;
-    [SerializeField] private KeyCode MOVMENT_KEY      = KeyCode.Mouse1;
-    [SerializeField] private KeyCode ATTACK_KEY       = KeyCode.Mouse0;
+    [Header("UI")]
+    public Slider hp;
+    public Slider dashBar;
+    public Slider attackbar;
 
-    [Header("Attack saker")]
+    [Header("Move and attack")]
     [SerializeField] private GameObject enemyTargetToKill;
-	private RaycastHit attackTarget;
-	private float      distBetweenStartAndGoal;
-	private bool       attackSpeed = true;
+	private bool attackSpeed = true;
     public bool moveAndAttack;
 
-    [Header("Sprint saker")]
-    [SerializeField] private float dashDistanse = 9f;
-    [SerializeField] private float dashTime     = 9f;
-
-    private bool  dashing = false;
+    [Header("Dash")]
+    [SerializeField] private float dashDistance = 9f;
+    [SerializeField] private float dashTime = 9f;
+    [SerializeField] private float dashAcceleration = 9f;
+    [SerializeField] private bool CandDash = true;
+    public bool dashing = false;
+    public bool ConstatMovment = false;
     private float walkingSpeedNORMAL;
     private float walkingAccelerationNORMAL;
 
-    [SerializeField] private bool CandDash = true;
-
-    private float stepDashRefil = 0f;
-    private float attackRefil   = 0f;
-    [Header("Attack ", order = 1)]
-    public bool onlyAttack = false;
-
-    [Header("Movement ",order =1)]
-    [Tooltip("falsk: måste klicka för att röra sig, sant: kan hålla nera musen för att röra sig ")]
-    public bool ConstatMovment = false;
-    [Tooltip("sant: klicka en gång för att börja röra på sig, en gång för att sluta")]
-    public bool toogleMovment = false;
-
-
-    bool uppdatemovementTarget;
-
-    [SerializeField] CharacterBaseAbilitys targetAbilitis;
+	//private RaycastHit attackTarget;
+	//private float distBetweenStartAndGoal;
+    //private float stepDashRefil = 0f;
+    //private float attackRefil   = 0f;
+    //[Header("Attack ", order = 1)]
+    //public bool onlyAttack = false;
+    //[Header("Movement ",order =1)]
+    //[Tooltip("falsk: måste klicka för att röra sig, sant: kan hålla nera musen för att röra sig ")]
+    //[Tooltip("sant: klicka en gång för att börja röra på sig, en gång för att sluta")]
+    //public bool toogleMovment = false;
+    //bool uppdatemovementTarget;
+    //[SerializeField] CharacterBaseAbilitys targetAbilitis;
 
     private void Start()
 	{
@@ -74,18 +69,32 @@ public class PlayerController : MonoBehaviour
         MoveToMousePos();
         if (moveAndAttack)
             AttackTarget();
-        //MoveToMouse();
+        NewDash();
         //MoveDash();
+    }
 
-        //if (!onlyAttack) { MoveAndAttack(); }
-        //else { OnlyAttack(); }
+    void NewDash()
+    {
+        if (Input.GetKeyDown(DASH) && !dashing)
+        {
+            dashing = true;
+            agent.speed *= dashAcceleration;
 
-        //WaitToAttackUntilInRange();
+            agent.SetDestination(cam.ScreenToWorldPoint(Input.mousePosition) * dashDistance);
+            StartCoroutine(NewDashCo());
+        }
+    }
+
+    IEnumerator NewDashCo()
+    {
+        yield return new WaitForSeconds(dashTime);
+        dashing = false;
+        agent.speed /= dashAcceleration;
     }
 
     void MoveToMousePos()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKey(INTERACT))
         {
             Vector3 mouse = Input.mousePosition;
             Ray castPoint = cam.ScreenPointToRay(mouse);
@@ -153,38 +162,12 @@ public class PlayerController : MonoBehaviour
 
 
 
-    void MoveToMouse()
-    {
-        //Temp ändring för att ändra hur du rör dig
-        if (toogleMovment)
-        {
-            ConstatMovment = true;
-            if (Input.GetKey(MOVMENT_KEY))
-                uppdatemovementTarget = !uppdatemovementTarget;
-        }
-        else
-        {
-            uppdatemovementTarget = (ConstatMovment) ? Input.GetKey(MOVMENT_KEY) : Input.GetKeyDown(MOVMENT_KEY);
-        }
-
-        if (uppdatemovementTarget)
-		{
-			Vector3 mouse = Input.mousePosition;
-			Ray castPoint = cam.ScreenPointToRay(mouse);
-			RaycastHit hit;
-
-			if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
-			{
-				agent.SetDestination(hit.point);
-			}
-		}
-	}
 
     void MoveDash()
     {
         if (ConstatMovment)
         {
-            if (Input.GetKey(MOVMENT_KEY_dash) && CandDash)
+            if (Input.GetKey(DASH) && CandDash)
                 StartCoroutine(Dashing());
         }
         else
@@ -196,11 +179,10 @@ public class PlayerController : MonoBehaviour
                     agent.speed = walkingSpeedNORMAL;
                     agent.acceleration = walkingAccelerationNORMAL;
                     dashing = false;
-
                 }
 
             }
-            else if (Input.GetKey(MOVMENT_KEY_dash) && CandDash)
+            else if (Input.GetKey(DASH) && CandDash)
             {
                 Vector3 mouse = Input.mousePosition;
                 Ray castPoint = cam.ScreenPointToRay(mouse);
@@ -212,7 +194,7 @@ public class PlayerController : MonoBehaviour
                 Vector3 targetPoint;
                 RaycastHit hit;
                 dashing = false;
-                float tempDist = dashDistanse;
+                float tempDist = dashDistance;
                 bool continuSearcingIfFales = false;
                 while (!continuSearcingIfFales && castPoint.origin != agent.transform.position)
                 {
@@ -268,53 +250,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    void OnlyAttack()
-	{
-		if (Input.GetKeyDown(ATTACK_KEY))
-		{
-			Vector3 mouse = Input.mousePosition;
-			Ray castPoint = cam.ScreenPointToRay(mouse);
-			RaycastHit hit;
-
-			if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
-			{
-				if (attackSpeed)
-				{
-					if (hit.collider.gameObject.layer == 11)
-					{
-						attackTarget = hit;
-						moveAndAttack = true;
-					}
-					else
-					{
-						Debug.Log("Miss, no enemmy selected");
-						attackSpeed = false;
-						StartCoroutine(WaitForAttackSpeed());
-					}
-				}
-			}
-		}
-	}
-
-	void MoveAndAttack()
-	{
-		if (Input.GetKeyDown(ATTACK_KEY))
-		{
-			Vector3 mouse = Input.mousePosition;
-			Ray castPoint = cam.ScreenPointToRay(mouse);
-			RaycastHit hit;
-
-			if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, enemy))
-			{
-				agent.SetDestination(hit.point);
-				attackTarget      = hit;
-                enemyTargetToKill = hit.collider.transform.root.gameObject;// för att ta med rörliga fiender i beräkningen
-                moveAndAttack     = true;
-			}
-		}
-	}
-
     IEnumerator WaitForDashSpeed()
     {
         dashBar.value = 0f;
@@ -353,56 +288,129 @@ public class PlayerController : MonoBehaviour
         CandDash = true;
     }
 
-    void WaitToAttackUntilInRange()
-	{
-		if (moveAndAttack)
-		{
-			if(onlyAttack && agent.velocity == Vector3.zero)
-			{
-				distBetweenStartAndGoal = Vector3.Distance(agent.transform.position, attackTarget.point);
-			}
-			else if(!onlyAttack)
-			{
-                if (enemyTargetToKill == null)
-                {
-                    moveAndAttack = false;
-                    return;
-                }
-                Vector3 EnemyPos = enemyTargetToKill.transform.position;
-                agent.SetDestination(EnemyPos);
+ //   void MoveToMouse()
+ //   {
+ //       //Temp ändring för att ändra hur du rör dig
+ //       if (toogleMovment)
+ //       {
+ //           ConstatMovment = true;
+ //           if (Input.GetKey(MOVMENT_KEY))
+ //               uppdatemovementTarget = !uppdatemovementTarget;
+ //       }
+ //       else
+ //       {
+ //           uppdatemovementTarget = (ConstatMovment) ? Input.GetKey(MOVMENT_KEY) : Input.GetKeyDown(MOVMENT_KEY);
+ //       }
 
-                if (agent.pathPending)
-                {
-                    distBetweenStartAndGoal = Vector3.Distance(agent.transform.position, EnemyPos);
-                }
-                else
-                {
-                    distBetweenStartAndGoal = agent.remainingDistance;
-                }
-			}
-			if (distBetweenStartAndGoal <= playerStats.attackRange)
-			{
-				agent.isStopped = true;
-				agent.SetDestination(agent.transform.position);
-				agent.isStopped = false;
-				if (attackSpeed)
-				{
-					Attack();
-					attackSpeed = false;
-					StartCoroutine(WaitForAttackSpeed());
-				}
-			}
-			else if (onlyAttack)
-			{
-				if (attackSpeed)
-				{
-					Debug.Log("Miss, enemy not in range");
-					moveAndAttack = false;
-					attackSpeed   = false;
-					StartCoroutine(WaitForAttackSpeed());
-				}
-			}
-		}
-	}
+ //       if (uppdatemovementTarget)
+	//	{
+	//		Vector3 mouse = Input.mousePosition;
+	//		Ray castPoint = cam.ScreenPointToRay(mouse);
+	//		RaycastHit hit;
 
+	//		if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
+	//		{
+	//			agent.SetDestination(hit.point);
+	//		}
+	//	}
+	//}
+
+ //   void OnlyAttack()
+	//{
+	//	if (Input.GetKeyDown(ATTACK_KEY))
+	//	{
+	//		Vector3 mouse = Input.mousePosition;
+	//		Ray castPoint = cam.ScreenPointToRay(mouse);
+	//		RaycastHit hit;
+
+	//		if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
+	//		{
+	//			if (attackSpeed)
+	//			{
+	//				if (hit.collider.gameObject.layer == 11)
+	//				{
+	//					attackTarget = hit;
+	//					moveAndAttack = true;
+	//				}
+	//				else
+	//				{
+	//					Debug.Log("Miss, no enemmy selected");
+	//					attackSpeed = false;
+	//					StartCoroutine(WaitForAttackSpeed());
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
+	//void MoveAndAttack()
+	//{
+	//	if (Input.GetKeyDown(ATTACK_KEY))
+	//	{
+	//		Vector3 mouse = Input.mousePosition;
+	//		Ray castPoint = cam.ScreenPointToRay(mouse);
+	//		RaycastHit hit;
+
+	//		if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, enemy))
+	//		{
+	//			agent.SetDestination(hit.point);
+	//			attackTarget      = hit;
+ //               enemyTargetToKill = hit.collider.transform.root.gameObject;// för att ta med rörliga fiender i beräkningen
+ //               moveAndAttack     = true;
+	//		}
+	//	}
+	//}
+
+
+ //   void WaitToAttackUntilInRange()
+	//{
+	//	if (moveAndAttack)
+	//	{
+	//		if(onlyAttack && agent.velocity == Vector3.zero)
+	//		{
+	//			distBetweenStartAndGoal = Vector3.Distance(agent.transform.position, attackTarget.point);
+	//		}
+	//		else if(!onlyAttack)
+	//		{
+ //               if (enemyTargetToKill == null)
+ //               {
+ //                   moveAndAttack = false;
+ //                   return;
+ //               }
+ //               Vector3 EnemyPos = enemyTargetToKill.transform.position;
+ //               agent.SetDestination(EnemyPos);
+
+ //               if (agent.pathPending)
+ //               {
+ //                   distBetweenStartAndGoal = Vector3.Distance(agent.transform.position, EnemyPos);
+ //               }
+ //               else
+ //               {
+ //                   distBetweenStartAndGoal = agent.remainingDistance;
+ //               }
+	//		}
+	//		if (distBetweenStartAndGoal <= playerStats.attackRange)
+	//		{
+	//			agent.isStopped = true;
+	//			agent.SetDestination(agent.transform.position);
+	//			agent.isStopped = false;
+	//			if (attackSpeed)
+	//			{
+	//				Attack();
+	//				attackSpeed = false;
+	//				StartCoroutine(WaitForAttackSpeed());
+	//			}
+	//		}
+	//		else if (onlyAttack)
+	//		{
+	//			if (attackSpeed)
+	//			{
+	//				Debug.Log("Miss, enemy not in range");
+	//				moveAndAttack = false;
+	//				attackSpeed   = false;
+	//				StartCoroutine(WaitForAttackSpeed());
+	//			}
+	//		}
+	//	}
+	//}
 }

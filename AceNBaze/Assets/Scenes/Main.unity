@@ -2068,7 +2068,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 59.759995, y: -24.964996}
+  m_AnchoredPosition: {x: 59.76001, y: -24.964966}
   m_SizeDelta: {x: 119.52, y: 49.929993}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &495416028
@@ -2640,7 +2640,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 652673833}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.0215921, y: 0.48, z: -2.69}
+  m_LocalPosition: {x: -11.69, y: 0.48, z: -2.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2061829327}
@@ -5544,7 +5544,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1419929228}
   m_LocalRotation: {x: 0, y: 0.9544488, z: 0, w: 0.29837462}
-  m_LocalPosition: {x: -2.0215921, y: 0.48, z: 2.86}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1793372989}
@@ -5585,25 +5585,23 @@ MonoBehaviour:
   cam: {fileID: 1965925665}
   agent: {fileID: 1419929229}
   playerStats: {fileID: 11400000, guid: 2c53328f8ddd7ee41877fdd97a1b0e23, type: 2}
-  hp: {fileID: 1087599161}
-  dashBar: {fileID: 333463988}
-  attackbar: {fileID: 2078140414}
   enemy:
     serializedVersion: 2
     m_Bits: 2048
   animator: {fileID: 1002565101}
-  MOVMENT_KEY_dash: 32
-  MOVMENT_KEY: 324
-  ATTACK_KEY: 323
+  DASH: 32
+  INTERACT: 323
+  hp: {fileID: 1087599161}
+  dashBar: {fileID: 333463988}
+  attackbar: {fileID: 2078140414}
   enemyTargetToKill: {fileID: 0}
   moveAndAttack: 0
-  dashDistanse: 9
-  dashTime: 9
+  dashDistance: 10
+  dashTime: 0.1
+  dashAcceleration: 10
   CandDash: 1
-  onlyAttack: 0
+  dashing: 0
   ConstatMovment: 0
-  toogleMovment: 0
-  targetAbilitis: {fileID: 0}
 --- !u!4 &1430642514 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4960817310007188, guid: 9af4bc1d01b9ec04c9d66a88ace89c21,
@@ -7244,13 +7242,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1965925664}
-  m_LocalRotation: {x: 0.39044836, y: 0.346829, z: -0.16172901, w: 0.83731925}
-  m_LocalPosition: {x: -14.18, y: 21.23, z: -8.2}
+  m_LocalRotation: {x: 0.39044833, y: 0.34682897, z: -0.161729, w: 0.8373192}
+  m_LocalPosition: {x: -10, y: 20, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 50.000004, y: 45, z: 0}
 --- !u!1 &1979370794
 GameObject:
   m_ObjectHideFlags: 0
