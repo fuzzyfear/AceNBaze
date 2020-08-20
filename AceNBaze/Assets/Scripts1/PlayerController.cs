@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
 	public Camera cam;
 	public NavMeshAgent agent;
 	public CharacterInfo playerStats;
-
 	public LayerMask enemy;
     public Animator animator;
 
@@ -30,12 +29,15 @@ public class PlayerController : MonoBehaviour
     [Header("Dash")]
     [SerializeField] private float dashDistance = 9f;
     [SerializeField] private float dashTime = 9f;
-    [SerializeField] private float dashAcceleration = 9f;
-    [SerializeField] private bool CandDash = true;
-    public bool dashing = false;
-    public bool ConstatMovment = false;
-    private float walkingSpeedNORMAL;
-    private float walkingAccelerationNORMAL;
+    [SerializeField] private float dashSpeed = 9f;
+	private float walkingSpeed;
+    public bool isDashing = false;
+	public bool dashAvailable = true;
+
+    //[SerializeField] private bool CandDash = true;
+    //public bool ConstatMovment = false;
+    //private float walkingSpeedNORMAL;
+    //private float walkingAccelerationNORMAL;
 
 	//private RaycastHit attackTarget;
 	//private float distBetweenStartAndGoal;
@@ -62,6 +64,8 @@ public class PlayerController : MonoBehaviour
 
         dashBar.maxValue   = playerStats.dashCooldown;
         dashBar.value      = playerStats.dashCooldown;
+
+		walkingSpeed = agent.speed;
     }
 
 	void Update()
@@ -70,26 +74,38 @@ public class PlayerController : MonoBehaviour
         if (moveAndAttack)
             AttackTarget();
         NewDash();
-        //MoveDash();
     }
 
     void NewDash()
     {
-        if (Input.GetKeyDown(DASH) && !dashing)
+        if (Input.GetKeyDown(DASH) && dashAvailable)
         {
-            dashing = true;
-            agent.speed *= dashAcceleration;
-
-            agent.SetDestination(cam.ScreenToWorldPoint(Input.mousePosition) * dashDistance);
-            StartCoroutine(NewDashCo());
+			dashAvailable = false;
+            isDashing = true;
+			agent.speed = dashSpeed;
+			Ray destination = cam.ScreenPointToRay(Input.mousePosition * dashDistance);
+			agent.SetDestination(destination.origin);
         }
+		if (isDashing)
+		{
+			isDashing = false;
+			Vector3 startPos = transform.position;
+			StartCoroutine(DashTime(startPos));
+			StartCoroutine(DashCooldown());
+		}
     }
 
-    IEnumerator NewDashCo()
+	IEnumerator DashTime(Vector3 startPos)
+	{
+		yield return new WaitForSeconds(dashTime);
+        agent.speed = walkingSpeed;
+		//Debug.Log("Distance traveled: " + Vector3.Distance(transform.position, startPos));
+	}
+
+    IEnumerator DashCooldown()
     {
-        yield return new WaitForSeconds(dashTime);
-        dashing = false;
-        agent.speed /= dashAcceleration;
+        yield return new WaitForSeconds(playerStats.dashCooldown);
+		dashAvailable = true;
     }
 
     void MoveToMousePos()
@@ -103,7 +119,6 @@ public class PlayerController : MonoBehaviour
             //Attack enemy
             if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, enemy))
             {
-                Debug.Log("Attack enemy");
                 agent.SetDestination(hit.point);
                 enemyTargetToKill = hit.collider.transform.root.gameObject;
                 moveAndAttack = true;
@@ -111,7 +126,6 @@ public class PlayerController : MonoBehaviour
             //Move to position
             else if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
             {
-                Debug.Log("Move to position");
                 agent.SetDestination(hit.point);
                 moveAndAttack = false;
             }
@@ -160,133 +174,130 @@ public class PlayerController : MonoBehaviour
 		Gizmos.DrawSphere(agent.transform.position, playerStats.attackRange);
 	}
 
+    //void MoveDash()
+    //{
+    //    if (ConstatMovment)
+    //    {
+    //        if (Input.GetKeyDown(DASH) && CandDash)
+    //            StartCoroutine(Dashing());
+    //    }
+    //    else
+    //    {
+    //        if (isDashing)
+    //        {
+    //            if (agent.remainingDistance == 0)
+    //            {
+    //                agent.speed = walkingSpeedNORMAL;
+    //                agent.acceleration = walkingAccelerationNORMAL;
+    //                isDashing = false;
+    //            }
 
+    //        }
+    //        else if (Input.GetKeyDown(DASH) && CandDash)
+    //        {
+    //            Vector3 mouse = Input.mousePosition;
+    //            Ray castPoint = cam.ScreenPointToRay(mouse);
 
+    //            Vector3 mheading = (castPoint.origin - agent.transform.position);
+    //            float mdist = mheading.magnitude;
+    //            Vector3 mdir = mheading / mdist;
 
-    void MoveDash()
-    {
-        if (ConstatMovment)
-        {
-            if (Input.GetKey(DASH) && CandDash)
-                StartCoroutine(Dashing());
-        }
-        else
-        {
-            if (dashing)
-            {
-                if (agent.remainingDistance == 0)
-                {
-                    agent.speed = walkingSpeedNORMAL;
-                    agent.acceleration = walkingAccelerationNORMAL;
-                    dashing = false;
-                }
+    //            Vector3 targetPoint;
+    //            RaycastHit hit;
+    //            isDashing = false;
+    //            float tempDist = dashDistance;
+    //            bool continuSearcingIfFales = false;
+    //            while (!continuSearcingIfFales && castPoint.origin != agent.transform.position)
+    //            {
+    //                continuSearcingIfFales = Physics.Raycast(castPoint, out hit, Mathf.Infinity);
+    //                if (continuSearcingIfFales)
+    //                {
+    //                    Vector3 heading = (hit.point - agent.transform.position);
+    //                    float dist = heading.magnitude;
+    //                    Vector3 dir = heading / dist;
+    //                    targetPoint = tempDist * dir + agent.transform.position;
 
-            }
-            else if (Input.GetKey(DASH) && CandDash)
-            {
-                Vector3 mouse = Input.mousePosition;
-                Ray castPoint = cam.ScreenPointToRay(mouse);
+    //                    bool notFound = true;
 
-                Vector3 mheading = (castPoint.origin - agent.transform.position);
-                float mdist = mheading.magnitude;
-                Vector3 mdir = mheading / mdist;
+    //                    while (notFound)
+    //                    {
+    //                        if (!agent.SetDestination(targetPoint))
+    //                        {
 
-                Vector3 targetPoint;
-                RaycastHit hit;
-                dashing = false;
-                float tempDist = dashDistance;
-                bool continuSearcingIfFales = false;
-                while (!continuSearcingIfFales && castPoint.origin != agent.transform.position)
-                {
-                    continuSearcingIfFales = Physics.Raycast(castPoint, out hit, Mathf.Infinity);
-                    if (continuSearcingIfFales)
-                    {
-                        Vector3 heading = (hit.point - agent.transform.position);
-                        float dist = heading.magnitude;
-                        Vector3 dir = heading / dist;
-                        targetPoint = tempDist * dir + agent.transform.position;
+    //                            tempDist -= 0.2f;
+    //                            if (tempDist <= 0.0f)
+    //                            {
+    //                                notFound = false;
+    //                                agent.speed = walkingSpeedNORMAL;
+    //                                agent.acceleration = walkingAccelerationNORMAL;
 
-                        bool notFound = true;
-
-                        while (notFound)
-                        {
-                            if (!agent.SetDestination(targetPoint))
-                            {
-
-                                tempDist -= 0.2f;
-                                if (tempDist <= 0.0f)
-                                {
-                                    notFound = false;
-                                    agent.speed = walkingSpeedNORMAL;
-                                    agent.acceleration = walkingAccelerationNORMAL;
-
-                                }
-                                else
-                                    targetPoint = tempDist * dir + agent.transform.position;
-                            }
-                            else
-                            {
-                                notFound = false;
-                                dashing = true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        castPoint.origin = Vector3.MoveTowards(castPoint.origin, agent.transform.position, 0.2f);
-                        //  castPoint.origin -= mdir * 0.2f;
-                    }
-                }
-                if (dashing)
-                {
-                    walkingSpeedNORMAL = agent.speed;
-                    agent.speed = walkingSpeedNORMAL * 10f;
-                    walkingAccelerationNORMAL = agent.acceleration;
-                    agent.acceleration = agent.acceleration * 10f;
-                    CandDash = false;
+    //                            }
+    //                            else
+    //                                targetPoint = tempDist * dir + agent.transform.position;
+    //                        }
+    //                        else
+    //                        {
+    //                            notFound = false;
+    //                            isDashing = true;
+    //                        }
+    //                    }
+    //                }
+    //                else
+    //                {
+    //                    castPoint.origin = Vector3.MoveTowards(castPoint.origin, agent.transform.position, 0.2f);
+    //                    //  castPoint.origin -= mdir * 0.2f;
+    //                }
+    //            }
+    //            if (isDashing)
+    //            {
+    //                walkingSpeedNORMAL = agent.speed;
+    //                agent.speed = walkingSpeedNORMAL * 10f;
+    //                walkingAccelerationNORMAL = agent.acceleration;
+    //                agent.acceleration = agent.acceleration * 10f;
+    //                CandDash = false;
   
-                    StartCoroutine(WaitForDashSpeed());
-                }
-            }
-        }
-    }
-    IEnumerator WaitForDashSpeed()
-    {
-        dashBar.value = 0f;
-        while (dashBar.value != dashBar.maxValue)
-        {
-            dashBar.value += 0.1f;
-            yield return new WaitForSeconds(playerStats.dashCooldown/10f);
-        }
-        CandDash = true;
-    }
+    //                StartCoroutine(WaitForDashSpeed());
+    //            }
+    //        }
+    //    }
+    //}
+    //IEnumerator WaitForDashSpeed()
+    //{
+    //    dashBar.value = 0f;
+    //    while (dashBar.value != dashBar.maxValue)
+    //    {
+    //        dashBar.value += 0.1f;
+    //        yield return new WaitForSeconds(playerStats.dashCooldown/10f);
+    //    }
+    //    CandDash = true;
+    //}
 
-    IEnumerator Dashing()
-    {
-         walkingSpeedNORMAL        = agent.speed;
-         agent.speed               = walkingSpeedNORMAL * 10f;
-         walkingAccelerationNORMAL = agent.acceleration;
-         agent.acceleration        = agent.acceleration * 10f;
-         CandDash                  = false;
+    //IEnumerator Dashing()
+    //{
+    //     walkingSpeedNORMAL        = agent.speed;
+    //     agent.speed               = walkingSpeedNORMAL * 10f;
+    //     walkingAccelerationNORMAL = agent.acceleration;
+    //     agent.acceleration        = agent.acceleration * 10f;
+    //     CandDash                  = false;
 
-        while (dashBar.value != dashBar.minValue)
-        {
-            dashBar.value -= 0.1f;
-            yield return new WaitForSeconds(playerStats.dashCooldown / dashTime);
-        }
-        agent.speed = walkingSpeedNORMAL;
-        agent.acceleration = walkingAccelerationNORMAL;
-        dashing = false;
+    //    while (dashBar.value != dashBar.minValue)
+    //    {
+    //        dashBar.value -= 0.1f;
+    //        yield return new WaitForSeconds(playerStats.dashCooldown / dashTime);
+    //    }
+    //    agent.speed = walkingSpeedNORMAL;
+    //    agent.acceleration = walkingAccelerationNORMAL;
+    //    isDashing = false;
 
-        //laddar dash energin
-        while (dashBar.value != dashBar.maxValue)
-        {
-            dashBar.value += 0.1f;
-            yield return new WaitForSeconds(playerStats.dashCooldown / 10f);
-        }
+    //    //laddar dash energin
+    //    while (dashBar.value != dashBar.maxValue)
+    //    {
+    //        dashBar.value += 0.1f;
+    //        yield return new WaitForSeconds(playerStats.dashCooldown / 10f);
+    //    }
 
-        CandDash = true;
-    }
+    //    CandDash = true;
+    //}
 
  //   void MoveToMouse()
  //   {

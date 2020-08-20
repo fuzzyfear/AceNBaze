@@ -2591,7 +2591,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!195 &652673834
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5596,12 +5596,11 @@ MonoBehaviour:
   attackbar: {fileID: 2078140414}
   enemyTargetToKill: {fileID: 0}
   moveAndAttack: 0
-  dashDistance: 10
+  dashDistance: 10000
   dashTime: 0.1
-  dashAcceleration: 10
-  CandDash: 1
-  dashing: 0
-  ConstatMovment: 0
+  dashSpeed: 200
+  isDashing: 0
+  dashAvailable: 1
 --- !u!4 &1430642514 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4960817310007188, guid: 9af4bc1d01b9ec04c9d66a88ace89c21,
@@ -5760,25 +5759,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
-    - target: {fileID: 2937648416355957315, guid: 5a0476498c3b3044d92be930b3340c56,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2937648416355957314, guid: 5a0476498c3b3044d92be930b3340c56,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.95
+      value: -7.43
       objectReference: {fileID: 0}
     - target: {fileID: 2937648416355957314, guid: 5a0476498c3b3044d92be930b3340c56,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.99
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2937648416355957314, guid: 5a0476498c3b3044d92be930b3340c56,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.0101967
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2937648416355957314, guid: 5a0476498c3b3044d92be930b3340c56,
         type: 3}
@@ -5818,11 +5812,6 @@ PrefabInstance:
     - target: {fileID: 2937648416355957314, guid: 5a0476498c3b3044d92be930b3340c56,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2937648416355957317, guid: 5a0476498c3b3044d92be930b3340c56,
-        type: 3}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6116,7 +6105,7 @@ PrefabInstance:
     - target: {fileID: 8340600468902837282, guid: 394ce40c94c35f64f8acbe65490cbb56,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8340600468902837292, guid: 394ce40c94c35f64f8acbe65490cbb56,
         type: 3}
