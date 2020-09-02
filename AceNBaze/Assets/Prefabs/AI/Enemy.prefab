@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2937648416355957314}
   - component: {fileID: 2937648416355957317}
   - component: {fileID: 2937648416355957316}
+  - component: {fileID: 719039702}
   m_Layer: 11
   m_Name: Enemy
   m_TagString: Untagged
@@ -41,7 +42,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2937648416355957315}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac13a73c34c86bd439263002389951de, type: 3}
   m_Name: 
@@ -56,19 +57,34 @@ NavMeshAgent:
   m_GameObject: {fileID: 2937648416355957315}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Radius: 1
+  m_Speed: 12
+  m_Acceleration: 1000
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 1000
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0.98
+  m_Height: 5
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &719039702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2937648416355957315}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761a3b408675a25498dbb2b2f9c19a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 100
+  radius: 15
+  swapDirTime: 1
 --- !u!1 &3161084801575857888
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +236,7 @@ GameObject:
   - component: {fileID: 3419359788809494437}
   m_Layer: 11
   m_Name: PatrolPattern
-  m_TagString: Untagged
+  m_TagString: PatrolPattern
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
