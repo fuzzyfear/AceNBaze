@@ -2,49 +2,90 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class EnemyVision : MonoBehaviour
 {
-	private NavMeshAgent navMeshAgent;
-	private SphereCollider sphereCollider;
 	public CharacterInfo enemyStats;
-	private bool attackReady = true;
-	private float attackSpeed;
-
 	public float fieldOfView = 110f;
 	public bool playerInSight;
 	public Vector3 personalLastSighting;
-	public Animator animator;
+	public float waitTime;
+	public string personalPath;
+	public Slider healthBar;
 
+	private Animator animator;
+	private NavMeshAgent navMeshAgent;
+	private SphereCollider sphereCollider;
+	private bool attackReady = true;
+	private float attackSpeed;
 	private LastPlayerSighting lastPlayerSighting;
-	GameObject player;
-	private Animator playerAnimator;
+	private GameObject player;
 	private float playerHealth;
-	//private HashIDs hash;
 	private Vector3 previousSighting;
+	private GameObject personalPathHolder;
+	private bool showHealthBar = false;
 
 	private void Awake()
 	{
+		animator = gameObject.GetComponentInChildren<Animator>();
 		navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 		sphereCollider = gameObject.GetComponent<SphereCollider>();
 		lastPlayerSighting = GameObject.FindGameObjectWithTag("GameController").GetComponent<LastPlayerSighting>();
 		player = GameObject.FindGameObjectWithTag("Player");
-		playerAnimator = player.GetComponentInChildren<Animator>();
 		playerHealth = player.GetComponent<PlayerController>().hp.value;
+		personalPathHolder = GameObject.Find(personalPath);
 
 		personalLastSighting = lastPlayerSighting.resetPosition;
 		previousSighting = lastPlayerSighting.resetPosition;
 
 		attackSpeed = enemyStats.attackSpeed;
+		healthBar.maxValue = enemyStats.healthPoints;
+		healthBar.value = enemyStats.healthPoints;
+	}
+
+	private void Start()
+	{
+		for(int i = 0; i < healthBar.transform.childCount; i++)
+		{
+			healthBar.transform.GetChild(i).GetComponent<Image>().enabled = false;
+		}
+		
 	}
 
 	private void Update()
 	{
+		playerHealth = player.GetComponent<PlayerController>().hp.value;
 		Detect();
-		if (playerInSight)
+		PlayerInRange();
+
+	}
+
+	void CommitSuduko()
+	{
+		if(healthBar.value <= 0)
 		{
-			PlayerInRange();
+			Debug.Log("Suduko commited");
+			gameObject.SetActive(false);
 		}
+	}
+
+	public void TakeDmg(int dmg)
+	{
+		if (!showHealthBar)
+		{
+			for (int i = 0; i < healthBar.transform.childCount; i++)
+			{
+				Image image = healthBar.transform.GetChild(i).GetComponent<Image>();
+				if (image.enabled == false)
+				{
+					image.enabled = true;
+				}
+			}
+			showHealthBar = false;
+		}
+		healthBar.value -= dmg;
+		CommitSuduko();
 	}
 
 	void Detect()
@@ -68,19 +109,22 @@ public class EnemyVision : MonoBehaviour
 
 	void PlayerInRange()
 	{
-		float dist = Vector3.Distance(navMeshAgent.transform.position, player.transform.position);
-
-		if (dist <= enemyStats.attackRange)
+		if (playerInSight)
 		{
-			navMeshAgent.isStopped = true;
-			navMeshAgent.SetDestination(navMeshAgent.transform.position);
-			navMeshAgent.isStopped = false;
-			if (attackReady)
+			float dist = Vector3.Distance(navMeshAgent.transform.position, player.transform.position);
+
+			if (dist <= enemyStats.attackRange)
 			{
-				Attack();
-				attackReady = false;
-				animator.SetBool("isAttacking", true);
-				StartCoroutine(WaitForAttackSpeed());
+				navMeshAgent.isStopped = true;
+				navMeshAgent.SetDestination(navMeshAgent.transform.position);
+				navMeshAgent.isStopped = false;
+				if (attackReady)
+				{
+					Attack();
+					attackReady = false;
+					animator.SetBool("isAttacking", true);
+					StartCoroutine(WaitForAttackSpeed());
+				}
 			}
 		}
 	}
@@ -88,6 +132,7 @@ public class EnemyVision : MonoBehaviour
 	void Attack()
 	{
 		Debug.Log(player.name + " takes " + enemyStats.dmg + " dmg");
+		player.GetComponent<PlayerController>().TakeDmg(enemyStats.dmg);
 	}
 
 	IEnumerator WaitForAttackSpeed()

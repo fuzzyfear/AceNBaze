@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 	public CharacterInfo playerStats;
 	public LayerMask enemy;
     public Animator animator;
+    public GameObject enemyUi;
 
     [Header("Controlls")]
     [SerializeField] private KeyCode DASH = KeyCode.Space;
@@ -56,7 +57,7 @@ public class PlayerController : MonoBehaviour
 	{
 		agent.speed        = playerStats.movementSpeed;
 
-		hp.maxValue        = playerStats.HP;
+		hp.maxValue        = playerStats.healthPoints;
 		hp.value           = hp.maxValue;
 
         attackbar.maxValue = playerStats.attackSpeed;
@@ -71,6 +72,7 @@ public class PlayerController : MonoBehaviour
 	void Update()
     {
         MoveToMousePos();
+        HoverOverEnemy();
         if (moveAndAttack)
             AttackTarget();
         NewDash();
@@ -120,7 +122,7 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, enemy))
             {
                 agent.SetDestination(hit.point);
-                enemyTargetToKill = hit.collider.transform.root.gameObject;
+                enemyTargetToKill = hit.transform.gameObject;
                 moveAndAttack = true;
             }
             //Move to position
@@ -165,6 +167,7 @@ public class PlayerController : MonoBehaviour
 
 	void Attack()
 	{
+        enemyTargetToKill.GetComponent<EnemyVision>().TakeDmg(playerStats.dmg);
 		Debug.Log(enemyTargetToKill.name + " takes " + playerStats.dmg + " dmg");
 	}
 
@@ -173,6 +176,35 @@ public class PlayerController : MonoBehaviour
 		Gizmos.color = new Color (1, 1, 1, 0.1f);
 		Gizmos.DrawSphere(agent.transform.position, playerStats.attackRange);
 	}
+
+    public void TakeDmg(int dmg)
+    {
+        hp.value -= dmg;
+        if(hp.value <= 0)
+        {
+            Debug.Log("Player is dead");
+        }
+    }
+
+    void HoverOverEnemy()
+    {
+        Vector3 mouse = Input.mousePosition;
+        Ray castPoint = cam.ScreenPointToRay(mouse);
+        RaycastHit hit;
+
+        //Display enemy name and HP
+        if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, enemy))
+        {
+            enemyUi.SetActive(true);
+            enemyUi.GetComponentInChildren<Text>().text = hit.transform.name;
+            enemyUi.GetComponentInChildren<Slider>().maxValue = hit.transform.GetComponent<EnemyVision>().healthBar.maxValue;
+            enemyUi.GetComponentInChildren<Slider>().value = hit.transform.GetComponent<EnemyVision>().healthBar.value;
+        }
+        else
+        {
+            enemyUi.SetActive(false);
+        }
+    }
 
     //void MoveDash()
     //{

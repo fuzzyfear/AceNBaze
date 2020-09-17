@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acc4a1f20614066409b2237b83653268, type: 3}
   m_Name: EnemyStats
   m_EditorClassIdentifier: 
-  HP: 100
-  currentHP: 0
-  dmg: 100
+  healthPoints: 100
+  dmg: 10
   attackSpeed: 1
   dashCooldown: 1
   movementSpeed: 12

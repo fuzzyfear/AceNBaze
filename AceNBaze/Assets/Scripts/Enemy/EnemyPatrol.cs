@@ -7,48 +7,59 @@ public class EnemyPatrol : StateMachineBehaviour
 {
 	private NavMeshAgent navMeshAgent;
 	public float speed;
-	public float startWaitTime;
-	public string spotsName;
-	public bool randomPath = false;
+	private string spotsName;
 
 	private GameObject moveSpotsHolder;
 	private Transform[] moveSpots;
-	private float waitTime;
+	private float startWaitTime;
 	private int nextSpot = 0;
-	private int lastRandomSpot;
 
 	// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
+		spotsName = animator.GetComponentInParent<EnemyVision>().personalPath;
+		startWaitTime = animator.GetComponentInParent<EnemyVision>().waitTime;
 		navMeshAgent = animator.GetComponentInParent<NavMeshAgent>();
-		moveSpotsHolder = GameObject.FindGameObjectWithTag(spotsName);
+		moveSpotsHolder = GameObject.Find(spotsName);
 		moveSpots = new Transform[moveSpotsHolder.transform.childCount];
+
 		for(int i = 0; i < moveSpotsHolder.transform.childCount; i++)
 		{
 			moveSpots[i] = moveSpotsHolder.transform.GetChild(i).transform;
 		}
-		waitTime = startWaitTime;
+
+		animator.SetFloat("tempWaitTime", startWaitTime);
+		navMeshAgent.autoBraking = false;
+
 		FindClosestSpot(animator);
-		if (randomPath)
-		{
-			nextSpot = Random.Range(0, moveSpots.Length);
-			lastRandomSpot = nextSpot;
-			navMeshAgent.SetDestination(moveSpots[nextSpot].transform.position);
-		}
+		navMeshAgent.isStopped = false;
+		//GotoNextPoint(animator);
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
-		Patrol(animator);
-		navMeshAgent.SetDestination(moveSpots[nextSpot].transform.position);
+		if (moveSpotsHolder.transform.childCount <= 1)
+		{
+			nextSpot = 0;
+			Patrol(animator);
+			//Change animation state to guarding
+			if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
+			{
+				animator.SetBool("isGuarding", true);
+			}
+		}
+		else
+		{
+			Patrol(animator);
+		}
 	}
 
 	//// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-	//override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-	//{
-
-	//}
+	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+	{
+		//navMeshAgent.isStopped = false;
+	}
 
 	// OnStateMove is called right after Animator.OnAnimatorMove()
 	//override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -64,50 +75,60 @@ public class EnemyPatrol : StateMachineBehaviour
 
 	void Patrol(Animator animator)
 	{
-		if (Vector3.Distance(animator.transform.position, moveSpots[nextSpot].transform.position) < 0.2f)
+		if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
 		{
-			if (waitTime <= 0)
+			if (startWaitTime > 0)
 			{
-				if (randomPath)
+				if (animator.GetFloat("tempWaitTime") == startWaitTime)
 				{
-					nextSpot = Random.Range(0, moveSpots.Length);
-					while (nextSpot == lastRandomSpot)
-					{
-						nextSpot = Random.Range(0, moveSpots.Length);
-					}
+					navMeshAgent.isStopped = true;
+					animator.SetBool("waitBeforePatrolling", true);
 				}
 				else
-				{
-					nextSpot++;
-					nextSpot = nextSpot % moveSpots.Length;
-				}
-				waitTime = startWaitTime;
-				navMeshAgent.SetDestination(moveSpots[nextSpot].transform.position);
+					animator.SetFloat("tempWaitTime", startWaitTime);
 			}
-			else
-			{
-				waitTime -= Time.deltaTime;
-			}
+			GotoNextPoint(animator);
 		}
 	}
 
 	void FindClosestSpot(Animator animator)
 	{
-		int newNextSpot = 0;
-		float dist = Vector3.Distance(moveSpots[0].transform.position, animator.transform.position);
-		for(int i = 1; i < moveSpots.Length; i++)
+		Vector3 origin = animator.transform.position;
+		int closestSpot = 0;
+		float dist = Vector3.Distance(origin, moveSpots[0].transform.position);
+		float tempDist = 0;
+
+		//Get distance between all points. Dist is the closest point.
+		for (int i = 1; i < moveSpots.Length; i++)
 		{
-			float tempDist = Vector3.Distance(moveSpots[i].transform.position, animator.transform.position);
+			tempDist = Vector3.Distance(origin, moveSpots[i].transform.position);
 			if (tempDist < dist)
 			{
 				dist = tempDist;
-				newNextSpot = i;
+				closestSpot = i;
 			}
 		}
-		if(Vector3.Distance(moveSpots[nextSpot].transform.position, animator.transform.position) > dist)
-		{
-			nextSpot = newNextSpot;
-		}
-		navMeshAgent.SetDestination(moveSpots[nextSpot].transform.position);
+
+		//If the distance betweeen the enemy and the next checkpoint is less than 
+		//the distance from the current checkpoint to the next checkpoint, go to the next checkpoint
+		dist = Vector3.Distance(moveSpots[closestSpot].position, moveSpots[(closestSpot + 1) % moveSpots.Length].position);
+		tempDist = Vector3.Distance(origin, moveSpots[(closestSpot + 1) % moveSpots.Length].position);
+		if (dist > tempDist)
+			closestSpot = (closestSpot + 1) % moveSpots.Length;
+		nextSpot = closestSpot;
+	}
+
+	void GotoNextPoint(Animator animator)
+	{
+		// Returns if no points have been set up
+		if (moveSpots.Length == 0)
+			return;
+
+		// Set the agent to go to the currently selected destination.
+		navMeshAgent.destination = moveSpots[nextSpot].position;
+
+		// Choose the next point in the array as the destination,
+		// cycling to the start if necessary.
+		nextSpot = (nextSpot + 1) % moveSpots.Length;
 	}
 }

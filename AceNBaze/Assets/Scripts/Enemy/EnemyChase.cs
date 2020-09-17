@@ -13,6 +13,7 @@ public class EnemyChase : StateMachineBehaviour
     {
         navMeshAgent = animator.GetComponentInParent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
+        navMeshAgent.isStopped = false;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

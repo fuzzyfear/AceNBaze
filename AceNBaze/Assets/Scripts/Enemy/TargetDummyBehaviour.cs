@@ -18,19 +18,19 @@ public class TargetDummyBehaviour : MonoBehaviour
 
         characterHp.transform.SetParent(canvas.transform);
 
-        characterHp.maxValue = dummyStats.HP;
+        characterHp.maxValue = dummyStats.healthPoints;
 		characterHp.value    = characterHp.maxValue;
-		dummyStats.currentHP = (int)characterHp.value;
+		//dummyStats.currentHP = (int)characterHp.value;
 		temp                 = characterHp.value;
 	}
 
 	private void Update()
 	{
 		characterHp.transform.position = cam.WorldToScreenPoint(transform.position + camOffset);
-		if(dummyStats.currentHP != temp)
-		{
-			TakeDmg(10);
-		}
+		//if(dummyStats.currentHP != temp)
+		//{
+		//	TakeDmg(10);
+		//}
 	}
 
 	public void TakeDmg(int dmg)
