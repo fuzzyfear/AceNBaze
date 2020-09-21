@@ -17,8 +17,8 @@ public class EnemyPatrol : StateMachineBehaviour
 	// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
-		spotsName = animator.GetComponentInParent<EnemyVision>().personalPath;
-		startWaitTime = animator.GetComponentInParent<EnemyVision>().waitTime;
+		spotsName = animator.GetComponentInParent<EnemyBehaviour>().personalPath;
+		startWaitTime = animator.GetComponentInParent<EnemyBehaviour>().waitTime;
 		navMeshAgent = animator.GetComponentInParent<NavMeshAgent>();
 		moveSpotsHolder = GameObject.Find(spotsName);
 		moveSpots = new Transform[moveSpotsHolder.transform.childCount];
@@ -33,17 +33,16 @@ public class EnemyPatrol : StateMachineBehaviour
 
 		FindClosestSpot(animator);
 		navMeshAgent.isStopped = false;
-		//GotoNextPoint(animator);
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
+		//Change animation state to guarding
 		if (moveSpotsHolder.transform.childCount <= 1)
 		{
 			nextSpot = 0;
 			Patrol(animator);
-			//Change animation state to guarding
 			if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
 			{
 				animator.SetBool("isGuarding", true);
@@ -87,7 +86,7 @@ public class EnemyPatrol : StateMachineBehaviour
 				else
 					animator.SetFloat("tempWaitTime", startWaitTime);
 			}
-			GotoNextPoint(animator);
+			GotoNextPoint();
 		}
 	}
 
@@ -118,7 +117,7 @@ public class EnemyPatrol : StateMachineBehaviour
 		nextSpot = closestSpot;
 	}
 
-	void GotoNextPoint(Animator animator)
+	void GotoNextPoint()
 	{
 		// Returns if no points have been set up
 		if (moveSpots.Length == 0)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBehaviour : MonoBehaviour
+public class EnemyBehaviour1 : MonoBehaviour
 {
     private Vector2 prevLocation;
     private Vector2 normalizedDir;

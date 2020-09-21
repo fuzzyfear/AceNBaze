@@ -13,7 +13,7 @@ public class GuardingEnemy : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         navMeshAgent = animator.GetComponentInParent<NavMeshAgent>();
-        guardSpotName = animator.GetComponentInParent<EnemyVision>().personalPath;
+        guardSpotName = animator.GetComponentInParent<EnemyBehaviour>().personalPath;
         guardPost = GameObject.Find(guardSpotName);
         navMeshAgent.isStopped = true;
     }

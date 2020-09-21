@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class EnemyVision : MonoBehaviour
+public class EnemyBehaviour : MasterCombatController
 {
 	public CharacterInfo enemyStats;
 	public float fieldOfView = 110f;
@@ -18,13 +18,11 @@ public class EnemyVision : MonoBehaviour
 	private NavMeshAgent navMeshAgent;
 	private SphereCollider sphereCollider;
 	private bool attackReady = true;
-	private float attackSpeed;
 	private LastPlayerSighting lastPlayerSighting;
 	private GameObject player;
 	private float playerHealth;
 	private Vector3 previousSighting;
-	private GameObject personalPathHolder;
-	private bool showHealthBar = false;
+	[HideInInspector] public bool showHealthBar = false;
 
 	private void Awake()
 	{
@@ -34,12 +32,10 @@ public class EnemyVision : MonoBehaviour
 		lastPlayerSighting = GameObject.FindGameObjectWithTag("GameController").GetComponent<LastPlayerSighting>();
 		player = GameObject.FindGameObjectWithTag("Player");
 		playerHealth = player.GetComponent<PlayerController>().hp.value;
-		personalPathHolder = GameObject.Find(personalPath);
 
 		personalLastSighting = lastPlayerSighting.resetPosition;
 		previousSighting = lastPlayerSighting.resetPosition;
 
-		attackSpeed = enemyStats.attackSpeed;
 		healthBar.maxValue = enemyStats.healthPoints;
 		healthBar.value = enemyStats.healthPoints;
 	}
@@ -50,101 +46,13 @@ public class EnemyVision : MonoBehaviour
 		{
 			healthBar.transform.GetChild(i).GetComponent<Image>().enabled = false;
 		}
-		
 	}
 
 	private void Update()
 	{
 		playerHealth = player.GetComponent<PlayerController>().hp.value;
-		Detect();
-		PlayerInRange();
-
-	}
-
-	void CommitSuduko()
-	{
-		if(healthBar.value <= 0)
-		{
-			Debug.Log("Suduko commited");
-			gameObject.SetActive(false);
-		}
-	}
-
-	public void TakeDmg(int dmg)
-	{
-		if (!showHealthBar)
-		{
-			for (int i = 0; i < healthBar.transform.childCount; i++)
-			{
-				Image image = healthBar.transform.GetChild(i).GetComponent<Image>();
-				if (image.enabled == false)
-				{
-					image.enabled = true;
-				}
-			}
-			showHealthBar = false;
-		}
-		healthBar.value -= dmg;
-		CommitSuduko();
-	}
-
-	void Detect()
-	{
-		if (lastPlayerSighting.postition != previousSighting)
-		{
-			personalLastSighting = lastPlayerSighting.postition;
-		}
-
-		previousSighting = lastPlayerSighting.postition;
-
-		if (playerHealth > 0f)
-		{
-			animator.SetBool("playerInSight", playerInSight);
-		}
-		else
-		{
-			animator.SetBool("playerInSight", false);
-		}
-	}
-
-	void PlayerInRange()
-	{
-		if (playerInSight)
-		{
-			float dist = Vector3.Distance(navMeshAgent.transform.position, player.transform.position);
-
-			if (dist <= enemyStats.attackRange)
-			{
-				navMeshAgent.isStopped = true;
-				navMeshAgent.SetDestination(navMeshAgent.transform.position);
-				navMeshAgent.isStopped = false;
-				if (attackReady)
-				{
-					Attack();
-					attackReady = false;
-					animator.SetBool("isAttacking", true);
-					StartCoroutine(WaitForAttackSpeed());
-				}
-			}
-		}
-	}
-
-	void Attack()
-	{
-		Debug.Log(player.name + " takes " + enemyStats.dmg + " dmg");
-		player.GetComponent<PlayerController>().TakeDmg(enemyStats.dmg);
-	}
-
-	IEnumerator WaitForAttackSpeed()
-	{
-		attackSpeed = 0;
-		while (attackSpeed < enemyStats.attackSpeed)
-		{
-			attackSpeed += 0.1f;
-			yield return new WaitForSeconds(enemyStats.attackSpeed * 0.1f);
-		}
-		animator.SetBool("isAttacking", false);
-		attackReady = true;
+		Detect(animator, lastPlayerSighting, playerInSight, previousSighting, personalLastSighting, playerHealth);
+		PlayerInRange(animator, navMeshAgent, player, playerInSight, attackReady, enemyStats.attackRange, enemyStats.attackSpeed, enemyStats.dmg);
 	}
 
 	private void OnTriggerStay(Collider other)

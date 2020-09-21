@@ -804,9 +804,9 @@ GameObject:
   m_Component:
   - component: {fileID: 73150635}
   - component: {fileID: 73150639}
-  - component: {fileID: 73150638}
   - component: {fileID: 73150637}
   - component: {fileID: 73150636}
+  - component: {fileID: 73150638}
   m_Layer: 11
   m_Name: PatrollingEnemyW/Pause
   m_TagString: Enemy
@@ -869,16 +869,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 73150634}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ab9839019a4bb4408eaab4f56104ecf, type: 3}
+  m_Script: {fileID: 11500000, guid: afa3033ad9c52aa4fb0d3904ac1884c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyStats: {fileID: 11400000, guid: 168331b687641ad4db328df3decc98d2, type: 2}
-  fieldOfView: 180
+  fieldOfView: 200
   playerInSight: 0
   personalLastSighting: {x: 0, y: 0, z: 0}
   waitTime: 2
   personalPath: PatrolPattern1
   healthBar: {fileID: 2074116031}
+  showHealthBar: 0
 --- !u!195 &73150639
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -19389,6 +19390,7 @@ GameObject:
   - component: {fileID: 1419929233}
   - component: {fileID: 1419929234}
   - component: {fileID: 1419929235}
+  - component: {fileID: 1419929236}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -19512,6 +19514,7 @@ MonoBehaviour:
   dashSpeed: 200
   isDashing: 0
   dashAvailable: 1
+  fieldOfView: 110
 --- !u!136 &1419929234
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19542,6 +19545,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &1419929236
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419929228}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1428210368
 GameObject:
   m_ObjectHideFlags: 0
@@ -22817,9 +22833,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1742882190}
   - component: {fileID: 1742882194}
-  - component: {fileID: 1742882193}
   - component: {fileID: 1742882192}
   - component: {fileID: 1742882191}
+  - component: {fileID: 1742882193}
   m_Layer: 11
   m_Name: GuardingEnemy
   m_TagString: Enemy
@@ -22882,16 +22898,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1742882189}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ab9839019a4bb4408eaab4f56104ecf, type: 3}
+  m_Script: {fileID: 11500000, guid: afa3033ad9c52aa4fb0d3904ac1884c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyStats: {fileID: 11400000, guid: 168331b687641ad4db328df3decc98d2, type: 2}
-  fieldOfView: 180
+  fieldOfView: 200
   playerInSight: 0
   personalLastSighting: {x: 0, y: 0, z: 0}
   waitTime: 0
   personalPath: PatrolPattern2
   healthBar: {fileID: 70729124}
+  showHealthBar: 0
 --- !u!195 &1742882194
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -29568,9 +29585,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2937648417017651606}
   - component: {fileID: 2937648417017651600}
-  - component: {fileID: 2937648417017651609}
   - component: {fileID: 2937648417017651608}
   - component: {fileID: 2937648417017651610}
+  - component: {fileID: 2937648417017651609}
   m_Layer: 11
   m_Name: PatrollingEnemy
   m_TagString: Enemy
@@ -29600,16 +29617,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2937648417017651607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ab9839019a4bb4408eaab4f56104ecf, type: 3}
+  m_Script: {fileID: 11500000, guid: afa3033ad9c52aa4fb0d3904ac1884c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyStats: {fileID: 11400000, guid: 168331b687641ad4db328df3decc98d2, type: 2}
-  fieldOfView: 180
+  fieldOfView: 200
   playerInSight: 0
   personalLastSighting: {x: 0, y: 0, z: 0}
   waitTime: 0
   personalPath: PatrolPattern
   healthBar: {fileID: 1814173535}
+  showHealthBar: 0
 --- !u!54 &2937648417017651610
 Rigidbody:
   m_ObjectHideFlags: 0

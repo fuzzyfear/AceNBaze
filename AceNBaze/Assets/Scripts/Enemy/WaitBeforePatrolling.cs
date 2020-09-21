@@ -13,7 +13,7 @@ public class WaitBeforePatrolling : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         navMeshAgent = animator.GetComponentInParent<NavMeshAgent>();
-        startWaitTime = animator.GetComponentInParent<EnemyVision>().waitTime;
+        startWaitTime = animator.GetComponentInParent<EnemyBehaviour>().waitTime;
         waitTime = startWaitTime;
     }
 
