@@ -76,6 +76,10 @@ public class PlayerController : MonoBehaviour
         if (moveAndAttack)
             AttackTarget();
         NewDash();
+        if(Vector3.Distance(agent.destination, animator.transform.position) < 0.2f)
+		{
+            animator.SetBool("isWalking", false);
+		}
     }
 
     void NewDash()
@@ -87,6 +91,7 @@ public class PlayerController : MonoBehaviour
 			agent.speed = dashSpeed;
 			Ray destination = cam.ScreenPointToRay(Input.mousePosition * dashDistance);
 			agent.SetDestination(destination.origin);
+            animator.SetBool("isDashing", true);
         }
 		if (isDashing)
 		{
@@ -101,7 +106,7 @@ public class PlayerController : MonoBehaviour
 	{
 		yield return new WaitForSeconds(dashTime);
         agent.speed = walkingSpeed;
-		//Debug.Log("Distance traveled: " + Vector3.Distance(transform.position, startPos));
+        animator.SetBool("isDashing", false);
 	}
 
     IEnumerator DashCooldown()
@@ -122,6 +127,7 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, enemy))
             {
                 agent.SetDestination(hit.point);
+                animator.SetBool("isWalking", true);
                 enemyTargetToKill = hit.transform.gameObject;
                 moveAndAttack = true;
             }
@@ -129,6 +135,7 @@ public class PlayerController : MonoBehaviour
             else if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
             {
                 agent.SetDestination(hit.point);
+                animator.SetBool("isWalking", true);
                 moveAndAttack = false;
             }
         }
