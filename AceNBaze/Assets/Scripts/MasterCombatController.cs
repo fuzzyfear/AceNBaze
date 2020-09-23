@@ -6,17 +6,31 @@ using UnityEngine.AI;
 
  public class MasterCombatController : MonoBehaviour
 {
-	public IEnumerator WaitForAttackSpeed(Animator animator, bool attackReady, float attackSpeed)
+	EnemyBehaviour enemyBehaviour;
+	public virtual IEnumerator WaitForAttackSpeed(Animator animator, bool attackReady, float attackSpeed)
+	{
+		//float tempAttackSpeed = 0;
+		//while (tempAttackSpeed < attackSpeed)
+		//{
+		//	tempAttackSpeed += 0.1f;
+		//	yield return new WaitForSeconds(attackSpeed * 0.1f);
+		//	Debug.Log("xd");
+		//}
+		yield return new WaitForSeconds(attackSpeed * 1000);
+		Debug.Log(attackSpeed * 0.1f);
+		animator.SetBool("isAttacking", false);
+		attackReady = true;
+	}
+
+	public void Test(Animator animator, float attackSpeed)
 	{
 		float tempAttackSpeed = 0;
 		while (tempAttackSpeed < attackSpeed)
 		{
-			attackSpeed += 0.1f;
-			yield return new WaitForSeconds(attackSpeed * 0.1f);
-			Debug.Log("xd");
+			tempAttackSpeed += Time.deltaTime;
 		}
 		animator.SetBool("isAttacking", false);
-		attackReady = true;
+		enemyBehaviour.attackReady = true;
 	}
 
 	public void EnemyTakeDmg(Slider healthBar, bool showHealthBar, int dmg)
@@ -62,7 +76,8 @@ using UnityEngine.AI;
 					attackReady = false;
 					Attack(player, damage);
 					animator.SetBool("isAttacking", true);
-					StartCoroutine(WaitForAttackSpeed(animator, attackReady, attackSpeed));
+					Test(animator, attackReady, attackSpeed);
+					//StartCoroutine(WaitForAttackSpeed(animator, attackReady, attackSpeed));
 				}
 			}
 		}

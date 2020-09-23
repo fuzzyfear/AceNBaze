@@ -159,24 +159,30 @@ public class PlayerController : MasterCombatController
                 Attack();
                 attackReady = false;
                 animator.SetBool("isAttacking", true);
-                StartCoroutine(WaitForAttackSpeed(animator, attackReady, playerStats.attackSpeed));
+                //StartCoroutine(WaitForAttackSpeed(animator, attackReady, playerStats.attackSpeed));
+                Test(animator, attackReady, playerStats.attackSpeed);
             }
         }
     }
 
-	//IEnumerator WaitForAttackSpeed()
-	//{
- //       attackbar.value = 0;
- //       while (attackbar.value != attackbar.maxValue)
- //       {
- //           attackbar.value += 0.1f;
- //           yield return new WaitForSeconds(playerStats.attackSpeed / 10f);
- //       }
- //       animator.SetBool("isAttacking", false);
-	//	attackSpeed = true;
-	//}
+    //public override IEnumerator WaitForAttackSpeed(Animator animator, bool attackReady, float attackSpeed)
+    //{
+    //    yield return base.WaitForAttackSpeed(animator, attackReady, attackSpeed);
+    //}
 
-	void Attack()
+    //IEnumerator WaitForAttackSpeed()
+    //{
+    //       attackbar.value = 0;
+    //       while (attackbar.value != attackbar.maxValue)
+    //       {
+    //           attackbar.value += 0.1f;
+    //           yield return new WaitForSeconds(playerStats.attackSpeed / 10f);
+    //       }
+    //       animator.SetBool("isAttacking", false);
+    //	attackSpeed = true;
+    //}
+
+    void Attack()
 	{
         EnemyTakeDmg(enemyTargetToKill.GetComponent<EnemyBehaviour>().healthBar, enemyTargetToKill.GetComponent<EnemyBehaviour>().showHealthBar, playerStats.dmg);
 		Debug.Log(enemyTargetToKill.name + " takes " + playerStats.dmg + " dmg");

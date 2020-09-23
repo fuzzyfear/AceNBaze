@@ -17,7 +17,7 @@ public class EnemyBehaviour : MasterCombatController
 	private Animator animator;
 	private NavMeshAgent navMeshAgent;
 	private SphereCollider sphereCollider;
-	private bool attackReady = true;
+	public bool attackReady = true;
 	private LastPlayerSighting lastPlayerSighting;
 	private GameObject player;
 	private float playerHealth;
@@ -53,7 +53,22 @@ public class EnemyBehaviour : MasterCombatController
 		playerHealth = player.GetComponent<PlayerController>().hp.value;
 		Detect(animator, lastPlayerSighting, playerInSight, previousSighting, personalLastSighting, playerHealth);
 		PlayerInRange(animator, navMeshAgent, player, playerInSight, attackReady, enemyStats.attackRange, enemyStats.attackSpeed, enemyStats.dmg);
+		//if (attackReady)
+		//{
+		//	StartCoroutine(WaitForAttackSpeed(animator, attackReady, enemyStats.attackSpeed));
+		//}
+		if (!attackReady)
+		{
+			Debug.Log(attackReady);
+		}
 	}
+
+
+
+	//public override IEnumerator WaitForAttackSpeed(Animator animator, bool attackReady, float attackSpeed)
+	//{
+	//	yield return base.WaitForAttackSpeed(animator, attackReady, attackSpeed);
+	//}
 
 	private void OnTriggerStay(Collider other)
 	{
