@@ -6,12 +6,13 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-	public Camera cam;
-	public NavMeshAgent agent;
-	public CharacterInfo playerStats;
-	public LayerMask enemy;
+    public Camera cam;
+    public NavMeshAgent agent;
+    public CharacterInfo playerStats;
+    public LayerMask enemy;
     public Animator animator;
     public GameObject enemyUi;
+    private SphereCollider sphereCollider;
 
     [Header("Controlls")]
     [SerializeField] private KeyCode DASH = KeyCode.Space;
@@ -24,24 +25,27 @@ public class PlayerController : MonoBehaviour
 
     [Header("Move and attack")]
     [SerializeField] private GameObject enemyTargetToKill;
-	private bool attackSpeed = true;
+    private bool attackReady = true;
     public bool moveAndAttack;
 
     [Header("Dash")]
     [SerializeField] private float dashDistance = 9f;
     [SerializeField] private float dashTime = 9f;
     [SerializeField] private float dashSpeed = 9f;
-	private float walkingSpeed;
+    private float walkingSpeed;
     public bool isDashing = false;
-	public bool dashAvailable = true;
+    public bool dashAvailable = true;
+
+    [Header("Parry")]
+    public float fieldOfView = 110f;
 
     //[SerializeField] private bool CandDash = true;
     //public bool ConstatMovment = false;
     //private float walkingSpeedNORMAL;
     //private float walkingAccelerationNORMAL;
 
-	//private RaycastHit attackTarget;
-	//private float distBetweenStartAndGoal;
+    //private RaycastHit attackTarget;
+    //private float distBetweenStartAndGoal;
     //private float stepDashRefil = 0f;
     //private float attackRefil   = 0f;
     //[Header("Attack ", order = 1)]
@@ -53,30 +57,33 @@ public class PlayerController : MonoBehaviour
     //bool uppdatemovementTarget;
     //[SerializeField] CharacterBaseAbilitys targetAbilitis;
 
-    private void Start()
-	{
-		agent.speed        = playerStats.movementSpeed;
+    private void Awake()
+    {
+        sphereCollider = gameObject.GetComponent<SphereCollider>();
 
-		hp.maxValue        = playerStats.healthPoints;
-		hp.value           = hp.maxValue;
+        agent.speed = playerStats.movementSpeed;
+
+        hp.maxValue = playerStats.healthPoints;
+        hp.value = hp.maxValue;
 
         attackbar.maxValue = playerStats.attackSpeed;
-        attackbar.value    = playerStats.attackSpeed;
+        attackbar.value = playerStats.attackSpeed;
 
-        dashBar.maxValue   = playerStats.dashCooldown;
-        dashBar.value      = playerStats.dashCooldown;
+        dashBar.maxValue = playerStats.dashCooldown;
+        dashBar.value = playerStats.dashCooldown;
 
-		walkingSpeed = agent.speed;
+        walkingSpeed = agent.speed;
     }
 
-	void Update()
+    void Update()
     {
+        sphereCollider.radius = playerStats.attackRange;
         MoveToMousePos();
         HoverOverEnemy();
         if (moveAndAttack)
             AttackTarget();
         NewDash();
-        if(Vector3.Distance(agent.destination, animator.transform.position) < 0.2f)
+        if (Vector3.Distance(agent.destination, animator.transform.position) < 0.2f)
 		{
             animator.SetBool("isWalking", false);
 		}
@@ -131,6 +138,7 @@ public class PlayerController : MonoBehaviour
                 enemyTargetToKill = hit.transform.gameObject;
                 moveAndAttack = true;
             }
+            //TODO Ignore colliders
             //Move to position
             else if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
             {
@@ -145,15 +153,15 @@ public class PlayerController : MonoBehaviour
     {
         float dist = Vector3.Distance(agent.transform.position, enemyTargetToKill.transform.position);
 
-        if (dist <= playerStats.attackRange)
+        if (dist <= sphereCollider.radius)
         {
             agent.isStopped = true;
             agent.SetDestination(agent.transform.position);
             agent.isStopped = false;
-            if (attackSpeed)
+            if (attackReady)
             {
                 Attack();
-                attackSpeed = false;
+                attackReady = false;
                 animator.SetBool("isAttacking", true);
                 StartCoroutine(WaitForAttackSpeed());
             }
@@ -162,14 +170,14 @@ public class PlayerController : MonoBehaviour
 
 	IEnumerator WaitForAttackSpeed()
 	{
-        attackbar.value = 0;
-        while (attackbar.value != attackbar.maxValue)
-        {
-            attackbar.value += 0.1f;
-            yield return new WaitForSeconds(playerStats.attackSpeed / 10f);
-        }
-        animator.SetBool("isAttacking", false);
-		attackSpeed = true;
+		attackbar.value = 0;
+		while (attackbar.value != attackbar.maxValue)
+		{
+			attackbar.value += 0.1f;
+			yield return new WaitForSeconds(playerStats.attackSpeed / 10f);
+		}
+		animator.SetBool("isAttacking", false);
+		attackReady = true;
 	}
 
 	void Attack()
@@ -178,16 +186,16 @@ public class PlayerController : MonoBehaviour
 		Debug.Log(enemyTargetToKill.name + " takes " + playerStats.dmg + " dmg");
 	}
 
-	private void OnDrawGizmos()
-	{
-		Gizmos.color = new Color (1, 1, 1, 0.1f);
-		Gizmos.DrawSphere(agent.transform.position, playerStats.attackRange);
-	}
+	//private void OnDrawGizmos()
+	//{
+	//	Gizmos.color = new Color (1, 1, 1, 0.1f);
+	//	Gizmos.DrawSphere(agent.transform.position, playerStats.attackRange);
+	//}
 
     public void TakeDmg(int dmg)
     {
         hp.value -= dmg;
-        if(hp.value <= 0)
+        if (hp.value <= 0)
         {
             Debug.Log("Player is dead");
         }
@@ -212,6 +220,49 @@ public class PlayerController : MonoBehaviour
             enemyUi.SetActive(false);
         }
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            if (other.gameObject.tag == "Enemy")
+            {
+                Vector3 direction = other.transform.position - transform.position;
+                float angle = Vector3.Angle(direction, transform.forward);
+
+                if (angle < fieldOfView * 0.5f)
+                {
+                    RaycastHit hit;
+                    if (Physics.Raycast(transform.position + transform.up, direction.normalized, out hit, sphereCollider.radius))
+                    {
+                        if (hit.collider.gameObject.tag == "Enemy")
+                        {
+                            animator.SetBool("isParrying", true);
+                            Debug.Log(hit.collider.gameObject.name + " got owned");
+                            StartCoroutine(WaitForParry());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    IEnumerator WaitForParry()
+    {
+        yield return new WaitForSeconds(playerStats.attackSpeed);
+        animator.SetBool("isParrying", false);
+    }
+
+    //NEW CODE HERE
+
+    //void Attack()
+    //{
+    //    EnemyTakeDmg(enemyTargetToKill.GetComponent<EnemyBehaviour>().healthBar, enemyTargetToKill.GetComponent<EnemyBehaviour>().showHealthBar, playerStats.dmg);
+    //    Debug.Log(enemyTargetToKill.name + " takes " + playerStats.dmg + " dmg");
+    //}
+
+    //END NEW CODE
+
 
     //void MoveDash()
     //{
@@ -294,7 +345,7 @@ public class PlayerController : MonoBehaviour
     //                walkingAccelerationNORMAL = agent.acceleration;
     //                agent.acceleration = agent.acceleration * 10f;
     //                CandDash = false;
-  
+
     //                StartCoroutine(WaitForDashSpeed());
     //            }
     //        }
@@ -338,129 +389,129 @@ public class PlayerController : MonoBehaviour
     //    CandDash = true;
     //}
 
- //   void MoveToMouse()
- //   {
- //       //Temp ändring för att ändra hur du rör dig
- //       if (toogleMovment)
- //       {
- //           ConstatMovment = true;
- //           if (Input.GetKey(MOVMENT_KEY))
- //               uppdatemovementTarget = !uppdatemovementTarget;
- //       }
- //       else
- //       {
- //           uppdatemovementTarget = (ConstatMovment) ? Input.GetKey(MOVMENT_KEY) : Input.GetKeyDown(MOVMENT_KEY);
- //       }
+    //   void MoveToMouse()
+    //   {
+    //       //Temp ändring för att ändra hur du rör dig
+    //       if (toogleMovment)
+    //       {
+    //           ConstatMovment = true;
+    //           if (Input.GetKey(MOVMENT_KEY))
+    //               uppdatemovementTarget = !uppdatemovementTarget;
+    //       }
+    //       else
+    //       {
+    //           uppdatemovementTarget = (ConstatMovment) ? Input.GetKey(MOVMENT_KEY) : Input.GetKeyDown(MOVMENT_KEY);
+    //       }
 
- //       if (uppdatemovementTarget)
-	//	{
-	//		Vector3 mouse = Input.mousePosition;
-	//		Ray castPoint = cam.ScreenPointToRay(mouse);
-	//		RaycastHit hit;
+    //       if (uppdatemovementTarget)
+    //	{
+    //		Vector3 mouse = Input.mousePosition;
+    //		Ray castPoint = cam.ScreenPointToRay(mouse);
+    //		RaycastHit hit;
 
-	//		if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
-	//		{
-	//			agent.SetDestination(hit.point);
-	//		}
-	//	}
-	//}
+    //		if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
+    //		{
+    //			agent.SetDestination(hit.point);
+    //		}
+    //	}
+    //}
 
- //   void OnlyAttack()
-	//{
-	//	if (Input.GetKeyDown(ATTACK_KEY))
-	//	{
-	//		Vector3 mouse = Input.mousePosition;
-	//		Ray castPoint = cam.ScreenPointToRay(mouse);
-	//		RaycastHit hit;
+    //   void OnlyAttack()
+    //{
+    //	if (Input.GetKeyDown(ATTACK_KEY))
+    //	{
+    //		Vector3 mouse = Input.mousePosition;
+    //		Ray castPoint = cam.ScreenPointToRay(mouse);
+    //		RaycastHit hit;
 
-	//		if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
-	//		{
-	//			if (attackSpeed)
-	//			{
-	//				if (hit.collider.gameObject.layer == 11)
-	//				{
-	//					attackTarget = hit;
-	//					moveAndAttack = true;
-	//				}
-	//				else
-	//				{
-	//					Debug.Log("Miss, no enemmy selected");
-	//					attackSpeed = false;
-	//					StartCoroutine(WaitForAttackSpeed());
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+    //		if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
+    //		{
+    //			if (attackSpeed)
+    //			{
+    //				if (hit.collider.gameObject.layer == 11)
+    //				{
+    //					attackTarget = hit;
+    //					moveAndAttack = true;
+    //				}
+    //				else
+    //				{
+    //					Debug.Log("Miss, no enemmy selected");
+    //					attackSpeed = false;
+    //					StartCoroutine(WaitForAttackSpeed());
+    //				}
+    //			}
+    //		}
+    //	}
+    //}
 
-	//void MoveAndAttack()
-	//{
-	//	if (Input.GetKeyDown(ATTACK_KEY))
-	//	{
-	//		Vector3 mouse = Input.mousePosition;
-	//		Ray castPoint = cam.ScreenPointToRay(mouse);
-	//		RaycastHit hit;
+    //void MoveAndAttack()
+    //{
+    //	if (Input.GetKeyDown(ATTACK_KEY))
+    //	{
+    //		Vector3 mouse = Input.mousePosition;
+    //		Ray castPoint = cam.ScreenPointToRay(mouse);
+    //		RaycastHit hit;
 
-	//		if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, enemy))
-	//		{
-	//			agent.SetDestination(hit.point);
-	//			attackTarget      = hit;
- //               enemyTargetToKill = hit.collider.transform.root.gameObject;// för att ta med rörliga fiender i beräkningen
- //               moveAndAttack     = true;
-	//		}
-	//	}
-	//}
+    //		if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, enemy))
+    //		{
+    //			agent.SetDestination(hit.point);
+    //			attackTarget      = hit;
+    //               enemyTargetToKill = hit.collider.transform.root.gameObject;// för att ta med rörliga fiender i beräkningen
+    //               moveAndAttack     = true;
+    //		}
+    //	}
+    //}
 
 
- //   void WaitToAttackUntilInRange()
-	//{
-	//	if (moveAndAttack)
-	//	{
-	//		if(onlyAttack && agent.velocity == Vector3.zero)
-	//		{
-	//			distBetweenStartAndGoal = Vector3.Distance(agent.transform.position, attackTarget.point);
-	//		}
-	//		else if(!onlyAttack)
-	//		{
- //               if (enemyTargetToKill == null)
- //               {
- //                   moveAndAttack = false;
- //                   return;
- //               }
- //               Vector3 EnemyPos = enemyTargetToKill.transform.position;
- //               agent.SetDestination(EnemyPos);
+    //   void WaitToAttackUntilInRange()
+    //{
+    //	if (moveAndAttack)
+    //	{
+    //		if(onlyAttack && agent.velocity == Vector3.zero)
+    //		{
+    //			distBetweenStartAndGoal = Vector3.Distance(agent.transform.position, attackTarget.point);
+    //		}
+    //		else if(!onlyAttack)
+    //		{
+    //               if (enemyTargetToKill == null)
+    //               {
+    //                   moveAndAttack = false;
+    //                   return;
+    //               }
+    //               Vector3 EnemyPos = enemyTargetToKill.transform.position;
+    //               agent.SetDestination(EnemyPos);
 
- //               if (agent.pathPending)
- //               {
- //                   distBetweenStartAndGoal = Vector3.Distance(agent.transform.position, EnemyPos);
- //               }
- //               else
- //               {
- //                   distBetweenStartAndGoal = agent.remainingDistance;
- //               }
-	//		}
-	//		if (distBetweenStartAndGoal <= playerStats.attackRange)
-	//		{
-	//			agent.isStopped = true;
-	//			agent.SetDestination(agent.transform.position);
-	//			agent.isStopped = false;
-	//			if (attackSpeed)
-	//			{
-	//				Attack();
-	//				attackSpeed = false;
-	//				StartCoroutine(WaitForAttackSpeed());
-	//			}
-	//		}
-	//		else if (onlyAttack)
-	//		{
-	//			if (attackSpeed)
-	//			{
-	//				Debug.Log("Miss, enemy not in range");
-	//				moveAndAttack = false;
-	//				attackSpeed   = false;
-	//				StartCoroutine(WaitForAttackSpeed());
-	//			}
-	//		}
-	//	}
-	//}
+    //               if (agent.pathPending)
+    //               {
+    //                   distBetweenStartAndGoal = Vector3.Distance(agent.transform.position, EnemyPos);
+    //               }
+    //               else
+    //               {
+    //                   distBetweenStartAndGoal = agent.remainingDistance;
+    //               }
+    //		}
+    //		if (distBetweenStartAndGoal <= playerStats.attackRange)
+    //		{
+    //			agent.isStopped = true;
+    //			agent.SetDestination(agent.transform.position);
+    //			agent.isStopped = false;
+    //			if (attackSpeed)
+    //			{
+    //				Attack();
+    //				attackSpeed = false;
+    //				StartCoroutine(WaitForAttackSpeed());
+    //			}
+    //		}
+    //		else if (onlyAttack)
+    //		{
+    //			if (attackSpeed)
+    //			{
+    //				Debug.Log("Miss, enemy not in range");
+    //				moveAndAttack = false;
+    //				attackSpeed   = false;
+    //				StartCoroutine(WaitForAttackSpeed());
+    //			}
+    //		}
+    //	}
+    //}
 }
