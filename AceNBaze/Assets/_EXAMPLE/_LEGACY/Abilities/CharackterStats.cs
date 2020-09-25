@@ -111,7 +111,7 @@ public class CharackterStats : MonoBehaviour
         {
             //TODO: Addera så att alla stas här går att läsa från character info
             level                  = 0;
-            movmentSpeed           = BaseStats.movementSpeed;
+            movmentSpeed           = BaseStats.runningSpeed;
             maxHP                  = BaseStats.healthPoints;
             currentHP              = maxHP;
             staminMax              = BaseStats.staminaBaseMax;

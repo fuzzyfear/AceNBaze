@@ -33,6 +33,7 @@ public class EnemyPatrol : StateMachineBehaviour
 
 		FindClosestSpot(animator);
 		navMeshAgent.isStopped = false;
+		navMeshAgent.speed = animator.GetComponentInParent<EnemyVision>().enemyStats.walkingSpeed;
 		//GotoNextPoint(animator);
 	}
 
@@ -58,7 +59,7 @@ public class EnemyPatrol : StateMachineBehaviour
 	//// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
-		//navMeshAgent.isStopped = false;
+		navMeshAgent.speed = animator.GetComponentInParent<EnemyVision>().enemyStats.runningSpeed;
 	}
 
 	// OnStateMove is called right after Animator.OnAnimatorMove()

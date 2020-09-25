@@ -9,7 +9,8 @@ public class CharacterInfo : ScriptableObject
     public int dmg;
     public int attackSpeed;
     public int dashCooldown;
-    public int movementSpeed;
+    public int runningSpeed;
+    public int walkingSpeed;
     public float baseDashTime;
     public float bashDashSpeed;
     public float attackColldown;

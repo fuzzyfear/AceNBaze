@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour
     [Header("Parry")]
     public float fieldOfView = 110f;
 
+    [Header("Test")]
+    public GameObject testCube;
+
     //[SerializeField] private bool CandDash = true;
     //public bool ConstatMovment = false;
     //private float walkingSpeedNORMAL;
@@ -61,7 +64,7 @@ public class PlayerController : MonoBehaviour
     {
         sphereCollider = gameObject.GetComponent<SphereCollider>();
 
-        agent.speed = playerStats.movementSpeed;
+        agent.speed = playerStats.runningSpeed;
 
         hp.maxValue = playerStats.healthPoints;
         hp.value = hp.maxValue;
@@ -138,9 +141,9 @@ public class PlayerController : MonoBehaviour
                 enemyTargetToKill = hit.transform.gameObject;
                 moveAndAttack = true;
             }
-            //TODO Ignore colliders
+            //TODO: Ignore colliders
             //Move to position
-            else if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
+            else if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
             {
                 agent.SetDestination(hit.point);
                 animator.SetBool("isWalking", true);

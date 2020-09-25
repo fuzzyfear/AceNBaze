@@ -27,7 +27,7 @@ public class PlayerControll_dash : MonoBehaviour
 
     public void Start()
     {
-        agent.speed = playerStats.movementSpeed;
+        agent.speed = playerStats.runningSpeed;
         hp.maxValue = playerStats.healthPoints;
         hp.value    = hp.maxValue;
    

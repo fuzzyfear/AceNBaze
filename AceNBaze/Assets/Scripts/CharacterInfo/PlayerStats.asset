@@ -16,7 +16,8 @@ MonoBehaviour:
   dmg: 10
   attackSpeed: 1
   dashCooldown: 1
-  movementSpeed: 12
+  runningSpeed: 10
+  walkingSpeed: 5
   baseDashTime: 0.5
   bashDashSpeed: 70
   attackColldown: 8

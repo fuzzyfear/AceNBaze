@@ -50,7 +50,7 @@ public class EnemyVision : MonoBehaviour
 		{
 			healthBar.transform.GetChild(i).GetComponent<Image>().enabled = false;
 		}
-		
+		navMeshAgent.speed = enemyStats.runningSpeed;
 	}
 
 	private void Update()
