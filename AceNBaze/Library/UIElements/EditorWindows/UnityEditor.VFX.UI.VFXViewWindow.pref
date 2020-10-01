@@ -17,4 +17,4 @@ MonoBehaviour:
   - __PanelContainer__rootVisualContainer__VFXView__UnityEditor.Experimental.GraphView.GraphView+PersistedSelection
   m_Values:
   - '{"position":{"x":372.0,"y":-10.0,"z":0.0},"scale":{"x":0.7561436891555786,"y":0.7561436891555786,"z":1.0}}'
-  - '{"m_Version":383,"m_SelectedElementsArray":["NodeID-20662"]}'
+  - '{"m_Version":385,"m_SelectedElementsArray":["NodeID-20662"]}'
