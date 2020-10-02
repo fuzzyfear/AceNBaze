@@ -21,6 +21,8 @@ MonoBehaviour:
   baseDashTime: 0.5
   bashDashSpeed: 70
   attackColldown: 8
-  attackRange: 7
+  attackRange: 3
   staminaColldown: 4
   staminaBaseMax: 1
+  visisonDistNeutral: 0
+  visionDistChase: 0

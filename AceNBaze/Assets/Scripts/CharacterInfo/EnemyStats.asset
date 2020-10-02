@@ -15,12 +15,17 @@ MonoBehaviour:
   healthPoints: 100
   dmg: 10
   attackSpeed: 1
-  dashCooldown: 1
+  attackRange: 3
   runningSpeed: 10
   walkingSpeed: 5
+  dashCooldown: 1
   baseDashTime: 0.5
   bashDashSpeed: 70
+  visisonDistNeutral: 6
+  visionDistChase: 9
+  FOWNeutral: 150
+  FOWChase: 240
+  stunDuration: 5
   attackColldown: 8
-  attackRange: 7
   staminaColldown: 4
   staminaBaseMax: 1

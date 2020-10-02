@@ -7,12 +7,14 @@ using UnityEngine.UI;
 public class EnemyVision : MonoBehaviour
 {
 	public CharacterInfo enemyStats;
-	public float fieldOfView = 110f;
+	private float fieldOfView;
 	public bool playerInSight;
 	public Vector3 personalLastSighting;
 	public float waitTime;
 	public string personalPath;
 	public Slider healthBar;
+
+	public GameObject testCube;
 
 	private Animator animator;
 	private NavMeshAgent navMeshAgent;
@@ -25,6 +27,7 @@ public class EnemyVision : MonoBehaviour
 	private Vector3 previousSighting;
 	private GameObject personalPathHolder;
 	private bool showHealthBar = false;
+	private bool isStunned;
 
 	private void Awake()
 	{
@@ -42,6 +45,8 @@ public class EnemyVision : MonoBehaviour
 		attackSpeed = enemyStats.attackSpeed;
 		healthBar.maxValue = enemyStats.healthPoints;
 		healthBar.value = enemyStats.healthPoints;
+		sphereCollider.radius = enemyStats.visisonDistNeutral;
+		fieldOfView = enemyStats.FOWNeutral;
 	}
 
 	private void Start()
@@ -50,15 +55,32 @@ public class EnemyVision : MonoBehaviour
 		{
 			healthBar.transform.GetChild(i).GetComponent<Image>().enabled = false;
 		}
-		navMeshAgent.speed = enemyStats.runningSpeed;
+		navMeshAgent.speed = enemyStats.walkingSpeed;
 	}
 
 	private void Update()
 	{
 		playerHealth = player.GetComponent<PlayerController>().hp.value;
-		Detect();
-		PlayerInRange();
-
+		if (!isStunned)
+		{
+			Detect();
+			PlayerInRange();
+			if (playerInSight)
+			{
+				float dist = Vector3.Distance(navMeshAgent.transform.localPosition, player.transform.localPosition);
+				if (dist > sphereCollider.radius)
+				{
+					Debug.Log(dist);
+					playerInSight = false;
+					animator.SetBool("inRange", false);
+					animator.SetBool("playerInSight", false);
+					playerInSight = false;
+					sphereCollider.radius = enemyStats.visisonDistNeutral;
+					navMeshAgent.speed = enemyStats.walkingSpeed;
+					fieldOfView = enemyStats.FOWNeutral;
+				}
+			}
+		}
 	}
 
 	void CommitSuduko()
@@ -85,6 +107,7 @@ public class EnemyVision : MonoBehaviour
 			showHealthBar = false;
 		}
 		healthBar.value -= dmg;
+		//navMeshAgent.SetDestination(player.transform.position);
 		CommitSuduko();
 	}
 
@@ -103,78 +126,136 @@ public class EnemyVision : MonoBehaviour
 		}
 		else
 		{
+			//Debug.Log("Player is dead");
+			playerInSight = false;
 			animator.SetBool("playerInSight", false);
+			animator.SetBool("inRange", false);
 		}
-	}
 
-	void PlayerInRange()
-	{
-		if (playerInSight)
+		if (playerInSight && attackReady)
 		{
-			float dist = Vector3.Distance(navMeshAgent.transform.position, player.transform.position);
-
-			if (dist <= enemyStats.attackRange)
-			{
-				navMeshAgent.isStopped = true;
-				navMeshAgent.SetDestination(navMeshAgent.transform.position);
-				navMeshAgent.isStopped = false;
-				if (attackReady)
-				{
-					Attack();
-					attackReady = false;
-					animator.SetBool("isAttacking", true);
-					StartCoroutine(WaitForAttackSpeed());
-				}
-			}
+			navMeshAgent.SetDestination(player.transform.position);
 		}
-	}
-
-	void Attack()
-	{
-		Debug.Log(player.name + " takes " + enemyStats.dmg + " dmg");
-		player.GetComponent<PlayerController>().TakeDmg(enemyStats.dmg);
-	}
-
-	IEnumerator WaitForAttackSpeed()
-	{
-		attackSpeed = 0;
-		while (attackSpeed < enemyStats.attackSpeed)
+		else if (!playerInSight && !navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
 		{
-			attackSpeed += 0.1f;
-			yield return new WaitForSeconds(enemyStats.attackSpeed * 0.1f);
+			//Instantiate(testCube, navMeshAgent.destination, Quaternion.identity);
+			playerInSight = false;
+			sphereCollider.radius = enemyStats.visisonDistNeutral;
+			navMeshAgent.speed = enemyStats.walkingSpeed;
+			fieldOfView = enemyStats.FOWNeutral;
 		}
-		animator.SetBool("isAttacking", false);
-		attackReady = true;
 	}
 
 	private void OnTriggerStay(Collider other)
 	{
 		if(other.gameObject == player)
 		{
-			playerInSight = false;
+			//playerInSight = false;
 			Vector3 direction = other.transform.position - transform.position;
 			float angle = Vector3.Angle(direction, transform.forward);
 
-			if(angle < fieldOfView * 0.5f)
+			if (angle < fieldOfView * 0.5f)
 			{
 				RaycastHit hit;
-				if(Physics.Raycast(transform.position + transform.up, direction.normalized, out hit, sphereCollider.radius))
+				if (Physics.Raycast(transform.position + transform.up, direction.normalized, out hit, sphereCollider.radius))
 				{
-					if(hit.collider.gameObject == player)
+					if (hit.collider.gameObject == player)
 					{
 						playerInSight = true;
+						sphereCollider.radius = enemyStats.visionDistChase;
+						navMeshAgent.speed = enemyStats.runningSpeed;
+						fieldOfView = enemyStats.FOWChase;
 						lastPlayerSighting.postition = player.transform.position;
 					}
 				}
 			}
+			//else if (dist > sphereCollider.radius)
+			//{
+			//	playerInSight = false;
+			//	animator.SetBool("inRange", false);
+			//}
 		}
 	}
 
-	private void OnTriggerExit(Collider other)
+	//private void OnTriggerExit(Collider other)
+	//{
+	//	float dist = Vector3.Distance(navMeshAgent.transform.position, player.transform.position);
+	//	if (dist > sphereCollider.radius)
+	//	{
+	//		playerInSight = false;
+	//		animator.SetBool("inRange", false);
+	//		animator.SetBool("playerInSight", false);
+	//		playerInSight = false;
+	//		sphereCollider.radius = enemyStats.visisonDistNeutral;
+	//		navMeshAgent.speed = enemyStats.walkingSpeed;
+	//	}
+	//}
+
+	void PlayerInRange()
 	{
-		if(other.gameObject == player)
+		//Check if we can see player
+		if (playerInSight)
 		{
-			playerInSight = false;
+			float dist = Vector3.Distance(navMeshAgent.transform.position, player.transform.position);
+
+			//Check if we are close enough to attack enemy
+			if (dist <= enemyStats.attackRange)
+			{
+				animator.SetBool("inRange", true);
+				//Attack if the attackspeed allows it
+				if (attackReady)
+				{
+					Attack();
+				}
+			}
+			else
+			{
+				animator.SetBool("inRange", false);
+			}
 		}
+	}
+
+	//TODO: Enemy attack 1 time too many when player is dead
+	void Attack()
+	{
+		//Debug.Log("attack player");
+		navMeshAgent.isStopped = true;
+		navMeshAgent.ResetPath();
+		attackReady = false;
+		animator.SetBool("attackReady", false);
+		animator.SetBool("isAttacking", true);
+		StartCoroutine(WaitForAttackSpeed());
+	}
+
+	IEnumerator WaitForAttackSpeed()
+	{
+		//attackSpeed = 0;
+		yield return new WaitForSeconds(enemyStats.attackSpeed);
+		animator.SetBool("isAttacking", false);
+		animator.SetBool("attackReady", true);
+		attackReady = true;
+		navMeshAgent.isStopped = false;
+		player.GetComponent<PlayerController>().TakeDmg(enemyStats.dmg);
+	}
+
+	public void GotParried()
+	{
+		isStunned = true;
+		animator.SetTrigger("isStunnedTrigger");
+		animator.SetBool("isStunned", true);
+		animator.SetBool("attackReady", false);
+		navMeshAgent.isStopped = true;
+		attackReady = false;
+		navMeshAgent.ResetPath();
+		StartCoroutine(WaitForStunDuration());
+	}
+
+	IEnumerator WaitForStunDuration()
+	{
+		yield return new WaitForSeconds(enemyStats.stunDuration);
+		isStunned = false;
+		animator.SetBool("isStunned", false);
+		navMeshAgent.isStopped = false;
+		StartCoroutine(WaitForAttackSpeed());
 	}
 }
